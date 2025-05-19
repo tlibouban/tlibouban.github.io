@@ -26,7 +26,7 @@ Cet outil a été conçu pour faciliter le suivi et la gestion des paramétrages
 1. Clonez ce dépôt
 
 ```bash
-git clone https://github.com/VOTRE-NOM-UTILISATEUR/Checklist.git
+git clone https://github.com/tlibouban/Checklist.git
 ```
 
 2. Ouvrez le fichier `index.html` dans votre navigateur
