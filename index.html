@@ -1,0 +1,2449 @@
+<!--
+  Checklist Atelier de Déploiement
+  - Formulaire accessible, inclusif
+  - Calcul dynamique des temps utilisateurs et profils
+  - Organisation en modules distincts
+-->
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Checklist du déploiement AIR et NEO - Outil de paramétrage"
+    />
+    <meta name="theme-color" content="#2196f3" />
+    <title>Checklist du déploiement</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../img/septeo_fav_icon.svg" />
+    <link
+      rel="shortcut icon"
+      href="../img/septeo_fav_icon.svg"
+      type="image/svg+xml"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.css"
+    />
+    <!-- Chargement de nos feuilles de style -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="css/profile-modal.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>
+        <span id="main-title">Checklist du déploiement</span>
+        <span class="total-general-h1" id="total-general-h1">0h 00min</span>
+      </h1>
+
+      <form id="checklist-form" autocomplete="off">
+        <!-- Scénarios - Contexte client -->
+        <div class="scenario-row">
+          <div>
+            <label for="client">Client</label>
+            <input
+              type="text"
+              id="client"
+              name="client"
+              placeholder="Nom du client"
+              aria-label="Nom du client"
+            />
+          </div>
+          <div>
+            <label for="projet">Type de projet</label>
+            <select id="projet" name="projet" aria-label="Type de projet">
+              <option value="">Sélectionner…</option>
+              <option value="separation">Séparation de base</option>
+              <option value="fusion">Fusion</option>
+              <option value="newlogo">New logo</option>
+              <option value="basecollab">Base collaborateur</option>
+            </select>
+          </div>
+          <div>
+            <label for="logiciel">Logiciel de base</label>
+            <select id="logiciel" name="logiciel" aria-label="Logiciel de base">
+              <option value="" selected>Sélectionner...</option>
+              <option value="AIR">AIR</option>
+              <option value="NEO">NEO</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label for="sens">Sens du changement</label>
+            <select id="sens" name="sens" aria-label="Sens du changement">
+              <option value="">Sélectionner…</option>
+              <option value="AIRversAIR">AIR vers AIR</option>
+              <option value="NEOversNEO">NEO vers NEO</option>
+              <option value="AIRversNEO">AIR vers NEO</option>
+              <option value="NEOversAIR">NEO vers AIR</option>
+              <option value="AutreversNEO">Autre vers NEO</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="logiciel-autre-container" class="hidden">
+          <label for="logiciel-autre">Nom du logiciel</label>
+          <input
+            type="text"
+            id="logiciel-autre"
+            name="logiciel-autre"
+            placeholder="Nom du logiciel"
+            aria-label="Nom du logiciel"
+          />
+        </div>
+
+        <!-- Filtres et recherche -->
+        <div class="filters-container">
+          <div class="tag-filters">
+            <label
+              id="tag-filter-label"
+              for="tag-filter-btn-group"
+              class="filter-label"
+              >Filtrer :</label
+            >
+            <div
+              id="tag-filter-btn-group"
+              class="filter-buttons"
+              role="group"
+              aria-labelledby="tag-filter-label"
+            >
+              <button
+                type="button"
+                class="tag-filter-btn all-btn"
+                data-tag="all"
+                id="filter-btn-all"
+              >
+                Tous
+              </button>
+              <button
+                type="button"
+                class="tag-filter-btn neo-btn"
+                data-tag="neo"
+                id="filter-btn-neo"
+              >
+                NEO
+              </button>
+              <button
+                type="button"
+                class="tag-filter-btn air-btn"
+                data-tag="air"
+                id="filter-btn-air"
+              >
+                AIR
+              </button>
+              <button
+                type="button"
+                class="tag-filter-btn adapps-btn"
+                data-tag="adapps"
+                id="filter-btn-adapps"
+              >
+                ADAPPS
+              </button>
+            </div>
+          </div>
+          <div class="search-filter">
+            <label for="search-input" id="search-label" class="sr-only"
+              >Rechercher</label
+            >
+            <div class="search-input-container">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Rechercher dans le formulaire..."
+                aria-label="Rechercher dans le formulaire"
+              />
+              <button
+                type="button"
+                id="clear-search-btn"
+                class="clear-search-btn"
+                aria-label="Effacer la recherche"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action toggle pour déplier/replier -->
+        <div class="action-buttons">
+          <button
+            type="button"
+            class="action-btn toggle-all-btn"
+            id="toggle-all-btn"
+            aria-label="Tout déplier/replier"
+            data-state="expanded"
+          >
+            <span class="icon">&#x25BC;</span> Tout replier
+          </button>
+        </div>
+
+        <!-- Emplacement pour les sections générées dynamiquement -->
+        <div id="checklist-sections"></div>
+
+        <div class="form-actions">
+          <button type="button" class="action-btn print-btn" id="print-btn">
+            <span class="btn-icon">🖨️</span>Imprimer
+          </button>
+          <button type="button" class="action-btn export-btn" id="export-btn">
+            <span class="btn-icon">📄</span>Exporter en PDF
+          </button>
+          <button
+            type="button"
+            class="action-btn profile-btn"
+            id="profile-manager-btn"
+          >
+            <span class="btn-icon">👤</span>Gérer les profils
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Pop-in Modal pour la gestion des profils -->
+    <div
+      id="profileModal"
+      class="modal"
+      role="dialog"
+      aria-labelledby="profile-modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-content profile-modal">
+        <button type="button" class="close" aria-label="Fermer">&times;</button>
+        <h1 id="profile-modal-title">Gestion des Profils</h1>
+
+        <div class="profile-actions">
+          <div class="profile-action-group">
+            <select
+              id="profile-select"
+              class="profile-select"
+              aria-label="Sélectionner un profil existant"
+            >
+              <option value="">Sélectionner un profil</option>
+              <option value="admin">Administrateur</option>
+              <option value="user">Utilisateur standard</option>
+              <option value="guest">Invité</option>
+            </select>
+            <button type="button" id="load-profile-btn" class="profile-btn">
+              Charger
+            </button>
+            <button
+              type="button"
+              id="delete-profile-btn"
+              class="profile-btn delete"
+            >
+              Supprimer
+            </button>
+          </div>
+          <div class="profile-action-group">
+            <label for="new-profile-name" class="sr-only"
+              >Nom du nouveau profil</label
+            >
+            <input
+              type="text"
+              id="new-profile-name"
+              placeholder="Nom du nouveau profil"
+              class="profile-select"
+              aria-label="Nom du nouveau profil"
+            />
+            <button type="button" id="save-profile-btn" class="profile-btn">
+              Enregistrer
+            </button>
+          </div>
+        </div>
+
+        <form id="profileForm">
+          <!-- ACCUEIL -->
+          <h2>ACCUEIL</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dossiers récents</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_dossiers_recents_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Indicateur nouveaux dossiers</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_indicateur_nouveaux_dossiers_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Nombre de dossiers créés</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_nombre_dossiers_crees_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Facturation cumulée HT</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_facturation_cumulee_ht_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Synthèse financière de l'exercice en cours</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_synthese_financiere_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Chiffre d'affaire encaissé HT</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="accueil_ca_encaisse_ht_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Chiffre d'affaire facturé HT</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="accueil_ca_facture_ht_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Mon agenda</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="accueil_mon_agenda_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Mon parapheur</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="accueil_mon_parapheur_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Documents produits</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_documents_produits_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Mes tâches</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="accueil_mes_taches_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Facturé / Encaissé HT</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_facture_encaisse_ht_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Calcul d'intérêts</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_calcul_interets_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Suivi des temps par intervenant</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_suivi_temps_intervenant_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Mes temps passés</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="accueil_mes_temps_passes_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- DOSSIERS -->
+          <h2>DOSSIERS ⚪</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="theme-row">
+                <td>Accès global</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="dossiers_acces_global" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Responsable (apparaît dans les listes responsable)</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="dossiers_responsable_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="dossiers_responsable_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Intervenants</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="dossiers_intervenants_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="dossiers_intervenants_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <!-- Autres actions pour DOSSIERS seront ajoutées ici -->
+            </tbody>
+          </table>
+
+          <!-- Autres sections seront ajoutées ici -->
+          <!-- PERSONNES -->
+          <h2>PERSONNES</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Saisie des informations sur le règlement</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="personnes_saisie_infos_reglement_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="personnes_saisie_infos_reglement_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Synthèse financière</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="personnes_synthese_financiere_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="personnes_apercu_pdf_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="personnes_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Gestion des doublons</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="personnes_gestion_doublons_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="personnes_gestion_doublons_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- TEMPS PASSÉS -->
+          <h2>TEMPS PASSÉS</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Temps passés de l'intervenant</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_intervenant_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_intervenant_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_intervenant_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Afficher les montants</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_afficher_montants_intervenant_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Temps passés des autres intervenants dans le dossier</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_autres_intervenants_dossier_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_autres_intervenants_dossier_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_autres_intervenants_dossier_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Afficher les montants</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_afficher_montants_autres_dossier_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Temps passés des autres intervenants hors dossier</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_autres_intervenants_hors_dossier_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_autres_intervenants_ hors_dossier_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_autres_intervenants_hors_dossier_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Afficher les montants</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_afficher_montants_autres_hors_dossier_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_apercu_pdf_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Recalcul des temps passés</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_recalcul_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Déplacer des temps passés</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_deplacer_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Modifier état facturable en masse</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_modifier_etat_facturable_masse_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Modifier état facturable</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="temps_passes_modifier_etat_facturable_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- FRAIS -->
+          <h2>FRAIS</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Frais de l'intervenant</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="frais_intervenant_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_intervenant_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="frais_intervenant_supprimer" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Frais des autres intervenants dans le dossier</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_autres_intervenants_dossier_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_autres_intervenants_dossier_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_autres_intervenants_dossier_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Frais des autres intervenants hors dossier</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_autres_intervenants_hors_dossier_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_autres_intervenants_hors_dossier_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_autres_intervenants_hors_dossier_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="frais_exporter_liste_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="frais_apercu_pdf_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Déplacer des temps passés</td>
+                <!-- This seems like a typo in the source, should be Déplacer des frais -->
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_deplacer_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Modifier l'état facturable en masse</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_modifier_etat_facturable_masse_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Modifier état facturable</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="frais_modifier_etat_facturable_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- CARPA -->
+          <h2>CARPA</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mouvements CARPA</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="carpa_mouvements_carpa_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="carpa_mouvements_carpa_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="carpa_mouvements_carpa_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- FACTURATION -->
+          <h2>FACTURATION</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Accéder aux factures</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_acceder_factures_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Console de facturation</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_console_facturation_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Paramétrage abonnement</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_abo_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_abo_apercu_pdf_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Paramétrage forfait</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_forfait_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_forfait_apercu_pdf_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Factures</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Factures</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_factures_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_factures_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Visualiser les factures des dossiers dans lesquels je
+                  n'interviens pas
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_factures_visualiser_autres_dossiers_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_factures_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_factures_apercu_pdf_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Avoirs</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Avoirs</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_avoirs_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_avoirs_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Règlements</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Règlements</td>
+                <td></td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_reglements_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_reglements_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Visualiser les règlements des dossiers dans lesquels je
+                  n'interviens pas
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_reglements_visualiser_autres_dossiers_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_reglements_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_reglements_apercu_pdf_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Impayés / Relances</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Impayés</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="facturation_impayes_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Relances</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="facturation_relances_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_impayes_exporter_liste_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_impayes_apercu_pdf_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Comptabilité</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Export comptable</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="facturation_comptabilite_export_voir"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- DOCUMENTS -->
+          <h2>DOCUMENTS</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Documents</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="documents_documents_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="documents_documents_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="documents_documents_supprimer"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Fusionner</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="documents_fusionner_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Exporter</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="documents_exporter_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Imprimer</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="documents_imprimer_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="documents_email_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>e-Signature</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="documents_e_signature_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- PARAPHEUR -->
+          <h2>PARAPHEUR</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Parapheur</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="parapheur_parapheur_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Accès aux parapheurs des autres utilisateurs</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="parapheur_acces_autres_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- AGENDA -->
+          <h2>AGENDA</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Agenda</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="agenda_agenda_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="agenda_agenda_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="agenda_agenda_supprimer" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Exporter la liste</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="agenda_exporter_liste_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="agenda_apercu_pdf_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- TÂCHES -->
+          <h2>TÂCHES</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">VOIR</th>
+                <th class="center">CREER-MODIFIER</th>
+                <th class="center">SUPPRIMER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tâches</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="taches_taches_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="taches_taches_creer_modifier"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="taches_taches_supprimer" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Aperçu PDF</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="taches_apercu_pdf_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Terminer en masse</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="taches_terminer_masse_voir" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- JURIDIQUE -->
+          <h2>JURIDIQUE</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">ACCÈS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dossiers Corporate</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="juridique_dossiers_corporate_acces"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- MODULES COMPLÉMENTAIRES -->
+          <h2>MODULES COMPLÉMENTAIRES</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">ACCÈS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>eBARREAU</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="modules_ebarreau_acces" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Analytics</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="modules_analytics_acces" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- OUTILS RGPD -->
+          <h2>OUTILS RGPD</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">ACCÈS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Effacer des dossiers</td>
+                <td class="center">
+                  <label class="switch">
+                    <input type="checkbox" name="rgpd_effacer_dossiers_acces" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Effacer des personnes</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="rgpd_effacer_personnes_acces"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Consulter les factures archivées</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="rgpd_consulter_factures_archivees_acces"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Consulter la CARPA archivée</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="rgpd_consulter_carpa_archivee_acces"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td>Numérotation de suivi RGPD</td>
+                <td class="center">
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      name="rgpd_numerotation_suivi_acces"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- STATISTIQUES -->
+          <h2>STATISTIQUES</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">ACCÈS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nombre de dossiers créés</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_nb_dossiers_crees_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Répartition par matière (TTC)</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_repartition_matiere_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Comparatif facturé/réglé (TTC)</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_comparatif_facture_regle_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Top 10 client (TTC)</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_top_10_client_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Agendas</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_agendas_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>CARPA</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_carpa_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Dossiers</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_dossiers_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Dossiers archivés</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_dossiers_archives_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Facturé / réglé</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_facture_regle_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Factures</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_factures_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Frais</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_frais_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Impayés détaillés</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_impayes_detailles_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>NEW Préfacturation</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_new_prefacturation_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Personnes</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_personnes_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Préfacturation</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_prefacturation_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Règlements</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_reglements_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Répartition</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_repartition_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Réunion agenda</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_reunion_agenda_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Temps passé</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_temps_passe_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Temps passé par intervenant</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_temps_passe_intervenant_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Mobile</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="statistiques_mobile_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- PARAMÉTRAGE -->
+          <h2>PARAMÉTRAGE</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th class="center">ACCÈS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cabinet</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_cabinet_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Comptabilités</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_comptabilites_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Utilisateurs</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_utilisateurs_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Modèle de taux</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_modele_taux_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Génération de documents</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_generation_documents_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Arborescence de répertoires</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_arborescence_repertoires_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Langues</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_langues_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Type de parties</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_type_parties_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Rôles des utilisateurs</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_roles_utilisateurs_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Fonction des contacts</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_fonction_contacts_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Numérotation</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_numerotation_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Déclencheurs</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_declencheurs_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Informations complémentaires</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_infos_complementaires_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Étapes du parapheur</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_etapes_parapheur_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Profils</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_profils_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Répartition</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_repartition_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Listes déroulantes</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_listes_deroulantes_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>SECIB Online</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_secib_online_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Actions liées</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_actions_liees_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>AvocatSync</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_avocatsync_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Préparation de dossiers</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_preparation_dossiers_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Recommandés électroniques AR24</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_recommandes_ar24_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Taux et index</td>
+                <td class="center">
+                  <label class="switch"
+                    ><input
+                      type="checkbox"
+                      name="parametrage_taux_index_acces" /><span
+                      class="slider"
+                    ></span
+                  ></label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="form-actions-centered">
+            <button
+              type="button"
+              id="save-profile-form-btn"
+              class="profile-btn primary"
+            >
+              Enregistrer le profil
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Chargement des modules JavaScript -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/profileManager.js"></script>
+    <script src="js/vueComponents.js"></script>
+    <script src="js/formHandler.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
