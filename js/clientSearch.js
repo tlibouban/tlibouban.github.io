@@ -251,20 +251,41 @@ class ClientSearch {
       return;
     }
 
+    // Nettoyer d'abord les classes existantes
+    this.clearClientField(clientInput);
+
     // Mettre à jour la valeur du champ
     clientInput.value = client;
     console.log("✅ Client field value set to:", clientInput.value);
+    console.log("📋 Field innerHTML:", clientInput.innerHTML);
+    console.log("📋 Field outerHTML:", clientInput.outerHTML);
 
     // Appliquer les styles visuels appropriés
-    this.clearClientField(clientInput);
     const className = exactMatch ? "client-found" : "client-approximate";
     clientInput.classList.add(className);
     console.log("🎨 CSS class applied:", className);
+    console.log("🎨 Current classList:", Array.from(clientInput.classList));
+
+    // Vérifier les styles CSS appliqués
+    const computedStyle = window.getComputedStyle(clientInput);
+    console.log("🎨 Computed styles:", {
+      backgroundColor: computedStyle.backgroundColor,
+      color: computedStyle.color,
+      borderColor: computedStyle.borderColor,
+      value: clientInput.value,
+      display: computedStyle.display,
+      visibility: computedStyle.visibility,
+      fontSize: computedStyle.fontSize,
+    });
 
     // Déclencher l'événement input pour mettre à jour le titre
     const inputEvent = new Event("input", { bubbles: true });
     clientInput.dispatchEvent(inputEvent);
     console.log("📡 Input event dispatched for title update");
+
+    // Forcer l'affichage
+    clientInput.style.setProperty("display", "block", "important");
+    console.log("🔧 Forced display style applied");
 
     // Animation de confirmation
     if (exactMatch) {

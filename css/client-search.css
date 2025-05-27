@@ -4,29 +4,29 @@
  */
 
 /* ===== ÉTATS DES CHAMPS CLIENT ===== */
-#client.client-found {
-  background-color: #e8f4fd;
-  border-color: #2e4a9e;
-  box-shadow: 0 0 0 2px rgba(46, 74, 158, 0.1);
-  color: #1a2956;
+input[type="text"]#client.client-found {
+  background-color: #e8f4fd !important;
+  border-color: #2e4a9e !important;
+  box-shadow: 0 0 0 2px rgba(46, 74, 158, 0.1) !important;
+  color: #1a2956 !important;
 }
 
-#client.client-approximate {
-  background-color: #f0f4ff;
-  border-color: #1a2956;
-  box-shadow: 0 0 0 2px rgba(26, 41, 86, 0.1);
-  color: #1a2956;
+input[type="text"]#client.client-approximate {
+  background-color: #f0f4ff !important;
+  border-color: #1a2956 !important;
+  box-shadow: 0 0 0 2px rgba(26, 41, 86, 0.1) !important;
+  color: #1a2956 !important;
 }
 
-#client.client-not-found {
-  background-color: #fef2f2;
-  border-color: #dc2626;
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
-  color: #dc2626;
+input[type="text"]#client.client-not-found {
+  background-color: #fef2f2 !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1) !important;
+  color: #dc2626 !important;
 }
 
 /* Transitions pour les états */
-#client {
+input[type="text"]#client {
   transition: background-color 0.3s ease, border-color 0.3s ease,
     box-shadow 0.3s ease;
 }
@@ -92,9 +92,9 @@
 #projet.has-value,
 #logiciel.has-value,
 #sens.has-value {
-  background-color: #f0f4ff;
-  border-color: #1a2956;
-  box-shadow: 0 0 0 1px rgba(26, 41, 86, 0.1);
+  background-color: #f0f4ff !important;
+  border-color: #1a2956 !important;
+  box-shadow: 0 0 0 1px rgba(26, 41, 86, 0.1) !important;
 }
 
 #numero-dossier:focus,
@@ -102,8 +102,8 @@
 #logiciel:focus,
 #sens:focus,
 #client:focus {
-  border-color: #2e4a9e;
-  box-shadow: 0 0 0 2px rgba(46, 74, 158, 0.1);
+  border-color: #2e4a9e !important;
+  box-shadow: 0 0 0 2px rgba(46, 74, 158, 0.1) !important;
   outline: none;
 }
 
@@ -122,4 +122,26 @@
   100% {
     box-shadow: 0 0 0 0 rgba(46, 74, 158, 0);
   }
+}
+
+/* ===== DEBUGGING STYLES ===== */
+/* Styles temporaires pour le débogage */
+#client {
+  /* Assurer que le texte est toujours visible */
+  font-weight: bold !important;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+#client:not(:placeholder-shown) {
+  /* Style quand le champ a une valeur */
+  background-image: linear-gradient(
+    45deg,
+    transparent 25%,
+    rgba(46, 74, 158, 0.1) 25%,
+    rgba(46, 74, 158, 0.1) 50%,
+    transparent 50%,
+    transparent 75%,
+    rgba(46, 74, 158, 0.1) 75%
+  ) !important;
+  background-size: 8px 8px !important;
 }
