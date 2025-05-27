@@ -17,7 +17,7 @@ Cet outil a été conçu pour faciliter le suivi et la gestion des paramétrages
 
 - `css/` - Fichiers de style
 - `csv/` - Données au format CSV
-- `Fiches formations/` - Documents PDF de support pour les formations
+- `Fiches formations/` - Documents PDF de support pour les formations (ignoré par Git)
 - `img/` - Ressources images
 - `js/` - Scripts JavaScript pour la logique applicative
 
@@ -26,7 +26,7 @@ Cet outil a été conçu pour faciliter le suivi et la gestion des paramétrages
 1. Clonez ce dépôt
 
 ```bash
-git clone https://github.com/tlibouban/Checklist.git
+git clone https://github.com/tlibouban/tlibouban.github.io.git
 ```
 
 2. Ouvrez le fichier `index.html` dans votre navigateur
@@ -36,6 +36,22 @@ Aucune dépendance externe n'est nécessaire, l'application fonctionne directeme
 ## Utilisation
 
 Ouvrez `index.html` dans votre navigateur pour accéder à l'interface principale de l'application. Sélectionnez un profil utilisateur et suivez les étapes de paramétrage recommandées.
+
+## Notes de développement
+
+### Gestion des fichiers de formation
+
+Le répertoire `Fiches formations/` contient des documents PDF sensibles qui ne doivent pas être versionnés publiquement. Ce répertoire est configuré dans `.gitignore` pour :
+- Protéger la confidentialité des documents de formation
+- Éviter l'encombrement du repository avec des fichiers binaires volumineux
+- Permettre un développement local avec accès aux fiches tout en maintenant un repository propre
+
+### Configuration Git
+
+Les fichiers suivants sont ignorés par Git :
+- `Fiches formations/` - Documents de formation confidentiels
+- Fichiers systèmes (`.DS_Store`, `Thumbs.db`)
+- Fichiers d'environnement et de configuration IDE
 
 ## Contact
 
