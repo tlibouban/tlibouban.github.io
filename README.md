@@ -66,6 +66,12 @@ La section précédemment appelée "TRONC COMMUN" a été renommée "Paramétrag
 - Les références dans le code JavaScript
 - La documentation et les commentaires
 
+### Améliorations techniques récentes
+
+- **Correction du bouton de fermeture de la modal** : Ajout d'une gestion d'erreur robuste et de gestionnaires de secours pour assurer le bon fonctionnement de la fermeture de la modal de gestion des profils
+- **Gestion d'erreurs JavaScript** : Implémentation de try-catch pour prévenir les erreurs d'initialisation
+- **Handlers de secours** : Mécanisme de fallback pour garantir la fonctionnalité même en cas de problème d'initialisation
+
 ## Contact
 
 Pour toute question concernant cet outil, veuillez contacter l'équipe de formation SEPTEO.
