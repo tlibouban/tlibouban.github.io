@@ -12,6 +12,7 @@ Cet outil a été conçu pour faciliter le suivi et la gestion des paramétrages
 - Suivi des checklists de paramétrage
 - Accès aux fiches de formation
 - Interface responsive et intuitive
+- Logo Septeo intégré pour une identité visuelle professionnelle
 
 ## Structure du projet
 
@@ -52,6 +53,10 @@ Les fichiers suivants sont ignorés par Git :
 - `Fiches formations/` - Documents de formation confidentiels
 - Fichiers systèmes (`.DS_Store`, `Thumbs.db`)
 - Fichiers d'environnement et de configuration IDE
+
+### Branding et identité visuelle
+
+L'application intègre le logo officiel Septeo depuis le [site web Septeo](https://www.septeo.com/fr) pour maintenir une cohérence avec l'identité visuelle de l'entreprise. Le logo est affiché de manière responsive dans l'en-tête de l'application.
 
 ## Contact
 
