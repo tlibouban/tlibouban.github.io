@@ -193,8 +193,9 @@
   }
 
   #client.client-approximate {
-    background-color: #1f1611;
+    background-color: #451a03;
     border-color: #d97706;
+    color: #fcd34d;
   }
 
   #client.client-not-found {
