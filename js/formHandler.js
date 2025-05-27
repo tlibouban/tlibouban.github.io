@@ -4,6 +4,21 @@
  */
 
 // =====================
+// Fonctions utilitaires pour la robustesse du code
+// =====================
+
+/**
+ * Fonction helper pour comparer les noms de sections de manière robuste
+ * Centralise les comparaisons pour éviter les problèmes de casse
+ * @param {string} sectionName - Nom de la section à vérifier
+ * @param {string} expectedName - Nom attendu
+ * @returns {boolean} - True si les noms correspondent
+ */
+function isSectionNamed(sectionName, expectedName) {
+  return sectionName.toLowerCase() === expectedName.toLowerCase();
+}
+
+// =====================
 // Génération dynamique du formulaire checklist
 // =====================
 function renderChecklist() {
@@ -66,18 +81,17 @@ function renderChecklist() {
     });
 
     // Déterminer l'ordre des sous-sections en fonction de la section
-    const ordreSousSections =
-      section.toUpperCase() === "PARAMÉTRAGE"
-        ? ["UTILISATEURS", "MATRICES", "NUMÉROTATION"]
-        : section.toUpperCase() === "FORMATIONS"
-        ? [
-            "PACK DÉMARRAGE COMPLET",
-            "PACK SECRÉTARIAT JURIDIQUE",
-            "MODULES SECRÉTARIAT JURIDIQUE",
-            "A LA CARTE",
-            "MODULES",
-          ]
-        : Object.keys(sousSections).sort();
+    const ordreSousSections = isSectionNamed(section, "Paramétrage")
+      ? ["UTILISATEURS", "MATRICES", "NUMÉROTATION"]
+      : isSectionNamed(section, "FORMATIONS")
+      ? [
+          "PACK DÉMARRAGE COMPLET",
+          "PACK SECRÉTARIAT JURIDIQUE",
+          "MODULES SECRÉTARIAT JURIDIQUE",
+          "A LA CARTE",
+          "MODULES",
+        ]
+      : Object.keys(sousSections).sort();
 
     // Sous-sections triées dans l'ordre défini + les autres
     const sousSectionsKeys = [
@@ -88,7 +102,7 @@ function renderChecklist() {
     ];
 
     // Traitement spécial pour la section CABINET OPTION
-    if (section.toUpperCase() === "CABINET OPTION") {
+    if (isSectionNamed(section, "CABINET OPTION")) {
       // Affichage en deux colonnes
       html += `<div class="cabinet-option-container">`;
 
@@ -125,13 +139,13 @@ function renderChecklist() {
         html += `<tr><td colspan="6"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></td></tr>`;
         sousSections[ss].forEach((item) => {
           // Ignorer la ligne spécifique avec data-section="Paramétrage" et data-idx="1"
-          if (section === "Paramétrage" && idxGlobal === 1) {
+          if (isSectionNamed(section, "Paramétrage") && idxGlobal === 1) {
             idxGlobal++;
             return;
           }
 
           const isUtilisateurs =
-            section.toUpperCase() === "PARAMÉTRAGE" &&
+            isSectionNamed(section, "Paramétrage") &&
             (item.FONCTIONNALITES.trim().toLowerCase() ===
               "utilisateurs (par user)" ||
               item.FONCTIONNALITES.trim()
@@ -140,8 +154,8 @@ function renderChecklist() {
           const unit = getUnitFromLabel(item.FONCTIONNALITES);
           const hasNumber =
             !!unit ||
-            section.toUpperCase() === "FORMATIONS" ||
-            section.toUpperCase() === "MODULES COMPLEMENTAIRES" ||
+            isSectionNamed(section, "FORMATIONS") ||
+            isSectionNamed(section, "MODULES COMPLEMENTAIRES") ||
             item.FONCTIONNALITES.includes("Equipes") ||
             item.FONCTIONNALITES.includes("Modèles de taux");
 
