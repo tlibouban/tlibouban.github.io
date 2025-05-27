@@ -530,7 +530,7 @@ function renderUtilisateursRow(section, sectionId, item, idxGlobal) {
   }">
     <td><input type="checkbox" class="check-feature-utilisateurs" aria-label="Inclure les utilisateurs dans le calcul" id="feature-utilisateurs-${sectionId}-${idxGlobal}" name="feature-utilisateurs-${sectionId}-${idxGlobal}" /></td>
     <td>
-      Utilisateurs (par user)
+      Utilisateurs
       <br>
       <div id="profils-dyn-list"></div>
       <div class="profil-buttons" style="display:flex;gap:10px;margin-top:8px;">
