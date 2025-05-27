@@ -31,6 +31,75 @@ input[type="text"]#client {
     box-shadow 0.3s ease;
 }
 
+/* ===== AUTOCOMPLÉTION ET SUGGESTIONS ===== */
+.client-suggestions-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background-color: #f0f4ff;
+}
+
+.suggestion-name {
+  font-weight: 600;
+  color: #1a2956;
+  margin-bottom: 4px;
+}
+
+.suggestion-name strong {
+  background-color: #fef3c7;
+  color: #d97706;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.suggestion-numbers {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Assurer que le conteneur parent est positionné */
+#client {
+  position: relative;
+}
+
+#client + .client-suggestions-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: -1px;
+}
+
+/* Style pour le conteneur parent */
+.scenario-row > div:has(#client) {
+  position: relative;
+}
+
 /* ===== NOTIFICATIONS ===== */
 .client-search-notification {
   position: fixed;
@@ -83,6 +152,23 @@ input[type="text"]#client {
 
   .client-search-notification.show {
     transform: translateY(0);
+  }
+
+  /* Ajuster les suggestions sur mobile */
+  .client-suggestions-container {
+    max-height: 200px;
+  }
+
+  .suggestion-item {
+    padding: 10px 12px;
+  }
+
+  .suggestion-name {
+    font-size: 0.95rem;
+  }
+
+  .suggestion-numbers {
+    font-size: 0.8rem;
   }
 }
 

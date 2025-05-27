@@ -1,15 +1,21 @@
 /**
  * clientSearch.js - Module de recherche automatique de client
  * Permet de rechercher et auto-compléter le nom du client à partir du numéro de dossier
+ * ET recherche inversée : numéro à partir du nom du client avec autocomplétion
  */
 
 class ClientSearch {
   constructor() {
-    this.clientDatabase = new Map();
+    this.clientDatabase = new Map(); // numero -> client
+    this.reverseDatabase = new Map(); // client -> [numeros]
+    this.clientNames = []; // Liste triée des noms de clients pour autocomplétion
     this.isLoaded = false;
     this.isLoading = false;
     this.cache = new Map(); // Cache pour optimiser les recherches
     this.searchTimeout = null; // Pour debounce
+    this.suggestionTimeout = null; // Pour debounce des suggestions
+    this.currentSuggestions = [];
+    this.selectedSuggestionIndex = -1;
 
     this.init();
   }
@@ -82,13 +88,22 @@ class ClientSearch {
         const cleanNumero = numero.trim();
         const cleanClient = client.trim();
 
-        // Stocker dans la Map principale
+        // Stocker dans la Map principale (numero -> client)
         this.clientDatabase.set(cleanNumero, cleanClient);
+
+        // Stocker dans la Map inversée (client -> [numeros])
+        if (!this.reverseDatabase.has(cleanClient)) {
+          this.reverseDatabase.set(cleanClient, []);
+        }
+        this.reverseDatabase.get(cleanClient).push(cleanNumero);
 
         // Créer des variantes pour la recherche flexible
         this.addSearchVariants(cleanNumero, cleanClient);
       }
     }
+
+    // Construire la liste triée des noms de clients pour autocomplétion
+    this.clientNames = Array.from(this.reverseDatabase.keys()).sort();
   }
 
   /**
@@ -122,6 +137,7 @@ class ClientSearch {
       return;
     }
 
+    // ===== RECHERCHE DIRECTE (numéro -> client) =====
     // Écouteur sur le champ numéro avec debounce
     numeroInput.addEventListener("input", (event) => {
       this.debounceSearch(event.target.value, clientInput);
@@ -145,6 +161,28 @@ class ClientSearch {
         this.performSearch(event.target.value, clientInput);
       }
     });
+
+    // ===== RECHERCHE INVERSÉE (client -> numéro) =====
+    // Écouteur sur le champ client pour autocomplétion
+    clientInput.addEventListener("input", (event) => {
+      this.debounceClientSuggestions(event.target.value, numeroInput);
+    });
+
+    // Écouteur pour navigation clavier dans les suggestions
+    clientInput.addEventListener("keydown", (event) => {
+      this.handleSuggestionNavigation(event, numeroInput);
+    });
+
+    // Écouteur sur la perte de focus pour fermer les suggestions
+    clientInput.addEventListener("blur", (event) => {
+      // Délai pour permettre le clic sur une suggestion
+      setTimeout(() => {
+        this.hideSuggestions();
+      }, 200);
+    });
+
+    // Créer le conteneur de suggestions
+    this.createSuggestionsContainer();
   }
 
   /**
@@ -398,6 +436,262 @@ class ClientSearch {
   clearCache() {
     this.cache.clear();
     console.log("🗑️ Cache de recherche client vidé");
+  }
+
+  // ===== RECHERCHE INVERSÉE ET AUTOCOMPLÉTION =====
+
+  /**
+   * Recherche avec délai pour les suggestions de clients
+   * @param {string} query - Texte recherché
+   * @param {HTMLElement} numeroInput - Champ numéro à remplir
+   */
+  debounceClientSuggestions(query, numeroInput) {
+    // Annuler la recherche précédente
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+    }
+
+    // Programmer une nouvelle recherche avec délai
+    this.suggestionTimeout = setTimeout(() => {
+      this.performClientSuggestions(query, numeroInput);
+    }, 300); // Délai plus court pour les suggestions
+  }
+
+  /**
+   * Effectue la recherche de suggestions de clients
+   * @param {string} query - Texte recherché
+   * @param {HTMLElement} numeroInput - Champ numéro à remplir
+   */
+  performClientSuggestions(query, numeroInput) {
+    if (!query || query.length < 2) {
+      this.hideSuggestions();
+      return;
+    }
+
+    const cleanQuery = query.trim().toLowerCase();
+    const suggestions = this.findClientSuggestions(cleanQuery);
+
+    if (suggestions.length > 0) {
+      this.showSuggestions(suggestions, numeroInput);
+    } else {
+      this.hideSuggestions();
+    }
+  }
+
+  /**
+   * Trouve les suggestions de clients basées sur la requête
+   * @param {string} query - Texte recherché (en minuscules)
+   * @returns {Array} - Liste des suggestions
+   */
+  findClientSuggestions(query) {
+    const suggestions = [];
+    const maxSuggestions = 8;
+
+    // Recherche exacte au début
+    for (const clientName of this.clientNames) {
+      if (clientName.toLowerCase().startsWith(query)) {
+        suggestions.push({
+          name: clientName,
+          numbers: this.reverseDatabase.get(clientName),
+          type: "exact",
+        });
+        if (suggestions.length >= maxSuggestions) break;
+      }
+    }
+
+    // Si pas assez de résultats, recherche contenant
+    if (suggestions.length < maxSuggestions) {
+      for (const clientName of this.clientNames) {
+        if (
+          clientName.toLowerCase().includes(query) &&
+          !suggestions.some((s) => s.name === clientName)
+        ) {
+          suggestions.push({
+            name: clientName,
+            numbers: this.reverseDatabase.get(clientName),
+            type: "partial",
+          });
+          if (suggestions.length >= maxSuggestions) break;
+        }
+      }
+    }
+
+    return suggestions;
+  }
+
+  /**
+   * Crée le conteneur de suggestions
+   */
+  createSuggestionsContainer() {
+    const clientInput = document.getElementById("client");
+    if (!clientInput) return;
+
+    const container = document.createElement("div");
+    container.id = "client-suggestions";
+    container.className = "client-suggestions-container";
+
+    // Insérer après le champ client
+    clientInput.parentNode.insertBefore(container, clientInput.nextSibling);
+  }
+
+  /**
+   * Affiche les suggestions
+   * @param {Array} suggestions - Liste des suggestions
+   * @param {HTMLElement} numeroInput - Champ numéro
+   */
+  showSuggestions(suggestions, numeroInput) {
+    const container = document.getElementById("client-suggestions");
+    if (!container) return;
+
+    this.currentSuggestions = suggestions;
+    this.selectedSuggestionIndex = -1;
+
+    container.innerHTML = "";
+    container.style.display = "block";
+
+    suggestions.forEach((suggestion, index) => {
+      const item = document.createElement("div");
+      item.className = "suggestion-item";
+      item.innerHTML = `
+        <div class="suggestion-name">${this.highlightMatch(
+          suggestion.name
+        )}</div>
+        <div class="suggestion-numbers">${
+          suggestion.numbers.length
+        } dossier(s): ${suggestion.numbers.slice(0, 3).join(", ")}${
+        suggestion.numbers.length > 3 ? "..." : ""
+      }</div>
+      `;
+
+      item.addEventListener("click", () => {
+        this.selectSuggestion(suggestion, numeroInput);
+      });
+
+      container.appendChild(item);
+    });
+  }
+
+  /**
+   * Surligne la correspondance dans le nom
+   * @param {string} name - Nom du client
+   * @returns {string} - Nom avec surlignage
+   */
+  highlightMatch(name) {
+    const clientInput = document.getElementById("client");
+    const query = clientInput.value.trim();
+
+    if (!query) return name;
+
+    const regex = new RegExp(`(${query})`, "gi");
+    return name.replace(regex, "<strong>$1</strong>");
+  }
+
+  /**
+   * Sélectionne une suggestion
+   * @param {Object} suggestion - Suggestion sélectionnée
+   * @param {HTMLElement} numeroInput - Champ numéro
+   */
+  selectSuggestion(suggestion, numeroInput) {
+    const clientInput = document.getElementById("client");
+
+    // Remplir le champ client
+    clientInput.value = suggestion.name;
+
+    // Remplir le champ numéro avec le premier dossier
+    if (suggestion.numbers.length > 0) {
+      numeroInput.value = suggestion.numbers[0];
+
+      // Appliquer les styles de succès
+      clientInput.classList.remove("client-approximate", "client-not-found");
+      clientInput.classList.add("client-found");
+
+      // Notification
+      const message =
+        suggestion.numbers.length === 1
+          ? `✅ Client trouvé : ${suggestion.name} (N° ${suggestion.numbers[0]})`
+          : `✅ Client trouvé : ${suggestion.name} (${suggestion.numbers.length} dossiers, N° ${suggestion.numbers[0]} sélectionné)`;
+
+      this.showSuccess(message);
+
+      // Déclencher l'événement pour la mise à jour du titre
+      const inputEvent = new Event("input", { bubbles: true });
+      clientInput.dispatchEvent(inputEvent);
+    }
+
+    this.hideSuggestions();
+  }
+
+  /**
+   * Gère la navigation clavier dans les suggestions
+   * @param {KeyboardEvent} event - Événement clavier
+   * @param {HTMLElement} numeroInput - Champ numéro
+   */
+  handleSuggestionNavigation(event, numeroInput) {
+    const container = document.getElementById("client-suggestions");
+    if (!container || container.style.display === "none") return;
+
+    const items = container.querySelectorAll(".suggestion-item");
+
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        this.selectedSuggestionIndex = Math.min(
+          this.selectedSuggestionIndex + 1,
+          this.currentSuggestions.length - 1
+        );
+        this.updateSuggestionSelection(items);
+        break;
+
+      case "ArrowUp":
+        event.preventDefault();
+        this.selectedSuggestionIndex = Math.max(
+          this.selectedSuggestionIndex - 1,
+          -1
+        );
+        this.updateSuggestionSelection(items);
+        break;
+
+      case "Enter":
+        event.preventDefault();
+        if (this.selectedSuggestionIndex >= 0) {
+          this.selectSuggestion(
+            this.currentSuggestions[this.selectedSuggestionIndex],
+            numeroInput
+          );
+        }
+        break;
+
+      case "Escape":
+        this.hideSuggestions();
+        break;
+    }
+  }
+
+  /**
+   * Met à jour la sélection visuelle des suggestions
+   * @param {NodeList} items - Éléments de suggestion
+   */
+  updateSuggestionSelection(items) {
+    items.forEach((item, index) => {
+      if (index === this.selectedSuggestionIndex) {
+        item.classList.add("selected");
+      } else {
+        item.classList.remove("selected");
+      }
+    });
+  }
+
+  /**
+   * Cache les suggestions
+   */
+  hideSuggestions() {
+    const container = document.getElementById("client-suggestions");
+    if (container) {
+      container.style.display = "none";
+      container.innerHTML = "";
+    }
+    this.currentSuggestions = [];
+    this.selectedSuggestionIndex = -1;
   }
 }
 
