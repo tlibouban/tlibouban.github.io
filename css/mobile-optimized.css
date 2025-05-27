@@ -1,0 +1,444 @@
+/* 
+ * Mobile-First Responsive Design
+ * Inspiré des meilleures pratiques de Tailwind CSS
+ * Breakpoints: 
+ * - sm: 640px (40rem) - tablettes portrait
+ * - md: 768px (48rem) - tablettes paysage 
+ * - lg: 1024px (64rem) - desktop small
+ * - xl: 1280px (80rem) - desktop large
+ */
+
+/* === VARIABLES RESPONSIVES === */
+:root {
+  /* Breakpoints suivant la convention Tailwind */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+
+  /* Espacements responsives */
+  --container-padding-mobile: 1rem;
+  --container-padding-tablet: 2rem;
+  --container-padding-desktop: 2.5rem;
+
+  /* Typography responsive */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+}
+
+/* === APPROCHE MOBILE-FIRST === */
+
+/* MOBILE (320px+) - Base styles */
+.container {
+  max-width: 100%;
+  margin: 1rem auto;
+  padding: var(--container-padding-mobile);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Header responsive mobile-first */
+.app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.septeo-logo {
+  height: 32px;
+  width: auto;
+}
+
+.app-header h1 {
+  font-size: var(--text-xl);
+  margin: 0;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.total-general-h1 {
+  font-size: var(--text-lg);
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-radius: 6px;
+  text-align: center;
+  background: linear-gradient(90deg, #1a2956 0%, #2e4a9e 100%);
+  color: white;
+  font-weight: 700;
+}
+
+/* Formulaire responsive */
+.scenario-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.scenario-row > div {
+  flex: 1;
+}
+
+/* Filtres responsive */
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tag-filter-btn {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* Touch-friendly minimum size */
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Tableaux responsive mobile-first */
+.checklist-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: var(--text-sm);
+}
+
+/* Mobile: Masquer certaines colonnes par défaut */
+.checklist-table th,
+.checklist-table td {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Mobile: Masquer colonnes non essentielles */
+.checklist-table th:nth-child(3),
+.checklist-table th:nth-child(4),
+.checklist-table th:nth-child(5),
+.checklist-table td:nth-child(3),
+.checklist-table td:nth-child(4),
+.checklist-table td:nth-child(5) {
+  display: none;
+}
+
+/* Mobile: Ajuster la checkbox et le nom */
+.checklist-table th:nth-child(1),
+.checklist-table td:nth-child(1) {
+  width: 60px;
+  text-align: center;
+}
+
+.checklist-table th:nth-child(2),
+.checklist-table td:nth-child(2) {
+  width: auto;
+}
+
+.checklist-table th:nth-child(6),
+.checklist-table td:nth-child(6) {
+  width: 80px;
+  text-align: right;
+  font-weight: 600;
+}
+
+/* Switches optimisés pour mobile */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  /* Touch-friendly */
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Actions buttons responsive */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* Touch-friendly */
+  min-height: 48px;
+  background: linear-gradient(90deg, #1a2956 0%, #2e4a9e 100%);
+  color: white;
+}
+
+.action-btn:hover,
+.action-btn:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 41, 86, 0.3);
+  outline: none;
+}
+
+/* Cabinet option adaptations */
+.cabinet-option-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cabinet-option-column {
+  width: 100%;
+}
+
+/* === TABLETTE PORTRAIT (640px+) === */
+@media (width >= 40rem) {
+  .container {
+    max-width: 90%;
+    margin: 1.5rem auto;
+    padding: var(--container-padding-tablet);
+    border-radius: 12px;
+  }
+
+  .app-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .septeo-logo {
+    height: 40px;
+  }
+
+  .app-header h1 {
+    font-size: var(--text-2xl);
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .total-general-h1 {
+    font-size: var(--text-xl);
+    padding: 0.75rem 1.5rem;
+    margin-left: 1rem;
+  }
+
+  .scenario-row {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .filters-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  /* Révéler la colonne "Nb" sur tablette */
+  .checklist-table th:nth-child(3),
+  .checklist-table td:nth-child(3) {
+    display: table-cell;
+    width: 80px;
+    text-align: center;
+  }
+
+  .action-buttons {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .action-btn {
+    width: auto;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* === TABLETTE PAYSAGE (768px+) === */
+@media (width >= 48rem) {
+  .container {
+    max-width: 85%;
+  }
+
+  .app-header h1 {
+    font-size: var(--text-3xl);
+  }
+
+  /* Révéler la colonne "Unité" */
+  .checklist-table th:nth-child(4),
+  .checklist-table td:nth-child(4) {
+    display: table-cell;
+    width: 100px;
+    text-align: center;
+  }
+
+  .cabinet-option-container {
+    flex-direction: row;
+  }
+
+  .cabinet-option-column {
+    width: 50%;
+  }
+}
+
+/* === DESKTOP SMALL (1024px+) === */
+@media (width >= 64rem) {
+  .container {
+    max-width: 80%;
+    padding: var(--container-padding-desktop);
+  }
+
+  /* Révéler la colonne "Temps unitaire" */
+  .checklist-table th:nth-child(5),
+  .checklist-table td:nth-child(5) {
+    display: table-cell;
+    width: 120px;
+    text-align: center;
+  }
+
+  /* Ajuster les largeurs pour desktop */
+  .checklist-table th:nth-child(1),
+  .checklist-table td:nth-child(1) {
+    width: 80px;
+  }
+
+  .checklist-table th:nth-child(2),
+  .checklist-table td:nth-child(2) {
+    width: auto;
+  }
+
+  .checklist-table th:nth-child(6),
+  .checklist-table td:nth-child(6) {
+    width: 120px;
+  }
+}
+
+/* === DESKTOP LARGE (1280px+) === */
+@media (width >= 80rem) {
+  .container {
+    max-width: 1200px;
+  }
+
+  .checklist-table {
+    font-size: var(--text-base);
+  }
+
+  .checklist-table th,
+  .checklist-table td {
+    padding: 1rem;
+  }
+}
+
+/* === UTILITAIRES RESPONSIVES === */
+
+/* Masquer sur mobile */
+.hidden-mobile {
+  display: none;
+}
+
+@media (width >= 40rem) {
+  .hidden-mobile {
+    display: block;
+  }
+}
+
+/* Masquer sur desktop */
+.mobile-only {
+  display: block;
+}
+
+@media (width >= 64rem) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* Stack vertical sur mobile */
+.stack-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (width >= 48rem) {
+  .stack-mobile {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+/* === AMÉLIORATIONS TOUCH === */
+
+/* Agrandir les éléments interactifs pour le touch */
+input[type="checkbox"] {
+  width: 28px;
+  height: 28px;
+  /* Touch target minimum 44px */
+  padding: 8px;
+}
+
+/* Améliorer les zones de tap */
+.toggle-section-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+/* === PERFORMANCE === */
+
+/* Optimiser les animations pour mobile */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === ACCESSIBILITÉ === */
+
+/* Améliorer le contraste sur petits écrans */
+@media (width < 48rem) {
+  .section-total-badge {
+    background: #1a2956;
+    color: white;
+    font-weight: 700;
+  }
+}
+
+/* Focus visible amélioré */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #2e4a9e;
+  outline-offset: 2px;
+}
