@@ -20,6 +20,9 @@ build/
 .env.test.local
 .env.production.local
 
+# Fichiers test
+Fiches formations/
+
 # Logs
 logs
 *.log
