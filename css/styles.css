@@ -32,6 +32,49 @@ body {
   position: relative;
   z-index: 1;
 }
+
+/* Header avec logo Septeo */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.septeo-logo {
+  height: 48px;
+  width: auto;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.septeo-logo:hover {
+  opacity: 0.8;
+}
+
+.app-header h1 {
+  margin: 0;
+  flex: 1;
+}
+
+/* Ajustement responsive pour mobile */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .septeo-logo {
+    height: 40px;
+  }
+
+  .app-header h1 {
+    width: 100%;
+  }
+}
 h1,
 h2,
 h3 {
