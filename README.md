@@ -71,6 +71,8 @@ La section précédemment appelée "TRONC COMMUN" a été renommée "Paramétrag
 - **Correction du bouton de fermeture de la modal** : Ajout d'une gestion d'erreur robuste et de gestionnaires de secours pour assurer le bon fonctionnement de la fermeture de la modal de gestion des profils
 - **Gestion d'erreurs JavaScript** : Implémentation de try-catch pour prévenir les erreurs d'initialisation
 - **Handlers de secours** : Mécanisme de fallback pour garantir la fonctionnalité même en cas de problème d'initialisation
+- **Restauration du tableau de gestion des profils** : Correction du problème de casse qui empêchait l'affichage du tableau des profils utilisateurs dans la section Paramétrage après le renommage de "TRONC COMMUN"
+- **Robustesse du code** : Ajout d'une fonction helper `isSectionNamed()` pour centraliser les comparaisons de noms de sections et éviter les problèmes futurs lors de modifications de terminologie
 
 ## Contact
 
