@@ -234,31 +234,37 @@ class ClientSearch {
   }
 
   /**
-   * Met à jour le champ client
-   * @param {HTMLElement} clientInput - Champ client
-   * @param {string} client - Nom du client
-   * @param {boolean} exactMatch - Si c'est une correspondance exacte
+   * Met à jour le champ client avec le résultat trouvé
    */
   updateClientField(clientInput, client, exactMatch = true) {
+    if (!clientInput || !client) return;
+
+    // Mettre à jour la valeur du champ
     clientInput.value = client;
 
-    // Ajouter une classe pour indiquer le type de correspondance
-    clientInput.classList.remove(
-      "client-found",
-      "client-approximate",
-      "client-not-found"
-    );
+    // Appliquer les styles visuels appropriés
+    this.clearClientField(clientInput);
+    const className = exactMatch ? "client-found" : "client-approximate";
+    clientInput.classList.add(className);
 
-    if (client) {
-      clientInput.classList.add(
-        exactMatch ? "client-found" : "client-approximate"
-      );
-    } else {
-      clientInput.classList.add("client-not-found");
+    // Déclencher l'événement input pour mettre à jour le titre
+    const inputEvent = new Event("input", { bubbles: true });
+    clientInput.dispatchEvent(inputEvent);
+
+    // Animation de confirmation
+    if (exactMatch) {
+      clientInput.classList.add("client-found-animation");
+      setTimeout(() => {
+        clientInput.classList.remove("client-found-animation");
+      }, 600);
     }
 
-    // Déclencher l'événement change pour d'autres modules qui écoutent
-    clientInput.dispatchEvent(new Event("change", { bubbles: true }));
+    // Notification de succès
+    const message = exactMatch
+      ? `✅ Client trouvé : ${client}`
+      : `🔍 Correspondance approximative : ${client}`;
+
+    this.showSuccess(message);
   }
 
   /**

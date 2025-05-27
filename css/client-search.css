@@ -29,21 +29,21 @@
 
 /* ===== ÉTATS DES CHAMPS CLIENT ===== */
 #client.client-found {
-  background-color: #f0f9ff;
-  border-color: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+  background-color: #e8f4fd;
+  border-color: #2e4a9e;
+  box-shadow: 0 0 0 2px rgba(46, 74, 158, 0.1);
 }
 
 #client.client-approximate {
-  background-color: #fefbf0;
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1);
+  background-color: #f0f4ff;
+  border-color: #1a2956;
+  box-shadow: 0 0 0 2px rgba(26, 41, 86, 0.1);
 }
 
 #client.client-not-found {
-  background-color: #fefbf0;
-  border-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+  background-color: #fef2f2;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
 }
 
 /* Animations pour les transitions d'état */
@@ -188,14 +188,15 @@
   }
 
   #client.client-found {
-    background-color: #0f1419;
-    border-color: #059669;
+    background-color: #0d1829;
+    border-color: #2e4a9e;
+    color: #e8f4fd;
   }
 
   #client.client-approximate {
-    background-color: #451a03;
-    border-color: #d97706;
-    color: #fcd34d;
+    background-color: #111827;
+    border-color: #1a2956;
+    color: #d1d5db;
   }
 
   #client.client-not-found {
