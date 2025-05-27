@@ -43,7 +43,7 @@ class ClientSearch {
     this.isLoading = true;
 
     try {
-      const response = await fetch("csv/db.tsv");
+      const response = await fetch("csv/db_anonymized.tsv");
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }

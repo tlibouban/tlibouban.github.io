@@ -24,7 +24,7 @@ build/
 Fiches formations/
 
 # Fichiers db
-db.tsv
+# db.tsv (fichier original confidentiel - utiliser db_anonymized.tsv)
 # Logs
 logs
 *.log
