@@ -1,0 +1,293 @@
+/**
+ * client-search.css - Styles pour le module de recherche client
+ * Contient les styles pour les notifications, indicateurs et états des champs
+ */
+
+/* ===== CONTENEUR DE RECHERCHE ===== */
+.search-input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.search-input-container .search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.search-input-container:hover .search-icon {
+  opacity: 1;
+}
+
+/* ===== ÉTATS DES CHAMPS CLIENT ===== */
+#client.client-found {
+  background-color: #f0f9ff;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+}
+
+#client.client-approximate {
+  background-color: #fefbf0;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1);
+}
+
+#client.client-not-found {
+  background-color: #fefbf0;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+
+/* Animations pour les transitions d'état */
+#client {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* ===== NOTIFICATIONS ===== */
+.client-search-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 400px;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.client-search-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Types de notifications */
+.notification-success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border-left: 4px solid #22c55e;
+}
+
+.notification-warning {
+  background-color: #fef3c7;
+  color: #d97706;
+  border-left: 4px solid #f59e0b;
+}
+
+.notification-info {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  border-left: 4px solid #3b82f6;
+}
+
+.notification-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-left: 4px solid #ef4444;
+}
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 640px) {
+  .client-search-notification {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    transform: translateY(100%);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+
+  .client-search-notification.show {
+    transform: translateY(0);
+  }
+
+  .search-input-container .search-icon {
+    font-size: 16px;
+    right: 16px;
+  }
+}
+
+/* ===== INDICATEURS DE CHARGEMENT ===== */
+.search-input-container.loading::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 50%;
+  border-top-color: #3b82f6;
+  animation: spin 1s linear infinite;
+  z-index: 2;
+}
+
+.search-input-container.loading .search-icon {
+  display: none;
+}
+
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* ===== ACCESSIBILITÉ ===== */
+@media (prefers-reduced-motion: reduce) {
+  .client-search-notification,
+  #client,
+  .search-input-container .search-icon {
+    transition: none;
+  }
+
+  .search-input-container.loading::after {
+    animation: none;
+  }
+}
+
+/* Focus pour navigation clavier */
+#numero-dossier:focus + .search-icon {
+  opacity: 1;
+  color: #3b82f6;
+}
+
+/* ===== ÉTATS HOVER ET FOCUS ===== */
+.search-input-container:hover {
+  /* Le conteneur devient plus interactif */
+}
+
+#numero-dossier:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+  .search-input-container .search-icon {
+    color: #9ca3af;
+  }
+
+  #client.client-found {
+    background-color: #0f1419;
+    border-color: #059669;
+  }
+
+  #client.client-approximate {
+    background-color: #1f1611;
+    border-color: #d97706;
+  }
+
+  #client.client-not-found {
+    background-color: #1f1315;
+    border-color: #dc2626;
+  }
+
+  .notification-success {
+    background-color: #064e3b;
+    color: #a7f3d0;
+  }
+
+  .notification-warning {
+    background-color: #78350f;
+    color: #fcd34d;
+  }
+
+  .notification-info {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+  }
+
+  .notification-error {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+  }
+}
+
+/* ===== ANIMATIONS D'AMÉLIORATION UX ===== */
+.client-found-animation {
+  animation: clientFoundPulse 0.6s ease-out;
+}
+
+@keyframes clientFoundPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+/* ===== TOOLTIPS INFORMATIFS ===== */
+.search-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+  margin-bottom: 5px;
+}
+
+.search-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.search-input-container:hover .search-tooltip {
+  opacity: 1;
+}
+
+/* ===== STYLES POUR LES TRÈS PETITS ÉCRANS ===== */
+@media (max-width: 320px) {
+  .client-search-notification {
+    padding: 12px 16px;
+    font-size: 14px;
+    left: 10px;
+    right: 10px;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .client-search-notification,
+  .search-icon,
+  .search-tooltip {
+    display: none !important;
+  }
+}

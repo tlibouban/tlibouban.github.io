@@ -23,6 +23,8 @@ build/
 # Fichiers test
 Fiches formations/
 
+# Fichiers db
+db.tsv
 # Logs
 logs
 *.log
