@@ -9,189 +9,234 @@
 document.addEventListener("DOMContentLoaded", function () {
   initModalHandlers();
   initProfilsDyn();
+
+  // Gestionnaire de secours pour la fermeture de la modal
+  // Au cas où initModalHandlers échouerait
+  setTimeout(() => {
+    const modal = document.getElementById("profileModal");
+    const closeBtn = modal ? modal.querySelector(".close") : null;
+    const openBtn = document.getElementById("profile-manager-btn");
+
+    if (closeBtn && !closeBtn.hasAttribute("data-handler-added")) {
+      closeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (modal) {
+          modal.style.display = "none";
+          modal.setAttribute("aria-hidden", "true");
+        }
+      });
+      closeBtn.setAttribute("data-handler-added", "true");
+    }
+
+    if (openBtn && modal && !openBtn.hasAttribute("data-handler-added")) {
+      openBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        modal.style.display = "block";
+        modal.setAttribute("aria-hidden", "false");
+      });
+      openBtn.setAttribute("data-handler-added", "true");
+    }
+  }, 100);
 });
 
 /**
  * Initialise les gestionnaires d'événements pour la modale de gestion des profils
  */
 function initModalHandlers() {
-  const modal = document.getElementById("profileModal");
-  const btn = document.getElementById("profile-manager-btn");
+  try {
+    const modal = document.getElementById("profileModal");
+    const btn = document.getElementById("profile-manager-btn");
 
-  // Vérifier d'abord que les éléments essentiels sont présents
-  if (!modal || !btn) {
-    console.warn(
-      "Éléments essentiels de la modale de profil manquants, initialisation abandonnée"
-    );
-    return;
-  }
+    // Vérifier d'abord que les éléments essentiels sont présents
+    if (!modal || !btn) {
+      console.warn(
+        "Éléments essentiels de la modale de profil manquants, initialisation abandonnée"
+      );
+      return;
+    }
 
-  const closeBtn = modal.querySelector(".close");
-  const saveProfileBtn = document.getElementById("save-profile-btn");
-  const saveProfileFormBtn = document.getElementById("save-profile-form-btn");
-  const loadProfileBtn = document.getElementById("load-profile-btn");
-  const deleteProfileBtn = document.getElementById("delete-profile-btn");
-  const profileSelect = document.getElementById("profile-select");
+    const closeBtn = modal.querySelector(".close");
+    const saveProfileBtn = document.getElementById("save-profile-btn");
+    const saveProfileFormBtn = document.getElementById("save-profile-form-btn");
+    const loadProfileBtn = document.getElementById("load-profile-btn");
+    const deleteProfileBtn = document.getElementById("delete-profile-btn");
+    const profileSelect = document.getElementById("profile-select");
 
-  // Vérifier que tous les éléments sont présents
-  if (
-    !closeBtn ||
-    !saveProfileBtn ||
-    !saveProfileFormBtn ||
-    !loadProfileBtn ||
-    !deleteProfileBtn ||
-    !profileSelect
-  ) {
-    console.warn(
-      "Certains éléments de l'interface du gestionnaire de profils sont manquants, mais l'initialisation continue avec les éléments disponibles"
-    );
-    // Ne pas quitter la fonction, continuer avec les éléments disponibles
-  }
+    // Vérifier que tous les éléments sont présents
+    if (
+      !closeBtn ||
+      !saveProfileBtn ||
+      !saveProfileFormBtn ||
+      !loadProfileBtn ||
+      !deleteProfileBtn ||
+      !profileSelect
+    ) {
+      console.warn(
+        "Certains éléments de l'interface du gestionnaire de profils sont manquants, mais l'initialisation continue avec les éléments disponibles"
+      );
+      // Ne pas quitter la fonction, continuer avec les éléments disponibles
+    }
 
-  // Charger les profils depuis la liste dynamique
-  if (profileSelect) {
-    loadProfilesIntoSelect();
-  }
-
-  // Ouvrir la modale
-  btn.addEventListener("click", function () {
-    // Recharger les profils à chaque ouverture pour s'assurer que la liste est à jour
+    // Charger les profils depuis la liste dynamique
     if (profileSelect) {
       loadProfilesIntoSelect();
     }
 
-    modal.style.display = "block";
-    // Accessibilité: informer les lecteurs d'écran
-    modal.setAttribute("aria-hidden", "false");
-    // Mémoriser l'élément actif pour y revenir à la fermeture
-    modal.lastFocus = document.activeElement;
-    // Mettre le focus sur la modale
-    const firstFocusable = modal.querySelector(
-      "button, [href], input, select, textarea"
-    );
-    if (firstFocusable) firstFocusable.focus();
-  });
+    // Ouvrir la modale
+    btn.addEventListener("click", function () {
+      // Recharger les profils à chaque ouverture pour s'assurer que la liste est à jour
+      if (profileSelect) {
+        loadProfilesIntoSelect();
+      }
 
-  // Fermer la modale en cliquant sur X
-  if (closeBtn) {
-    closeBtn.addEventListener("click", function () {
-      closeModal(modal);
+      modal.style.display = "block";
+      // Accessibilité: informer les lecteurs d'écran
+      modal.setAttribute("aria-hidden", "false");
+      // Mémoriser l'élément actif pour y revenir à la fermeture
+      modal.lastFocus = document.activeElement;
+      // Mettre le focus sur la modale
+      const firstFocusable = modal.querySelector(
+        "button, [href], input, select, textarea"
+      );
+      if (firstFocusable) firstFocusable.focus();
     });
-  }
 
-  // Fermer la modale en cliquant en dehors
-  window.addEventListener("click", function (event) {
-    if (event.target === modal) {
-      closeModal(modal);
+    // Fermer la modale en cliquant sur X
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        closeModal(modal);
+      });
     }
-  });
 
-  // Fermer la modale avec la touche Echap
-  window.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && modal.style.display === "block") {
-      closeModal(modal);
+    // Fermer la modale en cliquant en dehors
+    window.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal(modal);
+      }
+    });
+
+    // Fermer la modale avec la touche Echap
+    window.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && modal.style.display === "block") {
+        closeModal(modal);
+      }
+    });
+
+    // Enregistrer un nouveau profil
+    if (saveProfileBtn) {
+      saveProfileBtn.addEventListener("click", function () {
+        const profileNameInput = document.getElementById("new-profile-name");
+        if (!profileNameInput) return;
+
+        const profileName = profileNameInput.value;
+        if (profileName.trim() === "") {
+          alert("Veuillez saisir un nom de profil");
+          return;
+        }
+
+        // Simuler l'enregistrement (à implémenter réellement)
+        saveProfile(profileName);
+
+        // Ajouter le profil à la liste
+        if (profileSelect) {
+          const option = document.createElement("option");
+          option.value = profileName.toLowerCase().replace(/\s+/g, "_");
+          option.text = profileName;
+          profileSelect.add(option);
+        }
+
+        // Ajouter également à la liste dynamique des profils si elle existe
+        if (window.profilsDynList) {
+          window.profilsDynList.push({
+            nom: profileName,
+            nb: 0,
+            ajoute: true,
+          });
+        }
+
+        profileNameInput.value = "";
+      });
     }
-  });
 
-  // Enregistrer un nouveau profil
-  if (saveProfileBtn) {
-    saveProfileBtn.addEventListener("click", function () {
-      const profileNameInput = document.getElementById("new-profile-name");
-      if (!profileNameInput) return;
+    // Enregistrer les changements du formulaire
+    saveProfileFormBtn.addEventListener("click", function () {
+      const selectedIndex = profileSelect.selectedIndex;
 
-      const profileName = profileNameInput.value;
-      if (profileName.trim() === "") {
-        alert("Veuillez saisir un nom de profil");
+      if (profileSelect.value === "") {
+        alert("Veuillez sélectionner un profil ou créer un nouveau");
         return;
       }
 
+      const selectedProfile = profileSelect.options[selectedIndex].text;
+
       // Simuler l'enregistrement (à implémenter réellement)
-      saveProfile(profileName);
-
-      // Ajouter le profil à la liste
-      if (profileSelect) {
-        const option = document.createElement("option");
-        option.value = profileName.toLowerCase().replace(/\s+/g, "_");
-        option.text = profileName;
-        profileSelect.add(option);
-      }
-
-      // Ajouter également à la liste dynamique des profils si elle existe
-      if (window.profilsDynList) {
-        window.profilsDynList.push({
-          nom: profileName,
-          nb: 0,
-          ajoute: true,
-        });
-      }
-
-      profileNameInput.value = "";
+      saveProfileSettings(selectedProfile);
     });
-  }
 
-  // Enregistrer les changements du formulaire
-  saveProfileFormBtn.addEventListener("click", function () {
-    const selectedIndex = profileSelect.selectedIndex;
+    // Charger un profil
+    loadProfileBtn.addEventListener("click", function () {
+      const selectedIndex = profileSelect.selectedIndex;
 
-    if (profileSelect.value === "") {
-      alert("Veuillez sélectionner un profil ou créer un nouveau");
-      return;
-    }
-
-    const selectedProfile = profileSelect.options[selectedIndex].text;
-
-    // Simuler l'enregistrement (à implémenter réellement)
-    saveProfileSettings(selectedProfile);
-  });
-
-  // Charger un profil
-  loadProfileBtn.addEventListener("click", function () {
-    const selectedIndex = profileSelect.selectedIndex;
-
-    if (profileSelect.value === "") {
-      alert("Veuillez sélectionner un profil");
-      return;
-    }
-
-    const selectedProfile = profileSelect.options[selectedIndex].text;
-
-    // Simuler le chargement (à implémenter réellement)
-    loadProfileSettings(selectedProfile);
-  });
-
-  // Supprimer un profil
-  deleteProfileBtn.addEventListener("click", function () {
-    const selectedIndex = profileSelect.selectedIndex;
-
-    if (profileSelect.value === "") {
-      alert("Veuillez sélectionner un profil à supprimer");
-      return;
-    }
-
-    const selectedProfile = profileSelect.options[selectedIndex].text;
-
-    if (
-      confirm(
-        `Êtes-vous sûr de vouloir supprimer le profil "${selectedProfile}" ?`
-      )
-    ) {
-      // Simuler la suppression (à implémenter réellement)
-      deleteProfile(selectedProfile);
-      profileSelect.remove(selectedIndex);
-
-      // Supprimer également de la liste dynamique si elle existe
-      if (window.profilsDynList) {
-        const profilIndex = window.profilsDynList.findIndex(
-          (p) => p.nom === selectedProfile
-        );
-        if (profilIndex !== -1) {
-          window.profilsDynList.splice(profilIndex, 1);
-        }
+      if (profileSelect.value === "") {
+        alert("Veuillez sélectionner un profil");
+        return;
       }
 
-      alert("Profil supprimé");
+      const selectedProfile = profileSelect.options[selectedIndex].text;
+
+      // Simuler le chargement (à implémenter réellement)
+      loadProfileSettings(selectedProfile);
+    });
+
+    // Supprimer un profil
+    deleteProfileBtn.addEventListener("click", function () {
+      const selectedIndex = profileSelect.selectedIndex;
+
+      if (profileSelect.value === "") {
+        alert("Veuillez sélectionner un profil à supprimer");
+        return;
+      }
+
+      const selectedProfile = profileSelect.options[selectedIndex].text;
+
+      if (
+        confirm(
+          `Êtes-vous sûr de vouloir supprimer le profil "${selectedProfile}" ?`
+        )
+      ) {
+        // Simuler la suppression (à implémenter réellement)
+        deleteProfile(selectedProfile);
+        profileSelect.remove(selectedIndex);
+
+        // Supprimer également de la liste dynamique si elle existe
+        if (window.profilsDynList) {
+          const profilIndex = window.profilsDynList.findIndex(
+            (p) => p.nom === selectedProfile
+          );
+          if (profilIndex !== -1) {
+            window.profilsDynList.splice(profilIndex, 1);
+          }
+        }
+
+        alert("Profil supprimé");
+      }
+    });
+  } catch (error) {
+    console.error(
+      "Erreur lors de l'initialisation des gestionnaires de modal:",
+      error
+    );
+    // Essayer d'ajouter au moins le gestionnaire de base pour le bouton de fermeture
+    const modal = document.getElementById("profileModal");
+    const closeBtn = modal ? modal.querySelector(".close") : null;
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        if (modal) modal.style.display = "none";
+      });
     }
-  });
+  }
 }
 
 // Exposer la fonction initModalHandlers au niveau global
