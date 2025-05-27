@@ -67,7 +67,7 @@ function renderChecklist() {
 
     // Déterminer l'ordre des sous-sections en fonction de la section
     const ordreSousSections =
-      section.toUpperCase() === "Paramétrage"
+      section.toUpperCase() === "PARAMÉTRAGE"
         ? ["UTILISATEURS", "MATRICES", "NUMÉROTATION"]
         : section.toUpperCase() === "FORMATIONS"
         ? [
@@ -131,7 +131,7 @@ function renderChecklist() {
           }
 
           const isUtilisateurs =
-            section.toUpperCase() === "Paramétrage" &&
+            section.toUpperCase() === "PARAMÉTRAGE" &&
             (item.FONCTIONNALITES.trim().toLowerCase() ===
               "utilisateurs (par user)" ||
               item.FONCTIONNALITES.trim()
