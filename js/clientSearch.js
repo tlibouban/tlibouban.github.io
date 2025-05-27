@@ -16,6 +16,7 @@ class ClientSearch {
     this.suggestionTimeout = null; // Pour debounce des suggestions
     this.currentSuggestions = [];
     this.selectedSuggestionIndex = -1;
+    this.isSelectingSuggestion = false; // Flag pour éviter la recherche pendant la sélection
 
     this.init();
   }
@@ -179,6 +180,22 @@ class ClientSearch {
       setTimeout(() => {
         this.hideSuggestions();
       }, 200);
+    });
+
+    // Fermer les suggestions quand on clique ailleurs
+    document.addEventListener("click", (event) => {
+      const clientInput = document.getElementById("client");
+      const suggestionsContainer =
+        document.getElementById("client-suggestions");
+
+      if (
+        clientInput &&
+        suggestionsContainer &&
+        !clientInput.contains(event.target) &&
+        !suggestionsContainer.contains(event.target)
+      ) {
+        this.hideSuggestions();
+      }
     });
 
     // Créer le conteneur de suggestions
@@ -463,6 +480,11 @@ class ClientSearch {
    * @param {HTMLElement} numeroInput - Champ numéro à remplir
    */
   performClientSuggestions(query, numeroInput) {
+    // Ne pas rechercher si on est en train de sélectionner une suggestion
+    if (this.isSelectingSuggestion) {
+      return;
+    }
+
     if (!query || query.length < 2) {
       this.hideSuggestions();
       return;
@@ -594,6 +616,12 @@ class ClientSearch {
   selectSuggestion(suggestion, numeroInput) {
     const clientInput = document.getElementById("client");
 
+    // Activer le flag pour éviter les recherches pendant la sélection
+    this.isSelectingSuggestion = true;
+
+    // Cacher immédiatement les suggestions
+    this.hideSuggestions();
+
     // Remplir le champ client
     clientInput.value = suggestion.name;
 
@@ -618,7 +646,10 @@ class ClientSearch {
       clientInput.dispatchEvent(inputEvent);
     }
 
-    this.hideSuggestions();
+    // Réinitialiser le flag après un délai
+    setTimeout(() => {
+      this.isSelectingSuggestion = false;
+    }, 100);
   }
 
   /**
@@ -692,6 +723,12 @@ class ClientSearch {
     }
     this.currentSuggestions = [];
     this.selectedSuggestionIndex = -1;
+
+    // Annuler les timeouts en cours
+    if (this.suggestionTimeout) {
+      clearTimeout(this.suggestionTimeout);
+      this.suggestionTimeout = null;
+    }
   }
 }
 
