@@ -237,19 +237,34 @@ class ClientSearch {
    * Met à jour le champ client avec le résultat trouvé
    */
   updateClientField(clientInput, client, exactMatch = true) {
-    if (!clientInput || !client) return;
+    console.log("🔍 updateClientField called:", {
+      client,
+      exactMatch,
+      clientInput,
+    });
+
+    if (!clientInput || !client) {
+      console.log("❌ Missing clientInput or client:", {
+        clientInput: !!clientInput,
+        client,
+      });
+      return;
+    }
 
     // Mettre à jour la valeur du champ
     clientInput.value = client;
+    console.log("✅ Client field value set to:", clientInput.value);
 
     // Appliquer les styles visuels appropriés
     this.clearClientField(clientInput);
     const className = exactMatch ? "client-found" : "client-approximate";
     clientInput.classList.add(className);
+    console.log("🎨 CSS class applied:", className);
 
     // Déclencher l'événement input pour mettre à jour le titre
     const inputEvent = new Event("input", { bubbles: true });
     clientInput.dispatchEvent(inputEvent);
+    console.log("📡 Input event dispatched for title update");
 
     // Animation de confirmation
     if (exactMatch) {
