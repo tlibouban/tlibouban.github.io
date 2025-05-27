@@ -8,6 +8,9 @@ class MobileAlternative {
   constructor() {
     this.isMobile = this.checkIfMobile();
     this.init();
+
+    // NOUVEAU : Délégation d'événements globale pour tous les breakpoints
+    this.setupGlobalEventDelegation();
   }
 
   checkIfMobile() {
@@ -27,6 +30,134 @@ class MobileAlternative {
     if (newIsMobile !== this.isMobile) {
       this.isMobile = newIsMobile;
       this.transformTables();
+    }
+  }
+
+  /**
+   * NOUVEAU : Configuration de la délégation d'événements globale
+   * Cette approche fonctionne sur tous les breakpoints
+   */
+  setupGlobalEventDelegation() {
+    // Délégation pour tous les inputs et checkboxes
+    document.addEventListener("change", (event) => {
+      const target = event.target;
+
+      // Vérifier si c'est un élément qui doit déclencher les calculs
+      if (this.shouldTriggerCalculation(target)) {
+        console.log(
+          "🔄 [MOBILE] Événement change détecté:",
+          target.type,
+          target.id || target.className
+        );
+        this.handleGlobalInputChange(event);
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      const target = event.target;
+
+      // Vérifier si c'est un élément qui doit déclencher les calculs
+      if (this.shouldTriggerCalculation(target)) {
+        console.log(
+          "🔄 [MOBILE] Événement input détecté:",
+          target.type,
+          target.id || target.className
+        );
+        this.handleGlobalInputChange(event);
+      }
+    });
+  }
+
+  /**
+   * NOUVEAU : Détermine si un élément doit déclencher les calculs
+   */
+  shouldTriggerCalculation(element) {
+    if (!element || !element.type) return false;
+
+    // Types d'éléments qui déclenchent les calculs
+    const triggeringTypes = ["checkbox", "number"];
+    if (!triggeringTypes.includes(element.type)) return false;
+
+    // Classes qui déclenchent les calculs
+    const triggeringClasses = [
+      "check-feature",
+      "check-feature-cabinet",
+      "check-feature-utilisateurs",
+      "check-feature-profil",
+      "feature-nb",
+      "profil-nb",
+      "profil-modif",
+    ];
+
+    // Vérifier si l'élément a une des classes déclencheuses
+    const hasClass = triggeringClasses.some((className) =>
+      element.classList.contains(className)
+    );
+
+    // Ou si c'est dans une carte mobile ou un tableau checklist
+    const isInMobileCard = element.closest(".mobile-feature-card");
+    const isInChecklistTable = element.closest(".checklist-table");
+
+    return hasClass || isInMobileCard || isInChecklistTable;
+  }
+
+  /**
+   * NOUVEAU : Gestionnaire global pour tous les changements d'input
+   */
+  handleGlobalInputChange = (event) => {
+    const element = event.target;
+
+    // Appeler updateTotals si la fonction existe
+    if (typeof updateTotals === "function") {
+      console.log("📊 [MOBILE] Appel updateTotals()");
+      updateTotals();
+    } else {
+      console.warn("⚠️ [MOBILE] updateTotals() non disponible");
+    }
+
+    // Gérer les accords grammaticaux pour les unités
+    if (element.type === "number") {
+      this.handleUnitAccord(element);
+    }
+
+    // Forcer la mise à jour de l'affichage
+    setTimeout(() => {
+      if (typeof updateTotals === "function") {
+        updateTotals();
+      }
+    }, 100);
+  };
+
+  /**
+   * NOUVEAU : Gestion des accords grammaticaux des unités
+   */
+  handleUnitAccord(numberInput) {
+    // Pour les cartes mobiles
+    if (numberInput.hasAttribute("data-unit")) {
+      const card = numberInput.closest(".mobile-feature-card");
+      if (card) {
+        const unitSpan = card.querySelector(".mobile-unit");
+        const unitBase = numberInput.getAttribute("data-unit");
+        const count = parseInt(numberInput.value, 10) || 0;
+
+        if (unitSpan && unitBase && typeof accordUnit === "function") {
+          unitSpan.textContent = accordUnit(count, unitBase);
+        }
+      }
+    }
+
+    // Pour les tableaux standards
+    const row = numberInput.closest("tr");
+    if (row) {
+      const uniteCell = row.querySelector(".unite-cell");
+      if (uniteCell && uniteCell.hasAttribute("data-unit-base")) {
+        const unitBase = uniteCell.getAttribute("data-unit-base");
+        const count = parseInt(numberInput.value, 10) || 0;
+
+        if (typeof accordUnit === "function") {
+          uniteCell.textContent = accordUnit(count, unitBase);
+        }
+      }
     }
   }
 
@@ -98,8 +229,7 @@ class MobileAlternative {
     table.classList.add("mobile-transformed");
     table.parentNode.insertBefore(cardsContainer, table.nextSibling);
 
-    // NOUVEAU : Réattacher les event listeners pour les calculs
-    this.reattachEventListeners(cardsContainer);
+    console.log("✅ [MOBILE] Tableau transformé en cartes - délégation active");
   }
 
   createSectionHeader(row) {
@@ -231,72 +361,6 @@ class MobileAlternative {
     return card;
   }
 
-  /**
-   * NOUVEAU : Réattache les event listeners pour les calculs après transformation
-   */
-  reattachEventListeners(cardsContainer) {
-    // Attacher les listeners pour les checkboxes et inputs
-    const interactiveElements = cardsContainer.querySelectorAll(
-      'input[type="checkbox"], input[type="number"], .switch input'
-    );
-
-    interactiveElements.forEach((element) => {
-      // Supprimer les listeners existants pour éviter les doublons
-      element.removeEventListener("input", this.handleInputChange);
-      element.removeEventListener("change", this.handleInputChange);
-
-      // Ajouter les nouveaux listeners
-      element.addEventListener("input", this.handleInputChange);
-      element.addEventListener("change", this.handleInputChange);
-    });
-
-    // Gérer spécifiquement les profils dynamiques s'ils existent
-    const profilElements = cardsContainer.querySelectorAll(
-      ".check-feature-profil, .profil-nb, .profil-modif"
-    );
-
-    profilElements.forEach((element) => {
-      element.removeEventListener("input", this.handleInputChange);
-      element.addEventListener("input", this.handleInputChange);
-    });
-
-    // Réattacher les listeners pour les boutons d'action des profils
-    const profilButtons = cardsContainer.querySelectorAll(
-      "#add-profil-btn, #profile-manager-btn, .remove-profil-btn"
-    );
-
-    profilButtons.forEach((button) => {
-      // Ces boutons ont leurs propres gestionnaires dans profileManager.js
-      // On déclenche un événement personnalisé pour les réinitialiser
-      button.dispatchEvent(new Event("mobile-transform-complete"));
-    });
-  }
-
-  /**
-   * NOUVEAU : Gestionnaire unifié pour les changements d'input
-   */
-  handleInputChange = (event) => {
-    // Appeler updateTotals si la fonction existe
-    if (typeof updateTotals === "function") {
-      updateTotals();
-    }
-
-    // Gérer les accords grammaticaux pour les unités
-    const input = event.target;
-    if (input.type === "number" && input.hasAttribute("data-unit")) {
-      const card = input.closest(".mobile-feature-card");
-      if (card) {
-        const unitSpan = card.querySelector(".mobile-unit");
-        const unitBase = input.getAttribute("data-unit");
-        const count = parseInt(input.value, 10) || 0;
-
-        if (unitSpan && unitBase && typeof accordUnit === "function") {
-          unitSpan.textContent = accordUnit(count, unitBase);
-        }
-      }
-    }
-  };
-
   restoreTableFromCards(table) {
     if (!table.classList.contains("mobile-transformed")) return;
 
@@ -312,10 +376,7 @@ class MobileAlternative {
     table.style.display = "";
     table.classList.remove("mobile-transformed");
 
-    // Réattacher les listeners sur le tableau restauré
-    if (typeof addAllInputListeners === "function") {
-      setTimeout(() => addAllInputListeners(), 100);
-    }
+    console.log("✅ [MOBILE] Tableau restauré - délégation reste active");
   }
 }
 
@@ -478,6 +539,24 @@ const mobileCardStyles = `
   font-weight: 700;
   color: #2e4a9e;
 }
+
+/* Indicateur visuel de fonctionnement */
+.mobile-feature-card input:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-color: #3b82f6;
+}
+
+.mobile-cards-container::before {
+  content: "📱 Mode mobile actif - Calculs automatiques";
+  display: block;
+  background: #e0f2fe;
+  color: #01579b;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
 </style>
 `;
 
@@ -486,8 +565,41 @@ document.head.insertAdjacentHTML("beforeend", mobileCardStyles);
 
 // Initialiser le système mobile alternatif
 document.addEventListener("DOMContentLoaded", () => {
-  new MobileAlternative();
+  const mobileAlt = new MobileAlternative();
+
+  // Export global pour debugging
+  window.MobileAlternative = MobileAlternative;
+  window.mobileAltInstance = mobileAlt;
+
+  console.log(
+    "🚀 [MOBILE] Système mobile initialisé avec délégation d'événements globale"
+  );
 });
 
-// Exporter pour usage externe si nécessaire
-window.MobileAlternative = MobileAlternative;
+// Test de fonctionnement
+window.testMobileGlobal = () => {
+  console.log("🧪 [TEST GLOBAL] Test de la délégation d'événements...");
+
+  // Tester updateTotals
+  if (typeof updateTotals === "function") {
+    console.log("✅ updateTotals disponible");
+    updateTotals();
+  } else {
+    console.log("❌ updateTotals indisponible");
+  }
+
+  // Tester les éléments
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const numberInputs = document.querySelectorAll('input[type="number"]');
+
+  console.log(
+    `📊 Éléments trouvés: ${checkboxes.length} checkboxes, ${numberInputs.length} inputs number`
+  );
+
+  // Simuler un changement
+  if (checkboxes.length > 0) {
+    const firstCheckbox = checkboxes[0];
+    console.log("🔄 Test checkbox:", firstCheckbox.className);
+    firstCheckbox.click();
+  }
+};
