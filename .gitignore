@@ -24,7 +24,8 @@ build/
 Fiches formations/
 
 # Fichiers db
-# db.tsv (fichier original confidentiel - utiliser db_anonymized.tsv)
+db.tsv (fichier original confidentiel - utiliser db_anonymized.tsv)
+
 # Logs
 logs
 *.log
@@ -34,3 +35,4 @@ yarn-error.log*
 
 # Fichiers spécifiques à Windows
 site.code-workspace 
+csv/db.tsv
