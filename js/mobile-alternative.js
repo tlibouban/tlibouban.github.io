@@ -97,6 +97,9 @@ class MobileAlternative {
     table.style.display = "none";
     table.classList.add("mobile-transformed");
     table.parentNode.insertBefore(cardsContainer, table.nextSibling);
+
+    // NOUVEAU : Réattacher les event listeners pour les calculs
+    this.reattachEventListeners(cardsContainer);
   }
 
   createSectionHeader(row) {
@@ -137,8 +140,22 @@ class MobileAlternative {
     let checkboxHtml = "";
 
     if (isSwitch) {
-      // Copier le switch existant
-      checkboxHtml = cells[0].innerHTML;
+      // Copier le switch existant avec tous ses attributs
+      const switchElement = cells[0].querySelector(".switch");
+      const inputElement = switchElement.querySelector("input");
+      checkboxHtml = `
+        <label class="switch">
+          <input type="checkbox" ${inputElement.checked ? "checked" : ""} 
+                 class="${inputElement.className}" 
+                 id="${inputElement.id}" 
+                 name="${inputElement.name}"
+                 aria-label="${
+                   inputElement.getAttribute("aria-label") ||
+                   "Activer cette fonctionnalité"
+                 }" />
+          <span class="slider"></span>
+        </label>
+      `;
     } else if (checkbox) {
       // Copier la checkbox normale
       checkboxHtml = `<input type="checkbox" ${
@@ -175,7 +192,10 @@ class MobileAlternative {
                      class="${numberInput.className}" 
                      id="${numberInput.id}" 
                      name="${numberInput.name}" 
-                     style="width: 80px;" />
+                     style="width: 80px;" 
+                     data-unit="${
+                       numberInput.getAttribute("data-unit") || ""
+                     }" />
               <span class="mobile-unit">${unit}</span>
             </div>
           </div>
@@ -196,7 +216,7 @@ class MobileAlternative {
         
         <div class="mobile-card-row mobile-card-total">
           <span class="mobile-card-label">Sous-total:</span>
-          <span class="mobile-card-value mobile-subtotal">${subtotal}</span>
+          <span class="mobile-card-value mobile-subtotal sous-total">${subtotal}</span>
         </div>
       </div>
     `;
@@ -210,6 +230,72 @@ class MobileAlternative {
 
     return card;
   }
+
+  /**
+   * NOUVEAU : Réattache les event listeners pour les calculs après transformation
+   */
+  reattachEventListeners(cardsContainer) {
+    // Attacher les listeners pour les checkboxes et inputs
+    const interactiveElements = cardsContainer.querySelectorAll(
+      'input[type="checkbox"], input[type="number"], .switch input'
+    );
+
+    interactiveElements.forEach((element) => {
+      // Supprimer les listeners existants pour éviter les doublons
+      element.removeEventListener("input", this.handleInputChange);
+      element.removeEventListener("change", this.handleInputChange);
+
+      // Ajouter les nouveaux listeners
+      element.addEventListener("input", this.handleInputChange);
+      element.addEventListener("change", this.handleInputChange);
+    });
+
+    // Gérer spécifiquement les profils dynamiques s'ils existent
+    const profilElements = cardsContainer.querySelectorAll(
+      ".check-feature-profil, .profil-nb, .profil-modif"
+    );
+
+    profilElements.forEach((element) => {
+      element.removeEventListener("input", this.handleInputChange);
+      element.addEventListener("input", this.handleInputChange);
+    });
+
+    // Réattacher les listeners pour les boutons d'action des profils
+    const profilButtons = cardsContainer.querySelectorAll(
+      "#add-profil-btn, #profile-manager-btn, .remove-profil-btn"
+    );
+
+    profilButtons.forEach((button) => {
+      // Ces boutons ont leurs propres gestionnaires dans profileManager.js
+      // On déclenche un événement personnalisé pour les réinitialiser
+      button.dispatchEvent(new Event("mobile-transform-complete"));
+    });
+  }
+
+  /**
+   * NOUVEAU : Gestionnaire unifié pour les changements d'input
+   */
+  handleInputChange = (event) => {
+    // Appeler updateTotals si la fonction existe
+    if (typeof updateTotals === "function") {
+      updateTotals();
+    }
+
+    // Gérer les accords grammaticaux pour les unités
+    const input = event.target;
+    if (input.type === "number" && input.hasAttribute("data-unit")) {
+      const card = input.closest(".mobile-feature-card");
+      if (card) {
+        const unitSpan = card.querySelector(".mobile-unit");
+        const unitBase = input.getAttribute("data-unit");
+        const count = parseInt(input.value, 10) || 0;
+
+        if (unitSpan && unitBase && typeof accordUnit === "function") {
+          unitSpan.textContent = accordUnit(count, unitBase);
+        }
+      }
+    }
+  };
 
   restoreTableFromCards(table) {
     if (!table.classList.contains("mobile-transformed")) return;
@@ -225,6 +311,11 @@ class MobileAlternative {
     // Restaurer le tableau
     table.style.display = "";
     table.classList.remove("mobile-transformed");
+
+    // Réattacher les listeners sur le tableau restauré
+    if (typeof addAllInputListeners === "function") {
+      setTimeout(() => addAllInputListeners(), 100);
+    }
   }
 }
 
@@ -380,6 +471,12 @@ const mobileCardStyles = `
   margin: 0 0.25rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
+}
+
+/* Assurer que les sous-totaux des cartes sont bien mis à jour */
+.mobile-feature-card .mobile-subtotal {
+  font-weight: 700;
+  color: #2e4a9e;
 }
 </style>
 `;
