@@ -58,6 +58,14 @@ Les fichiers suivants sont ignorés par Git :
 
 L'application intègre le logo officiel Septeo depuis le [site web Septeo](https://www.septeo.com/fr) pour maintenir une cohérence avec l'identité visuelle de l'entreprise. Le logo est affiché de manière responsive dans l'en-tête de l'application.
 
+### Évolutions de la terminologie
+
+La section précédemment appelée "TRONC COMMUN" a été renommée "Paramétrage" pour une meilleure clarté et cohérence terminologique. Cette modification affecte :
+- Les titres de sections dans l'interface
+- Les identifiants et attributs `data-section` 
+- Les références dans le code JavaScript
+- La documentation et les commentaires
+
 ## Contact
 
 Pour toute question concernant cet outil, veuillez contacter l'équipe de formation SEPTEO.
