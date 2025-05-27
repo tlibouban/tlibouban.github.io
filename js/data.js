@@ -513,9 +513,9 @@ const cabinetOptions = [
 
 // Checklist des fonctionnalités avec temps
 const checklistData = [
-  // TRONC COMMUN
+  // Paramétrage
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "UTILISATEURS",
     FONCTIONNALITES:
       "Utilisateurs (par user)\n- Activation/désactivation\n- Tx horaire, Profil, Représentation",
@@ -523,35 +523,35 @@ const checklistData = [
     TEMPS: "00:02:00",
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "UTILISATEURS",
     FONCTIONNALITES: "Profils",
     Attention: "",
     TEMPS: "00:30:00",
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "UTILISATEURS",
     FONCTIONNALITES: "Equipes",
     Attention: "",
     TEMPS: "00:01:00",
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "UTILISATEURS",
     FONCTIONNALITES: "Modèles de taux",
     Attention: "",
     TEMPS: "00:01:00",
   },
   /* {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "MATRICES",
     FONCTIONNALITES: "Matrices",
     Attention: "Warning",
     TEMPS: "",
   },*/
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "MATRICES",
     FONCTIONNALITES: "Modification fonds de page",
     Attention: "",
@@ -560,7 +560,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "MATRICES",
     FONCTIONNALITES: "Modification matrices existantes",
     Attention: "",
@@ -569,7 +569,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "MATRICES",
     FONCTIONNALITES: "Matrices existantes à récupérer",
     Attention: "",
@@ -578,7 +578,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "MATRICES",
     FONCTIONNALITES: "Nettoyage des matrices",
     Attention: "",
@@ -587,7 +587,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "NUMÉROTATION",
     FONCTIONNALITES: "Numérotation dossiers",
     Attention: "",
@@ -596,7 +596,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "NUMÉROTATION",
     FONCTIONNALITES: "Numérotation factures",
     Attention: "",
@@ -605,7 +605,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     SOUS_SECTION: "NUMÉROTATION",
     FONCTIONNALITES: "Numérotation archives",
     Attention: "",
@@ -614,7 +614,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Sites",
     Attention: "",
     TEMPS: "00:15:00",
@@ -622,7 +622,7 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Arborescences",
     Attention: "",
     TEMPS: "00:15:00",
@@ -630,34 +630,34 @@ const checklistData = [
     DEFAULT_VALUE: 0,
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Codes activités",
     Attention: "",
     TEMPS: "01:00:00",
     TYPE: "switch",
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Dashboard",
     Attention: "",
     TEMPS: "",
     TYPE: "switch",
   },
   /* {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Codes activités",
     Attention: "",
     TEMPS: "01:00:00",
   },*/
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Actions liées",
     Attention: "",
     TEMPS: "",
     TYPE: "switch",
   },
   {
-    THEME: "TRONC COMMUN",
+    THEME: "Paramétrage",
     FONCTIONNALITES: "Infos complémentaires",
     Attention: "",
     TEMPS: "",
