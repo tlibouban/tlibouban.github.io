@@ -431,7 +431,7 @@ function renderProfilsDyn() {
 
       // Mettre à jour l'accord grammatical des utilisateurs
       const tr = document.querySelector(
-        '[data-section="Paramétrage"][data-idx="0"]'
+        '[data-section="PARAMÉTRAGE"][data-idx="0"]'
       );
       if (tr) {
         const nbInput = tr.querySelector("#utilisateurs-nb");

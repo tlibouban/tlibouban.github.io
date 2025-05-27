@@ -37,7 +37,7 @@ function renderChecklist() {
 
   // Définir l'ordre des sections
   const ordreDesSections = [
-    "Paramétrage",
+    "PARAMÉTRAGE",
     "FORMATIONS",
     "MODULES COMPLEMENTAIRES",
     "CABINET OPTION",
@@ -81,7 +81,7 @@ function renderChecklist() {
     });
 
     // Déterminer l'ordre des sous-sections en fonction de la section
-    const ordreSousSections = isSectionNamed(section, "Paramétrage")
+    const ordreSousSections = isSectionNamed(section, "PARAMÉTRAGE")
       ? ["UTILISATEURS", "MATRICES", "NUMÉROTATION"]
       : isSectionNamed(section, "FORMATIONS")
       ? [
@@ -138,14 +138,14 @@ function renderChecklist() {
       sousSectionsKeys.forEach((ss) => {
         html += `<tr><td colspan="6"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></td></tr>`;
         sousSections[ss].forEach((item) => {
-          // Ignorer la ligne spécifique avec data-section="Paramétrage" et data-idx="1"
-          if (isSectionNamed(section, "Paramétrage") && idxGlobal === 1) {
+          // Ignorer la ligne spécifique avec data-section="PARAMÉTRAGE" et data-idx="1"
+          if (isSectionNamed(section, "PARAMÉTRAGE") && idxGlobal === 1) {
             idxGlobal++;
             return;
           }
 
           const isUtilisateurs =
-            isSectionNamed(section, "Paramétrage") &&
+            isSectionNamed(section, "PARAMÉTRAGE") &&
             (item.FONCTIONNALITES.trim().toLowerCase() ===
               "utilisateurs (par user)" ||
               item.FONCTIONNALITES.trim()

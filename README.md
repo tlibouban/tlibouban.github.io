@@ -1,4 +1,4 @@
-# Checklist Paramétrage AIR NEO
+# Checklist PARAMÉTRAGE AIR NEO
 
 Application web permettant de gérer les checklists de paramétrage des applications AIR et NEO.
 
@@ -60,7 +60,7 @@ L'application intègre le logo officiel Septeo depuis le [site web Septeo](https
 
 ### Évolutions de la terminologie
 
-La section précédemment appelée "TRONC COMMUN" a été renommée "Paramétrage" pour une meilleure clarté et cohérence terminologique. Cette modification affecte :
+La section précédemment appelée "TRONC COMMUN" a été renommée "PARAMÉTRAGE" pour une meilleure clarté et cohérence terminologique. Cette modification affecte :
 - Les titres de sections dans l'interface
 - Les identifiants et attributs `data-section` 
 - Les références dans le code JavaScript
@@ -71,7 +71,7 @@ La section précédemment appelée "TRONC COMMUN" a été renommée "Paramétrag
 - **Correction du bouton de fermeture de la modal** : Ajout d'une gestion d'erreur robuste et de gestionnaires de secours pour assurer le bon fonctionnement de la fermeture de la modal de gestion des profils
 - **Gestion d'erreurs JavaScript** : Implémentation de try-catch pour prévenir les erreurs d'initialisation
 - **Handlers de secours** : Mécanisme de fallback pour garantir la fonctionnalité même en cas de problème d'initialisation
-- **Restauration du tableau de gestion des profils** : Correction du problème de casse qui empêchait l'affichage du tableau des profils utilisateurs dans la section Paramétrage après le renommage de "TRONC COMMUN"
+- **Restauration du tableau de gestion des profils** : Correction du problème de casse qui empêchait l'affichage du tableau des profils utilisateurs dans la section PARAMÉTRAGE après le renommage de "TRONC COMMUN"
 - **Robustesse du code** : Ajout d'une fonction helper `isSectionNamed()` pour centraliser les comparaisons de noms de sections et éviter les problèmes futurs lors de modifications de terminologie
 
 ## Contact
