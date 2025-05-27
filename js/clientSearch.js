@@ -22,6 +22,7 @@ class ClientSearch {
       await this.loadClientDatabase();
       this.setupEventListeners();
       this.addSearchIndicator();
+      this.monitorClientField();
       console.log("✅ Module de recherche client initialisé avec succès");
     } catch (error) {
       console.error(
@@ -276,7 +277,24 @@ class ClientSearch {
       display: computedStyle.display,
       visibility: computedStyle.visibility,
       fontSize: computedStyle.fontSize,
+      fontWeight: computedStyle.fontWeight,
+      textShadow: computedStyle.textShadow,
     });
+
+    // Test direct de la valeur
+    console.log("🔧 Direct value check:", {
+      value: clientInput.value,
+      getAttribute: clientInput.getAttribute("value"),
+      hasValue: !!clientInput.value,
+      valueLength: clientInput.value.length,
+    });
+
+    // Forcer plusieurs fois la valeur
+    setTimeout(() => {
+      clientInput.value = client;
+      clientInput.setAttribute("value", client);
+      console.log("🔧 Forced value again:", clientInput.value);
+    }, 100);
 
     // Déclencher l'événement input pour mettre à jour le titre
     const inputEvent = new Event("input", { bubbles: true });
@@ -430,6 +448,62 @@ class ClientSearch {
   clearCache() {
     this.cache.clear();
     console.log("🗑️ Cache de recherche client vidé");
+  }
+
+  /**
+   * Surveille le champ client pour détecter les interférences
+   */
+  monitorClientField() {
+    const clientInput = document.getElementById("client");
+    if (!clientInput) return;
+
+    // Observer les changements de valeur
+    let lastValue = clientInput.value;
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "value"
+        ) {
+          console.log("🔍 Attribute 'value' changed:", {
+            oldValue: mutation.oldValue,
+            newValue: clientInput.getAttribute("value"),
+            currentValue: clientInput.value,
+          });
+        }
+      });
+    });
+
+    observer.observe(clientInput, {
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: ["value"],
+    });
+
+    // Observer les changements de propriété value
+    setInterval(() => {
+      if (clientInput.value !== lastValue) {
+        console.log("🔍 Value property changed:", {
+          from: lastValue,
+          to: clientInput.value,
+          stackTrace: new Error().stack,
+        });
+        lastValue = clientInput.value;
+      }
+    }, 100);
+
+    // Observer les événements
+    ["input", "change", "focus", "blur", "reset"].forEach((eventType) => {
+      clientInput.addEventListener(eventType, (e) => {
+        console.log(`🔍 Event '${eventType}' on client field:`, {
+          value: clientInput.value,
+          target: e.target,
+          isTrusted: e.isTrusted,
+        });
+      });
+    });
+
+    console.log("🔍 Monitoring client field for interferences");
   }
 }
 

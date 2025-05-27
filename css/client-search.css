@@ -130,6 +130,8 @@ input[type="text"]#client {
   /* Assurer que le texte est toujours visible */
   font-weight: bold !important;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5) !important;
+  min-height: 40px !important;
+  line-height: 1.5 !important;
 }
 
 #client:not(:placeholder-shown) {
@@ -144,4 +146,24 @@ input[type="text"]#client {
     rgba(46, 74, 158, 0.1) 75%
   ) !important;
   background-size: 8px 8px !important;
+}
+
+/* Style très visible pour forcer l'affichage */
+#client[value]:not([value=""]) {
+  background-color: red !important;
+  color: white !important;
+  border: 3px solid green !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+}
+
+/* Alternative pour JavaScript */
+#client.client-found,
+#client.client-approximate {
+  background-color: yellow !important;
+  color: black !important;
+  border: 3px solid blue !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
 }
