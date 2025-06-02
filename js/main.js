@@ -82,7 +82,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // =====================
   // Base de données des clients depuis le TSV
   // =====================
-  let clientDatabase = null;
+  let clientDatabase = [];
+  let commercialDatabase = null; // Base de données commerciale
 
   // Charger la base de données des clients
   async function loadClientDatabase() {
@@ -114,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
               communication,
               documentation,
               comptabilite,
+              departement,
             ] = columns;
 
             clientDatabase.push({
@@ -139,12 +141,14 @@ document.addEventListener("DOMContentLoaded", function () {
               communication: communication ? parseInt(communication.trim()) : 0,
               documentation: documentation ? parseInt(documentation.trim()) : 0,
               comptabilite: comptabilite ? parseInt(comptabilite.trim()) : 0,
+              // Nouvelle colonne département
+              departement: departement ? departement.trim() : "",
             });
           }
         }
       }
       console.log(
-        `📊 Base de données client chargée: ${clientDatabase.length} entrées avec données de métiers`
+        `📊 Base de données client chargée: ${clientDatabase.length} entrées avec données de métiers et départements`
       );
     } catch (error) {
       console.error(
@@ -169,6 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Charger la base de données au démarrage
   loadClientDatabase();
+  loadCommercialDatabase();
 
   // =====================
   // Gestion des dropdowns avec logique client/prospect
@@ -188,6 +193,66 @@ document.addEventListener("DOMContentLoaded", function () {
     updateOptionsBasedOnClient();
   });
 
+  // Fonction pour afficher les informations de l'équipe commerciale
+  function displayCommercialTeam(clientData) {
+    // Chercher ou créer la div pour les informations commerciales
+    let commercialDiv = document.getElementById("commercial-team-info");
+
+    if (!commercialDiv) {
+      // Créer la div après la scenario-row
+      const scenarioRow = document.querySelector(".scenario-row");
+      if (!scenarioRow) return;
+
+      commercialDiv = document.createElement("div");
+      commercialDiv.id = "commercial-team-info";
+      commercialDiv.className = "commercial-team-container";
+
+      // Insérer après la scenario-row
+      scenarioRow.parentNode.insertBefore(
+        commercialDiv,
+        scenarioRow.nextSibling
+      );
+    }
+
+    if (!clientData || !clientData.departement) {
+      commercialDiv.style.display = "none";
+      return;
+    }
+
+    const commercialData = getCommercialDataByDepartment(
+      clientData.departement
+    );
+
+    if (!commercialData) {
+      commercialDiv.style.display = "none";
+      return;
+    }
+
+    // Construire l'affichage des informations commerciales
+    commercialDiv.innerHTML = `
+      <div class="commercial-team-content">
+        <h4>🏢 Équipe commerciale - Zone ${commercialData.Zone}</h4>
+        <div class="commercial-team-details">
+          <span class="commercial-item">
+            <strong>RR:</strong> ${commercialData["RR Nom"]}${
+      commercialData["RR Tel"] ? ` (${commercialData["RR Tel"]})` : ""
+    }
+          </span>
+          <span class="commercial-separator">•</span>
+          <span class="commercial-item">
+            <strong>CS MM:</strong> ${commercialData["CS MM Nom"]}
+          </span>
+          <span class="commercial-separator">•</span>
+          <span class="commercial-item">
+            <strong>CS LM:</strong> ${commercialData["CS LM Nom"]}
+          </span>
+        </div>
+      </div>
+    `;
+
+    commercialDiv.style.display = "block";
+  }
+
   // Fonction pour mettre à jour les options selon le client
   function updateOptionsBasedOnClient() {
     const clientName = clientInput.value;
@@ -196,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (clientData) {
       console.log(
-        `🔍 Client trouvé: ${clientData.nom} (${clientData.type}) - ERP: ${clientData.erp} - Effectif: ${clientData.effectif}`
+        `🔍 Client trouvé: ${clientData.nom} (${clientData.type}) - ERP: ${clientData.erp} - Effectif: ${clientData.effectif} - Dép: ${clientData.departement}`
       );
 
       // Remplir le champ effectif
@@ -213,12 +278,18 @@ document.addEventListener("DOMContentLoaded", function () {
         // Logiciel de base = ERP du client uniquement (comme pour les prospects)
         updateLogicielOptionsForClient(clientData.erp);
       }
+
+      // Afficher les informations de l'équipe commerciale
+      displayCommercialTeam(clientData);
     } else {
       // Client non trouvé dans la base, réinitialiser effectif et revenir aux options standard
       effectifInput.value = "";
       updateProjetOptionsStandard();
       updateLogicielOptionsStandard();
       logicielAutreContainer.classList.remove("hidden");
+
+      // Masquer les informations commerciales
+      displayCommercialTeam(null);
     }
 
     // Mettre à jour les profils utilisateurs selon les données TSV
@@ -584,7 +655,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateMainTitle() {
     const val = clientInput.value.trim();
     if (val) {
-      mainTitle.textContent = `Checklist du déploiement du cabinet ${val}`;
+      // Rechercher le client dans la base pour obtenir le département
+      const clientData = findClientInDatabase(val);
+      if (clientData && clientData.departement) {
+        mainTitle.textContent = `Checklist du déploiement du cabinet ${val} (dép. ${clientData.departement})`;
+      } else {
+        mainTitle.textContent = `Checklist du déploiement du cabinet ${val}`;
+      }
     } else {
       mainTitle.textContent = "Checklist du déploiement";
     }
@@ -709,5 +786,39 @@ document.addEventListener("DOMContentLoaded", function () {
         `✅ Cohérence vérifiée: Total profils = Effectif TSV = ${totalProfiles}`
       );
     }
+  }
+
+  // =====================
+  // Chargement des données commerciales
+  // =====================
+  async function loadCommercialDatabase() {
+    try {
+      const response = await fetch(
+        "json/repartition_commerciale_par_departement_anonymized.json"
+      );
+      const data = await response.json();
+
+      // Créer un map pour un accès rapide par département
+      commercialDatabase = new Map();
+      data.forEach((entry) => {
+        commercialDatabase.set(entry.Département, entry);
+      });
+
+      console.log(
+        `🏢 Base de données commerciale chargée: ${commercialDatabase.size} départements`
+      );
+    } catch (error) {
+      console.error(
+        "❌ Erreur lors du chargement de la base commerciale:",
+        error
+      );
+      commercialDatabase = null;
+    }
+  }
+
+  // Fonction pour obtenir les données commerciales d'un département
+  function getCommercialDataByDepartment(departement) {
+    if (!commercialDatabase || !departement) return null;
+    return commercialDatabase.get(departement);
   }
 });
