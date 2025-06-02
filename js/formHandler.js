@@ -407,14 +407,12 @@ function renderCabinetColumn(
       html += `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
         item.TEMPS || ""
       }" data-option-name="${optionName}">
-        <td><label class="switch">
-            <input type="checkbox" class="check-feature-cabinet" aria-label="Activer/désactiver cette fonctionnalité" 
-              id="feature-${sectionId}-${ss.replace(/\s+/g, "-")}-${idxGlobal}" 
-              name="feature-${sectionId}-${idxGlobal}" 
-              ${forceActive ? "checked" : ""}
-            />
-            <span class="slider"></span>
-          </label></td>
+        <td>${renderModernSwitch(
+          `feature-${sectionId}-${ss.replace(/\s+/g, "-")}-${idxGlobal}`,
+          `feature-${sectionId}-${idxGlobal}`,
+          forceActive,
+          "Activer/désactiver cette fonctionnalité"
+        )}</td>
         <td>${tooltipHTML}${item.FONCTIONNALITES.replace(
         /^\[PACKS\] |^\[MODULE\] /,
         ""
@@ -819,4 +817,30 @@ function setAllSections(expanded) {
       if (content) content.classList.remove("collapsed");
     }
   });
+}
+
+/**
+ * Génère un switch moderne pour les tableaux Cabinet Option
+ * @param {string} id - ID unique pour le switch
+ * @param {string} name - Nom du champ
+ * @param {boolean} checked - État initial
+ * @param {string} ariaLabel - Label d'accessibilité
+ * @returns {string} HTML du switch moderne
+ */
+function renderModernSwitch(id, name, checked = false, ariaLabel = "") {
+  return `
+    <div class="modern-switch-container">
+      <input 
+        id="${id}"
+        name="${name}"
+        type="checkbox" 
+        class="modern-switch-input check-feature-cabinet"
+        aria-label="${ariaLabel}"
+        ${checked ? "checked" : ""}
+      >
+      <label for="${id}" class="modern-switch-label">
+        <div class="tick-mark"></div>
+      </label>
+    </div>
+  `;
 }

@@ -3,6 +3,52 @@
  * Gestion des composants Vue pour les différentes parties de l'application
  */
 
+// Composant Switch moderne avec animation de coche
+const ModernSwitch = {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      default: "",
+    },
+    checked: {
+      type: Boolean,
+      default: false,
+    },
+    ariaLabel: {
+      type: String,
+      default: "",
+    },
+  },
+  emits: ["update:checked", "change"],
+  template: `
+    <div class="modern-switch-container">
+      <input 
+        :id="id"
+        :name="name"
+        :checked="checked"
+        :aria-label="ariaLabel"
+        type="checkbox" 
+        class="modern-switch-input"
+        @change="handleChange"
+      >
+      <label :for="id" class="modern-switch-label">
+        <div class="tick-mark"></div>
+      </label>
+    </div>
+  `,
+  methods: {
+    handleChange(event) {
+      const isChecked = event.target.checked;
+      this.$emit("update:checked", isChecked);
+      this.$emit("change", event);
+    },
+  },
+};
+
 // Attendre que le DOM soit chargé avant de monter Vue
 document.addEventListener("DOMContentLoaded", function () {
   // Vérifier si Vue est disponible  if (typeof Vue === "undefined") {    alert("Vue.js n'est pas chargé. Veuillez inclure Vue.js avant ce script.");    return;  }
@@ -249,6 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const app = Vue.createApp({
       components: {
         "profile-modal": ProfileModal,
+        "modern-switch": ModernSwitch,
       },
     });
 
@@ -260,6 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else if (Vue.component) {
     // Vue 2
     Vue.component("profile-modal", ProfileModal);
+    Vue.component("modern-switch", ModernSwitch);
 
     new Vue({
       el: "#profileModal",

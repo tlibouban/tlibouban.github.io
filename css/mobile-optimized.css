@@ -448,3 +448,63 @@ select:focus-visible {
   outline: 2px solid #2e4a9e;
   outline-offset: 2px;
 }
+
+/* Adaptation des nouveaux switches modernes pour mobile */
+.modern-switch-container {
+  width: 30px;
+  height: 30px;
+}
+
+.modern-switch-label {
+  width: 30px;
+  height: 30px;
+}
+
+/* Assurer la taille correcte dans les tableaux */
+.checklist-table .modern-switch-container {
+  margin: 0 auto;
+  display: block;
+}
+
+/* === DESKTOP MEDIUM (1200px+) === */
+@media (width >= 75rem) {
+  .container {
+    max-width: 90%;
+  }
+
+  .cabinet-option-container {
+    gap: 2rem;
+  }
+
+  .cabinet-option-column {
+    width: calc(33.333% - 1.33rem);
+  }
+
+  /* Révéler toutes les colonnes */
+  .checklist-table th:nth-child(3),
+  .checklist-table td:nth-child(3),
+  .checklist-table th:nth-child(5),
+  .checklist-table td:nth-child(5),
+  .checklist-table th:nth-child(6),
+  .checklist-table td:nth-child(6) {
+    display: table-cell;
+  }
+
+  .checklist-table th:nth-child(3),
+  .checklist-table td:nth-child(3) {
+    width: 80px;
+    text-align: center;
+  }
+
+  .checklist-table th:nth-child(5),
+  .checklist-table td:nth-child(5) {
+    width: 120px;
+    text-align: center;
+  }
+
+  .checklist-table th:nth-child(6),
+  .checklist-table td:nth-child(6) {
+    width: 100px;
+    text-align: right;
+  }
+}
