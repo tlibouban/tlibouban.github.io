@@ -171,8 +171,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (clientData.type === "Client") {
         // Si client : Type de projet = "Séparation de base", "Fusion", "Base collaborateur"
         updateProjetOptionsForClient();
-        // Logiciel standard
-        updateLogicielOptionsStandard();
+        // Logiciel de base = ERP du client uniquement (comme pour les prospects)
+        updateLogicielOptionsForClient(clientData.erp);
       }
     } else {
       // Client non trouvé : options standard
@@ -331,12 +331,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function updateLogicielOptionsForClient(erp) {
+    const currentValue = logicielSelect.value;
+    logicielSelect.innerHTML = '<option value="">Sélectionner...</option>';
+
+    // Ajouter l'ERP du client comme seule option
+    const option = document.createElement("option");
+    option.value = erp;
+    option.textContent = erp;
+    logicielSelect.appendChild(option);
+
+    // Auto-sélectionner l'ERP
+    logicielSelect.value = erp;
+
+    // Masquer le conteneur "logiciel-autre" pour les clients aussi
+    logicielAutreContainer.classList.add("hidden");
+  }
+
   function updateLogicielAutre() {
     const clientName = clientInput.value;
     const clientData = findClientInDatabase(clientName);
 
-    // Si c'est un prospect, ne pas afficher logiciel-autre-container
-    if (clientData && clientData.type === "Prospect") {
+    // Si c'est un prospect ou un client, ne pas afficher logiciel-autre-container
+    if (
+      clientData &&
+      (clientData.type === "Prospect" || clientData.type === "Client")
+    ) {
       logicielAutreContainer.classList.add("hidden");
       document.getElementById("logiciel-autre").value = "";
 
