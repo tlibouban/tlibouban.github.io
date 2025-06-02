@@ -79,16 +79,214 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
+  // =====================
+  // Base de données des clients depuis le TSV
+  // =====================
+  let clientDatabase = null;
+
+  // Charger la base de données des clients
+  async function loadClientDatabase() {
+    try {
+      const response = await fetch("csv/db_anonymized.tsv");
+      const text = await response.text();
+      const lines = text.split("\n");
+
+      clientDatabase = [];
+      // Ignorer la première ligne (headers)
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line) {
+          const [numero, nom, type, erp, effectif] = line.split("\t");
+          if (nom && type && erp) {
+            clientDatabase.push({
+              numero: numero,
+              nom: nom.trim(),
+              type: type.trim(), // "Prospect" ou "Client"
+              erp: erp.trim(), // Logiciel utilisé
+              effectif: effectif ? parseInt(effectif.trim()) : 0,
+            });
+          }
+        }
+      }
+      console.log(
+        `📊 Base de données client chargée: ${clientDatabase.length} entrées`
+      );
+    } catch (error) {
+      console.error(
+        "❌ Erreur lors du chargement de la base de données:",
+        error
+      );
+      clientDatabase = null;
+    }
+  }
+
+  // Fonction pour rechercher un client dans la base
+  function findClientInDatabase(clientName) {
+    if (!clientDatabase || !clientName) return null;
+
+    const searchName = clientName.trim().toLowerCase();
+    return clientDatabase.find(
+      (client) =>
+        client.nom.toLowerCase().includes(searchName) ||
+        searchName.includes(client.nom.toLowerCase())
+    );
+  }
+
+  // Charger la base de données au démarrage
+  loadClientDatabase();
+
+  // =====================
+  // Gestion des dropdowns avec logique client/prospect
+  // =====================
+
   // Gestion du champ logiciel autre
   const logicielSelect = document.getElementById("logiciel");
   const projetSelect = document.getElementById("projet");
   const sensSelect = document.getElementById("sens");
+  const clientInput = document.getElementById("client");
   const logicielAutreContainer = document.getElementById(
     "logiciel-autre-container"
   );
 
-  // Fonction pour mettre à jour les options du logiciel de base en fonction du type de projet
+  // Écouter les changements dans le champ client
+  clientInput.addEventListener("input", function () {
+    updateOptionsBasedOnClient();
+  });
+
+  // Fonction pour mettre à jour les options selon le client
+  function updateOptionsBasedOnClient() {
+    const clientName = clientInput.value;
+    const clientData = findClientInDatabase(clientName);
+
+    if (clientData) {
+      console.log(
+        `🔍 Client trouvé: ${clientData.nom} (${clientData.type}) - ERP: ${clientData.erp}`
+      );
+
+      if (clientData.type === "Prospect") {
+        // Si prospect : Type de projet = "New logo" uniquement
+        updateProjetOptionsForProspect();
+        // Logiciel de base = ERP de la base + supprimer logiciel-autre-container
+        updateLogicielOptionsForProspect(clientData.erp);
+      } else if (clientData.type === "Client") {
+        // Si client : Type de projet = "Séparation de base", "Fusion", "Base collaborateur"
+        updateProjetOptionsForClient();
+        // Logiciel standard
+        updateLogicielOptionsStandard();
+      }
+    } else {
+      // Client non trouvé : options standard
+      updateProjetOptionsStandard();
+      updateLogicielOptionsStandard();
+    }
+
+    // Mettre à jour les options de sens après changement
+    updateSensOptions();
+  }
+
+  function updateProjetOptionsForProspect() {
+    const currentValue = projetSelect.value;
+    projetSelect.innerHTML = '<option value="">Sélectionner…</option>';
+
+    const option = document.createElement("option");
+    option.value = "newlogo";
+    option.textContent = "New logo";
+    projetSelect.appendChild(option);
+
+    // Auto-sélectionner "New logo" pour un prospect
+    projetSelect.value = "newlogo";
+  }
+
+  function updateProjetOptionsForClient() {
+    const currentValue = projetSelect.value;
+    projetSelect.innerHTML = '<option value="">Sélectionner…</option>';
+
+    [
+      { value: "separation", label: "Séparation de base" },
+      { value: "fusion", label: "Fusion" },
+      { value: "basecollab", label: "Base collaborateur" },
+    ].forEach((opt) => {
+      const option = document.createElement("option");
+      option.value = opt.value;
+      option.textContent = opt.label;
+      projetSelect.appendChild(option);
+    });
+
+    // Restaurer la valeur si elle existe dans les nouvelles options
+    if ([...projetSelect.options].some((o) => o.value === currentValue)) {
+      projetSelect.value = currentValue;
+    }
+  }
+
+  function updateProjetOptionsStandard() {
+    const currentValue = projetSelect.value;
+    projetSelect.innerHTML = '<option value="">Sélectionner…</option>';
+
+    [
+      { value: "separation", label: "Séparation de base" },
+      { value: "fusion", label: "Fusion" },
+      { value: "newlogo", label: "New logo" },
+      { value: "basecollab", label: "Base collaborateur" },
+    ].forEach((opt) => {
+      const option = document.createElement("option");
+      option.value = opt.value;
+      option.textContent = opt.label;
+      projetSelect.appendChild(option);
+    });
+
+    if ([...projetSelect.options].some((o) => o.value === currentValue)) {
+      projetSelect.value = currentValue;
+    }
+  }
+
+  function updateLogicielOptionsForProspect(erp) {
+    const currentValue = logicielSelect.value;
+    logicielSelect.innerHTML = '<option value="">Sélectionner...</option>';
+
+    // Ajouter l'ERP du prospect comme seule option
+    const option = document.createElement("option");
+    option.value = erp;
+    option.textContent = erp;
+    logicielSelect.appendChild(option);
+
+    // Auto-sélectionner l'ERP
+    logicielSelect.value = erp;
+
+    // Masquer le conteneur "logiciel-autre" pour les prospects
+    logicielAutreContainer.classList.add("hidden");
+  }
+
+  function updateLogicielOptionsStandard() {
+    const currentValue = logicielSelect.value;
+    logicielSelect.innerHTML = '<option value="">Sélectionner...</option>';
+
+    [
+      { value: "AIR", label: "AIR" },
+      { value: "NEO", label: "NEO" },
+      { value: "Autre", label: "Autre" },
+    ].forEach((opt) => {
+      const option = document.createElement("option");
+      option.value = opt.value;
+      option.textContent = opt.label;
+      logicielSelect.appendChild(option);
+    });
+
+    if ([...logicielSelect.options].some((o) => o.value === currentValue)) {
+      logicielSelect.value = currentValue;
+    }
+  }
+
   function updateLogicielOptions() {
+    // Cette fonction est maintenant gérée par updateOptionsBasedOnClient()
+    // Gardée pour compatibilité avec les appels existants
+    const clientName = clientInput.value;
+    const clientData = findClientInDatabase(clientName);
+
+    if (clientData && clientData.type === "Prospect") {
+      // Pour les prospects, utiliser l'ERP de la base
+      return;
+    }
+
     const projetValue = projetSelect.value;
     const currentValue = logicielSelect.value;
 
@@ -134,12 +332,26 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateLogicielAutre() {
-    // Mettre à jour les options disponibles selon le type de projet
-    updateLogicielOptions();
+    const clientName = clientInput.value;
+    const clientData = findClientInDatabase(clientName);
 
-    const logicielAutreContainer = document.getElementById(
-      "logiciel-autre-container"
-    );
+    // Si c'est un prospect, ne pas afficher logiciel-autre-container
+    if (clientData && clientData.type === "Prospect") {
+      logicielAutreContainer.classList.add("hidden");
+      document.getElementById("logiciel-autre").value = "";
+
+      // Désactiver/activer le dropdown sens selon la sélection
+      if (logicielSelect.value === "") {
+        sensSelect.disabled = true;
+      } else {
+        sensSelect.disabled = false;
+      }
+      updateSensOptions();
+      return;
+    }
+
+    // Mettre à jour les options disponibles selon le type de projet (logique standard)
+    updateLogicielOptions();
 
     if (logicielSelect.value === "Autre") {
       // Afficher avec une animation
@@ -303,7 +515,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // =====================
   // Gestion du titre dynamique
   // =====================
-  const clientInput = document.getElementById("client");
   const mainTitle = document.getElementById("main-title");
 
   function updateMainTitle() {
