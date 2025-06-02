@@ -236,7 +236,7 @@ function renderChecklist() {
   // Ajoute les listeners
   document
     .querySelectorAll(
-      ".check-feature, .feature-nb, .check-feature-utilisateurs, .check-feature-cabinet"
+      ".modern-switch-input.check-feature, .feature-nb, .modern-switch-input.check-feature-utilisateurs, .modern-switch-input.check-feature-cabinet"
     )
     .forEach((el) => {
       el.addEventListener("input", updateTotals);
@@ -627,7 +627,7 @@ function updateTotals() {
         if (window.profilsDynList) {
           window.profilsDynList.forEach((profil, pidx) => {
             const checked = tr.querySelector(
-              `#profils-dyn-list .check-feature-profil[data-idx='${pidx}']`
+              `#profils-dyn-list .modern-switch-input.check-feature-profil[data-idx='${pidx}']`
             )?.checked;
             const nb = tr.querySelector(
               `#profils-dyn-list .profil-nb[data-idx='${pidx}']`
@@ -640,7 +640,7 @@ function updateTotals() {
                 )
               : 1;
             const modif = tr.querySelector(
-              `#profils-dyn-list .profil-modif[data-idx='${pidx}']`
+              `#profils-dyn-list .modern-switch-input.profil-modif[data-idx='${pidx}']`
             )?.checked;
 
             utilisateursTotal += checked ? nb : 0;
@@ -676,7 +676,7 @@ function updateTotals() {
 
         // Calcul du sous-total utilisateurs (ligne)
         const checkedUtil = tr.querySelector(
-          ".check-feature-utilisateurs"
+          ".modern-switch-input.check-feature-utilisateurs"
         )?.checked;
         const timeMins = parseTimeToMinutes(tr.dataset.temps);
         const sousTotalUtil = checkedUtil ? utilisateursTotal * timeMins : 0;
@@ -710,7 +710,7 @@ function updateTotals() {
       } else {
         // Calcul standard pour les autres lignes
         const checked = tr.querySelector(
-          ".check-feature, .check-feature-cabinet"
+          ".modern-switch-input.check-feature, .modern-switch-input.check-feature-cabinet"
         );
         const isChecked = checked ? checked.checked : false;
 
@@ -762,10 +762,10 @@ function updateTotals() {
       if (isCabinetOption) {
         // Pour Cabinet Option, afficher le nombre d'options activées plutôt que le temps
         const optionsActivees = sectionDiv.querySelectorAll(
-          ".check-feature-cabinet:checked"
+          ".modern-switch-input.check-feature-cabinet:checked"
         ).length;
         const optionsTotal = sectionDiv.querySelectorAll(
-          ".check-feature-cabinet"
+          ".modern-switch-input.check-feature-cabinet"
         ).length;
 
         // Affichage avec accord grammatical
@@ -794,7 +794,7 @@ function addAllInputListeners() {
   // Pour tous les champs standards
   document
     .querySelectorAll(
-      ".check-feature, .feature-nb, .check-feature-utilisateurs, .check-feature-cabinet"
+      ".modern-switch-input.check-feature, .feature-nb, .modern-switch-input.check-feature-utilisateurs, .modern-switch-input.check-feature-cabinet"
     )
     .forEach((el) => {
       el.removeEventListener("input", updateTotals); // évite les doublons
@@ -804,7 +804,7 @@ function addAllInputListeners() {
   // Pour les profils dynamiques
   document
     .querySelectorAll(
-      ".check-feature-profil, .profil-nb, .profil-modif, .profil-nom, .remove-profil-btn"
+      ".modern-switch-input.check-feature-profil, .profil-nb, .modern-switch-input.profil-modif, .profil-nom, .remove-profil-btn"
     )
     .forEach((el) => {
       el.removeEventListener("input", updateTotals);

@@ -498,13 +498,17 @@ function renderProfilsDyn() {
     });
   });
 
-  profilsDiv.querySelectorAll(".check-feature-profil").forEach((chk) => {
-    chk.addEventListener("input", updateTotals);
-  });
+  profilsDiv
+    .querySelectorAll(".modern-switch-input.check-feature-profil")
+    .forEach((chk) => {
+      chk.addEventListener("input", updateTotals);
+    });
 
-  profilsDiv.querySelectorAll(".profil-modif").forEach((chk) => {
-    chk.addEventListener("input", updateTotals);
-  });
+  profilsDiv
+    .querySelectorAll(".modern-switch-input.profil-modif")
+    .forEach((chk) => {
+      chk.addEventListener("input", updateTotals);
+    });
 
   // Applique l'alternance de couleurs sur le tableau généré
   const profilsTable = profilsDiv.querySelector("table");

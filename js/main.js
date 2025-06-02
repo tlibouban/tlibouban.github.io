@@ -54,28 +54,30 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(reattachProfileManagerHandler, 500);
 
   // S'assurer que les interrupteurs de Cabinet Option sont correctement configurés
-  document.querySelectorAll(".check-feature-cabinet").forEach((switchInput) => {
-    switchInput.addEventListener("change", function () {
-      // Mettre à jour l'affichage des badges d'attention en fonction de l'état du switch
-      const row = this.closest("tr");
-      if (row) {
-        const warningBadge = row.querySelector(".attention-badge");
-        const optionName = row.getAttribute("data-option-name");
+  document
+    .querySelectorAll(".modern-switch-input.check-feature-cabinet")
+    .forEach((switchInput) => {
+      switchInput.addEventListener("change", function () {
+        // Mettre à jour l'affichage des badges d'attention en fonction de l'état du switch
+        const row = this.closest("tr");
+        if (row) {
+          const warningBadge = row.querySelector(".attention-badge");
+          const optionName = row.getAttribute("data-option-name");
 
-        // Si le switch est activé, masquer le badge d'attention s'il existe
-        if (this.checked && warningBadge) {
-          warningBadge.style.display = "none";
+          // Si le switch est activé, masquer le badge d'attention s'il existe
+          if (this.checked && warningBadge) {
+            warningBadge.style.display = "none";
+          }
+          // Si le switch est désactivé, afficher le badge d'attention s'il existe
+          else if (!this.checked && warningBadge) {
+            warningBadge.style.display = "";
+          }
         }
-        // Si le switch est désactivé, afficher le badge d'attention s'il existe
-        else if (!this.checked && warningBadge) {
-          warningBadge.style.display = "";
-        }
-      }
 
-      // Mettre à jour les totaux
-      updateTotals();
+        // Mettre à jour les totaux
+        updateTotals();
+      });
     });
-  });
 
   // Gestion du champ logiciel autre
   const logicielSelect = document.getElementById("logiciel");
