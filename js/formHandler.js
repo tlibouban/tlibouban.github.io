@@ -231,7 +231,11 @@ function renderChecklist() {
 
   // Initialisation dynamique des profils (sous Utilisateurs)
   initProfilsDyn();
-  updateTotals();
+
+  // Mettre à jour les totaux une première fois
+  setTimeout(() => {
+    updateTotals();
+  }, 100);
 
   // Ajoute les listeners
   document
@@ -239,7 +243,13 @@ function renderChecklist() {
       ".modern-switch-input.check-feature, .feature-nb, .modern-switch-input.check-feature-utilisateurs, .modern-switch-input.check-feature-cabinet"
     )
     .forEach((el) => {
-      el.addEventListener("input", updateTotals);
+      // Pour les checkbox/switches, utiliser 'change'
+      if (el.type === "checkbox") {
+        el.addEventListener("change", updateTotals);
+      } else {
+        // Pour les input number, utiliser 'input'
+        el.addEventListener("input", updateTotals);
+      }
     });
 }
 
@@ -597,6 +607,9 @@ function accordGrammatical(count, singulier, pluriel) {
 // Calcul dynamique des sous-totaux et totaux
 // =====================
 function updateTotals() {
+  // Debug pour voir si la fonction est appelée
+  console.log("🔢 updateTotals() appelée");
+
   let totalGeneral = 0;
 
   // Liste des éléments à exclure du calcul des totaux
@@ -798,7 +811,15 @@ function addAllInputListeners() {
     )
     .forEach((el) => {
       el.removeEventListener("input", updateTotals); // évite les doublons
-      el.addEventListener("input", updateTotals);
+      el.removeEventListener("change", updateTotals); // évite les doublons
+
+      // Pour les checkbox/switches, utiliser 'change'
+      if (el.type === "checkbox") {
+        el.addEventListener("change", updateTotals);
+      } else {
+        // Pour les input number, utiliser 'input'
+        el.addEventListener("input", updateTotals);
+      }
     });
 
   // Pour les profils dynamiques
@@ -808,7 +829,15 @@ function addAllInputListeners() {
     )
     .forEach((el) => {
       el.removeEventListener("input", updateTotals);
-      el.addEventListener("input", updateTotals);
+      el.removeEventListener("change", updateTotals);
+
+      // Pour les checkbox/switches, utiliser 'change'
+      if (el.type === "checkbox") {
+        el.addEventListener("change", updateTotals);
+      } else {
+        // Pour les autres, utiliser 'input'
+        el.addEventListener("input", updateTotals);
+      }
     });
 }
 

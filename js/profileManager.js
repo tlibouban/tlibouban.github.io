@@ -501,16 +501,23 @@ function renderProfilsDyn() {
   profilsDiv
     .querySelectorAll(".modern-switch-input.check-feature-profil")
     .forEach((chk) => {
-      chk.addEventListener("input", updateTotals);
+      chk.addEventListener("change", updateTotals);
     });
 
   profilsDiv
     .querySelectorAll(".modern-switch-input.profil-modif")
     .forEach((chk) => {
-      chk.addEventListener("input", updateTotals);
+      chk.addEventListener("change", updateTotals);
     });
 
   // Applique l'alternance de couleurs sur le tableau généré
   const profilsTable = profilsDiv.querySelector("table");
   // CSS gère maintenant automatiquement l'alternance des couleurs
+
+  // Mettre à jour les totaux après le rendu des profils
+  setTimeout(() => {
+    if (typeof updateTotals === "function") {
+      updateTotals();
+    }
+  }, 50);
 }
