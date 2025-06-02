@@ -31,11 +31,22 @@ class ClientSearch {
       this.addSearchIndicator();
       console.log("✅ Module de recherche client initialisé avec succès");
     } catch (error) {
-      console.error(
-        "❌ Erreur lors de l'initialisation du module de recherche client:",
-        error
-      );
-      this.showError("Impossible de charger la base de données des clients");
+      // Vérifier si c'est une erreur CORS en développement local
+      const isLocalFile = window.location.protocol === "file:";
+      const isCorsError =
+        error.message.includes("Failed to fetch") || error.name === "TypeError";
+
+      if (isLocalFile && isCorsError) {
+        console.warn(
+          "⚠️ Module de recherche client désactivé en développement local (CORS). Fonctionnel en production."
+        );
+      } else {
+        console.error(
+          "❌ Erreur lors de l'initialisation du module de recherche client:",
+          error
+        );
+        this.showError("Impossible de charger la base de données des clients");
+      }
     }
   }
 
