@@ -2481,5 +2481,46 @@
     <script src="js/formStyling.js"></script>
     <script src="js/clientSearch.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Script de test temporaire pour déboguer le calcul des utilisateurs -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Attendre que tout soit initialisé
+        setTimeout(() => {
+          console.log("🧪 Test du calcul des utilisateurs - Version 2.0");
+          console.log("📋 window.profilsDynList:", window.profilsDynList);
+
+          // Utiliser les nouvelles fonctions de débogage
+          if (typeof window.debugProfilesState === "function") {
+            window.debugProfilesState();
+          }
+
+          if (typeof window.verifyUsersCalculation === "function") {
+            window.verifyUsersCalculation();
+          }
+
+          // Forcer un recalcul
+          if (typeof window.recalculateAndVerify === "function") {
+            console.log("🔄 Recalcul automatique dans 1 seconde...");
+            setTimeout(() => {
+              window.recalculateAndVerify();
+            }, 1000);
+          }
+
+          // Instructions pour l'utilisateur
+          console.log(`
+🎯 INSTRUCTIONS DE TEST:
+1. Ouvrez la section PARAMÉTRAGE dans l'interface
+2. Regardez la ligne "Utilisateurs" 
+3. Le champ "Nombre d'utilisateurs" devrait afficher la somme des profils cochés
+4. Par défaut, le profil "Associé" a 1 utilisateur et devrait être coché
+5. Vous pouvez tester en tapant dans la console:
+   - verifyUsersCalculation() pour vérifier l'état actuel
+   - recalculateAndVerify() pour forcer un recalcul
+   - debugProfilesState() pour voir l'état détaillé
+          `);
+        }, 2000);
+      });
+    </script>
   </body>
 </html>

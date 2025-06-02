@@ -641,28 +641,25 @@ function updateTotals() {
         if (window.profilsDynList) {
           console.log("👥 Profils trouvés:", window.profilsDynList.length);
           window.profilsDynList.forEach((profil, pidx) => {
-            const checked = tr.querySelector(
-              `#profils-dyn-list .modern-switch-input.check-feature-profil[data-idx='${pidx}']`
-            )?.checked;
-            const nb = tr.querySelector(
-              `#profils-dyn-list .profil-nb[data-idx='${pidx}']`
-            )
-              ? parseInt(
-                  tr.querySelector(
-                    `#profils-dyn-list .profil-nb[data-idx='${pidx}']`
-                  ).value,
-                  10
-                )
-              : 1;
-            const modif = tr.querySelector(
-              `#profils-dyn-list .modern-switch-input.profil-modif[data-idx='${pidx}']`
-            )?.checked;
+            // Rechercher les éléments par ID plutôt que par data-idx pour plus de robustesse
+            const checkboxProfil = document.querySelector(
+              `#profil-check-${pidx}`
+            );
+            const nbInput = document.querySelector(`#profil-nb-${pidx}`);
+            const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
+
+            const checked = checkboxProfil ? checkboxProfil.checked : false;
+            const nb = nbInput ? parseInt(nbInput.value, 10) : 0;
+            const modif = modifSwitch ? modifSwitch.checked : false;
 
             console.log(
               `  Profil ${pidx} (${profil.nom}): checked=${checked}, nb=${nb}, modif=${modif}`
             );
 
-            utilisateursTotal += checked ? nb : 0;
+            // Ajouter au total des utilisateurs seulement si le profil est coché
+            if (checked) {
+              utilisateursTotal += nb;
+            }
 
             // Temps profils : 0 si pas modif, 30 min si modif
             let tempsProfil = 0;

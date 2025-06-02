@@ -263,3 +263,77 @@ function debugProfilesState() {
     console.log(`📊 effectif.value: "${effectifInput.value}"`);
   }
 }
+
+/**
+ * Fonction pour vérifier en temps réel si le calcul des utilisateurs est correct
+ */
+function verifyUsersCalculation() {
+  console.log("🔍 Vérification du calcul des utilisateurs");
+
+  if (!window.profilsDynList) {
+    console.log("❌ Aucune liste de profils trouvée");
+    return false;
+  }
+
+  let expectedTotal = 0;
+  let actualCheckedTotal = 0;
+
+  window.profilsDynList.forEach((profil, idx) => {
+    const checkbox = document.querySelector(`#profil-check-${idx}`);
+    const numberInput = document.querySelector(`#profil-nb-${idx}`);
+
+    const isChecked = checkbox ? checkbox.checked : false;
+    const nb = numberInput ? parseInt(numberInput.value, 10) : 0;
+
+    expectedTotal += nb; // Total de tous les profils
+    if (isChecked) {
+      actualCheckedTotal += nb; // Total seulement des profils cochés
+    }
+
+    console.log(
+      `  📊 Profil ${idx} (${profil.nom}): nb=${nb}, checked=${isChecked}`
+    );
+  });
+
+  const utilisateursNb = document.getElementById("utilisateurs-nb");
+  const displayedTotal = utilisateursNb
+    ? parseInt(utilisateursNb.value, 10)
+    : 0;
+
+  console.log(`📈 Résultats:`);
+  console.log(`  - Total attendu (cochés): ${actualCheckedTotal}`);
+  console.log(`  - Total affiché: ${displayedTotal}`);
+  console.log(`  - Total de tous les profils: ${expectedTotal}`);
+
+  const isCorrect = displayedTotal === actualCheckedTotal;
+  console.log(
+    `${isCorrect ? "✅" : "❌"} Le calcul est ${
+      isCorrect ? "correct" : "incorrect"
+    }`
+  );
+
+  return isCorrect;
+}
+
+/**
+ * Fonction pour déclencher manuellement un recalcul et vérifier le résultat
+ */
+function recalculateAndVerify() {
+  console.log("🔄 Recalcul forcé et vérification");
+
+  if (typeof updateTotals === "function") {
+    updateTotals();
+
+    // Vérifier après un court délai
+    setTimeout(() => {
+      verifyUsersCalculation();
+    }, 100);
+  } else {
+    console.log("❌ Fonction updateTotals non disponible");
+  }
+}
+
+// Rendre ces fonctions disponibles globalement pour le débogage
+window.debugProfilesState = debugProfilesState;
+window.verifyUsersCalculation = verifyUsersCalculation;
+window.recalculateAndVerify = recalculateAndVerify;
