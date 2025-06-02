@@ -36,3 +36,6 @@ yarn-error.log*
 # Fichiers spécifiques à Windows
 site.code-workspace 
 csv/db.tsv
+
+# Fichiers contenant des données personnelles/confidentielles
+json/repartition_commerciale_par_departement.json
