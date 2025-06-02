@@ -470,6 +470,12 @@ function renderProfilsDyn() {
       const nb = parseInt(this.value, 10) || 0;
       window.profilsDynList[this.dataset.idx].nb = nb;
 
+      console.log(`🔄 Profil ${this.dataset.idx} nb mis à jour: ${nb}`);
+      console.log(
+        "📊 profilsDynList après mise à jour:",
+        window.profilsDynList
+      );
+
       // Mettre à jour l'accord grammatical des utilisateurs
       const tr = document.querySelector(
         '[data-section="PARAMÉTRAGE"][data-idx="0"]'

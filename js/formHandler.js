@@ -579,7 +579,7 @@ function renderUtilisateursRow(section, sectionId, item, idxGlobal) {
       <div id="profils-dyn-list"></div>
       <div class="profil-buttons" style="display:flex;gap:10px;margin-top:8px;">
         <button type="button" id="add-profil-btn" class="action-btn">Ajouter un profil</button>
-        <button type="button" id="profile-manager-btn" class="action-btn">Gérer les profils</button>
+        <button type="button" id="profile-manager-btn-utilisateurs" class="action-btn">Gérer les profils</button>
       </div>
     </td>
     <td><input type="number" id="utilisateurs-nb" name="utilisateurs-nb-${sectionId}-${idxGlobal}" value="0" class="feature-nb" style="width:60px;" readonly tabindex="-1" aria-label="Nombre d'utilisateurs" data-unit="utilisateur" /></td>
@@ -634,10 +634,12 @@ function updateTotals() {
 
       // Cas spécial : ligne Utilisateurs (par user)
       if (tr.querySelector("#profils-dyn-list")) {
+        console.log("📊 Calcul des utilisateurs détecté");
         let utilisateursTotal = 0;
         let profilsTotalMinutes = 0;
 
         if (window.profilsDynList) {
+          console.log("👥 Profils trouvés:", window.profilsDynList.length);
           window.profilsDynList.forEach((profil, pidx) => {
             const checked = tr.querySelector(
               `#profils-dyn-list .modern-switch-input.check-feature-profil[data-idx='${pidx}']`
@@ -655,6 +657,10 @@ function updateTotals() {
             const modif = tr.querySelector(
               `#profils-dyn-list .modern-switch-input.profil-modif[data-idx='${pidx}']`
             )?.checked;
+
+            console.log(
+              `  Profil ${pidx} (${profil.nom}): checked=${checked}, nb=${nb}, modif=${modif}`
+            );
 
             utilisateursTotal += checked ? nb : 0;
 
@@ -674,10 +680,14 @@ function updateTotals() {
           });
         }
 
+        console.log(`👤 Utilisateurs total: ${utilisateursTotal}`);
+        console.log(`⏱️ Profils total minutes: ${profilsTotalMinutes}`);
+
         // Met à jour le champ nb utilisateurs
         const nbInput = tr.querySelector("#utilisateurs-nb");
         if (nbInput) {
           nbInput.value = utilisateursTotal;
+          console.log(`📝 Mise à jour nbInput: ${utilisateursTotal}`);
 
           // Mettre à jour l'unité avec l'accord grammatical
           const uniteCell = tr.querySelector(".unite-cell");
@@ -691,9 +701,17 @@ function updateTotals() {
         const checkedUtil = tr.querySelector(
           ".modern-switch-input.check-feature-utilisateurs"
         )?.checked;
+        console.log(`🔘 Switch utilisateurs activé: ${checkedUtil}`);
+
         const timeMins = parseTimeToMinutes(tr.dataset.temps);
+        console.log(`⏰ Temps unitaire: ${timeMins} minutes`);
+
         const sousTotalUtil = checkedUtil ? utilisateursTotal * timeMins : 0;
         const totalUtilEtProfils = sousTotalUtil + profilsTotalMinutes;
+
+        console.log(
+          `💰 Sous-total utilisateurs: ${sousTotalUtil}, Total utilisateurs+profils: ${totalUtilEtProfils}`
+        );
 
         const sousTotalCell = tr.querySelector(".sous-total");
         if (sousTotalCell) {
