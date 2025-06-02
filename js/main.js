@@ -157,11 +157,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateOptionsBasedOnClient() {
     const clientName = clientInput.value;
     const clientData = findClientInDatabase(clientName);
+    const effectifInput = document.getElementById("effectif");
 
     if (clientData) {
       console.log(
-        `🔍 Client trouvé: ${clientData.nom} (${clientData.type}) - ERP: ${clientData.erp}`
+        `🔍 Client trouvé: ${clientData.nom} (${clientData.type}) - ERP: ${clientData.erp} - Effectif: ${clientData.effectif}`
       );
+
+      // Remplir le champ effectif
+      effectifInput.value = clientData.effectif;
 
       if (clientData.type === "Prospect") {
         // Si prospect : Type de projet = "New logo" uniquement
@@ -175,7 +179,8 @@ document.addEventListener("DOMContentLoaded", function () {
         updateLogicielOptionsForClient(clientData.erp);
       }
     } else {
-      // Client non trouvé : options standard
+      // Client non trouvé : options standard + vider l'effectif
+      effectifInput.value = "";
       updateProjetOptionsStandard();
       updateLogicielOptionsStandard();
     }
