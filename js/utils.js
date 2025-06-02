@@ -173,3 +173,93 @@ function getCabinetOptionDescription(optionName) {
   // Retourne la description si l'option existe, sinon une chaîne vide
   return option && option.Description ? option.Description : "";
 }
+
+/**
+ * Force la mise à jour complète des totaux d'utilisateurs
+ * Cette fonction est appelée après la mise à jour des profils depuis les données TSV
+ */
+function forceUpdateUsersCalculation() {
+  console.log("🔧 Forcing complete users calculation update...");
+
+  // Vérifier que les éléments nécessaires existent
+  const profilsDiv = document.getElementById("profils-dyn-list");
+  const utilisateursNb = document.getElementById("utilisateurs-nb");
+  const effectifInput = document.getElementById("effectif");
+
+  if (!profilsDiv || !utilisateursNb || !window.profilsDynList) {
+    console.warn("❌ Éléments manquants pour le calcul des utilisateurs");
+    return false;
+  }
+
+  console.log("📊 État actuel des profils:", window.profilsDynList);
+
+  // Calculer le total des utilisateurs
+  let totalUsers = 0;
+  window.profilsDynList.forEach((profil, idx) => {
+    const nb = profil.nb || 0;
+    totalUsers += nb;
+    console.log(`  - ${profil.nom}: ${nb} utilisateurs`);
+  });
+
+  console.log(`👤 Total calculé: ${totalUsers} utilisateurs`);
+
+  // Mettre à jour le champ nombre d'utilisateurs
+  utilisateursNb.value = totalUsers;
+
+  // Vérifier la cohérence avec l'effectif TSV
+  if (effectifInput && effectifInput.value) {
+    const effectifTSV = parseInt(effectifInput.value, 10);
+    if (totalUsers !== effectifTSV) {
+      console.warn(
+        `⚠️ Incohérence: ${totalUsers} utilisateurs ≠ ${effectifTSV} effectif TSV`
+      );
+    } else {
+      console.log(`✅ Cohérence vérifiée: ${totalUsers} = ${effectifTSV}`);
+    }
+  }
+
+  // Forcer la mise à jour des totaux
+  if (typeof updateTotals === "function") {
+    updateTotals();
+    console.log("🔄 updateTotals() forcé depuis forceUpdateUsersCalculation()");
+  }
+
+  return true;
+}
+
+/**
+ * Débugger les données de profils et leur état
+ */
+function debugProfilesState() {
+  console.log("🐛 DEBUG: État complet des profils");
+  console.log("📋 window.profilsDynList:", window.profilsDynList);
+
+  const profilsDiv = document.getElementById("profils-dyn-list");
+  if (profilsDiv) {
+    console.log("🎯 Éléments DOM dans profils-dyn-list:");
+
+    const checkboxes = profilsDiv.querySelectorAll(".check-feature-profil");
+    const numbers = profilsDiv.querySelectorAll(".profil-nb");
+    const modifs = profilsDiv.querySelectorAll(".profil-modif");
+
+    console.log(`  - Checkboxes: ${checkboxes.length}`);
+    console.log(`  - Number inputs: ${numbers.length}`);
+    console.log(`  - Modif switches: ${modifs.length}`);
+
+    numbers.forEach((input, idx) => {
+      console.log(
+        `  - Profil ${idx}: value="${input.value}", data-idx="${input.dataset.idx}"`
+      );
+    });
+  }
+
+  const utilisateursNb = document.getElementById("utilisateurs-nb");
+  if (utilisateursNb) {
+    console.log(`👤 utilisateurs-nb.value: "${utilisateursNb.value}"`);
+  }
+
+  const effectifInput = document.getElementById("effectif");
+  if (effectifInput) {
+    console.log(`📊 effectif.value: "${effectifInput.value}"`);
+  }
+}

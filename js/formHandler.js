@@ -608,20 +608,20 @@ function accordGrammatical(count, singulier, pluriel) {
 // =====================
 function updateTotals() {
   // Debug pour voir si la fonction est appelée
-  console.log("🔢 updateTotals() appelée");
+  console.log("🔄 updateTotals() appelé");
 
   let totalGeneral = 0;
 
-  // Liste des éléments à exclure du calcul des totaux
-  const excludedFromTotal = [
-    "Dashboard",
-    "Actions liées",
-    "Infos complémentaires",
-  ];
+  // Fonctionnalités à exclure du calcul total
+  const excludedFromTotal = [];
 
   document.querySelectorAll(".section").forEach((sectionDiv) => {
     let sectionTotal = 0;
-    const isCabinetOption = sectionDiv.id === "section-CABINET-OPTION";
+
+    const sectionTitle = sectionDiv.querySelector("h2");
+    const isCabinetOption =
+      sectionTitle &&
+      isSectionNamed(sectionTitle.textContent, "CABINET OPTION");
 
     sectionDiv.querySelectorAll("tbody tr").forEach((tr, idx) => {
       // Vérifier si la ligne contient une fonctionnalité à exclure
@@ -738,6 +738,9 @@ function updateTotals() {
             ? formatMinutes(profilsTotalMinutes)
             : "0";
         }
+
+        // Valider la cohérence des effectifs après le calcul
+        validateProfilesVsEffectif();
       } else {
         // Calcul standard pour les autres lignes
         const checked = tr.querySelector(
@@ -911,4 +914,63 @@ function renderModernSwitch(
       </label>
     </div>
   `;
+}
+
+// =====================
+// Fonction pour valider la cohérence entre profils et effectif
+// =====================
+function validateProfilesVsEffectif() {
+  const effectifInput = document.getElementById("effectif");
+  if (!effectifInput || !effectifInput.value || !window.profilsDynList) {
+    return;
+  }
+
+  const effectifTotal = parseInt(effectifInput.value, 10);
+  if (isNaN(effectifTotal) || effectifTotal <= 0) {
+    return;
+  }
+
+  const profilsTotal = window.profilsDynList.reduce(
+    (sum, profil) => sum + (profil.nb || 0),
+    0
+  );
+
+  // Si les totaux ne correspondent pas, afficher un avertissement
+  if (profilsTotal !== effectifTotal) {
+    console.warn(
+      `⚠️ Incohérence: Somme profils (${profilsTotal}) ≠ Effectif total (${effectifTotal})`
+    );
+
+    // Optionnel: ajouter un indicateur visuel sur l'interface
+    const utilisateursRow = document.querySelector(
+      '[data-section="PARAMÉTRAGE"] #utilisateurs-nb'
+    );
+    if (utilisateursRow) {
+      const parent = utilisateursRow.closest("td");
+      if (parent && !parent.querySelector(".effectif-warning")) {
+        const warning = document.createElement("div");
+        warning.className = "effectif-warning";
+        warning.style.cssText =
+          "color: #e74c3c; font-size: 0.8em; margin-top: 2px;";
+        warning.textContent = `⚠️ Somme: ${profilsTotal}/${effectifTotal}`;
+        parent.appendChild(warning);
+
+        // Supprimer l'avertissement après 5 secondes
+        setTimeout(() => {
+          if (warning.parentNode) {
+            warning.parentNode.removeChild(warning);
+          }
+        }, 5000);
+      }
+    }
+  } else {
+    console.log(`✅ Cohérence vérifiée: Profils = Effectif = ${profilsTotal}`);
+
+    // Supprimer les avertissements existants
+    document.querySelectorAll(".effectif-warning").forEach((warning) => {
+      if (warning.parentNode) {
+        warning.parentNode.removeChild(warning);
+      }
+    });
+  }
 }

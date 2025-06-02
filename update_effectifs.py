@@ -61,48 +61,115 @@ def get_job_distribution(effectif):
 def calculate_job_numbers(effectif, distribution):
     """
     Calcule le nombre de personnes pour chaque métier
+    S'assure que la somme totale = effectif exact
     """
-    jobs = {}
-    total_assigned = 0
+    if effectif <= 0:
+        return {job: 0 for job in distribution.keys()}
     
-    # Calculer chaque métier
+    jobs = {}
+    
+    # Phase 1: Calculer les nombres idéaux selon les pourcentages
+    ideal_numbers = {}
     for job, (min_pct, max_pct) in distribution.items():
         if min_pct == 0 and max_pct == 0:
-            jobs[job] = 0
+            ideal_numbers[job] = 0
         elif min_pct == 0 and max_pct == 1:  # Rare
-            # 20% de chance d'avoir 1 personne
-            jobs[job] = 1 if random.random() < 0.2 else 0
+            # 20% de chance d'avoir 1 personne pour les métiers "rares"
+            ideal_numbers[job] = 1 if random.random() < 0.2 and effectif > 3 else 0
         else:
             # Calculer le pourcentage aléatoire dans la fourchette
             pct = random.uniform(min_pct, max_pct) / 100
-            number = max(1, round(effectif * pct))
-            jobs[job] = number
-        
-        total_assigned += jobs[job]
+            ideal_numbers[job] = effectif * pct
     
-    # Ajuster si le total dépasse l'effectif
-    if total_assigned > effectif:
-        # Réduire proportionnellement en commençant par les plus gros effectifs
-        jobs_sorted = sorted(jobs.items(), key=lambda x: x[1], reverse=True)
-        excess = total_assigned - effectif
+    # Phase 2: Convertir en entiers et ajuster pour avoir exactement l'effectif
+    # Commencer par les nombres entiers
+    for job in distribution.keys():
+        jobs[job] = 0
+    
+    # Trier les métiers par nombre idéal décroissant pour distribuer intelligemment
+    sorted_jobs = sorted(ideal_numbers.items(), key=lambda x: x[1], reverse=True)
+    
+    remaining_effectif = effectif
+    
+    # Phase 3: Attribuer au minimum 1 personne aux métiers principaux obligatoires
+    # Pour petites structures: au moins 1 associé
+    # Pour moyennes/grandes: au moins 1 associé et 1 collaborateur
+    if effectif >= 1:
+        jobs['avocats_associes'] = 1
+        remaining_effectif -= 1
         
-        for job, count in jobs_sorted:
-            if excess <= 0:
+        if effectif >= 2 and effectif > 5:  # Moyennes/grandes structures
+            if remaining_effectif > 0:
+                jobs['avocats_collaborateurs'] = 1
+                remaining_effectif -= 1
+    
+    # Phase 4: Distribuer le reste selon les proportions idéales
+    if remaining_effectif > 0:
+        # Calculer les parts restantes à distribuer
+        jobs_to_distribute = []
+        for job, ideal_val in sorted_jobs:
+            if job not in ['avocats_associes', 'avocats_collaborateurs'] or jobs[job] == 0:
+                if ideal_val > 0:
+                    jobs_to_distribute.append((job, ideal_val))
+        
+        # Distribuer le reste proportionnellement
+        total_ideal = sum(val for _, val in jobs_to_distribute)
+        
+        if total_ideal > 0:
+            for job, ideal_val in jobs_to_distribute:
+                if remaining_effectif <= 0:
+                    break
+                    
+                # Calculer la part proportionnelle
+                proportion = ideal_val / total_ideal
+                to_add = max(0, round(remaining_effectif * proportion))
+                
+                if to_add > remaining_effectif:
+                    to_add = remaining_effectif
+                    
+                jobs[job] += to_add
+                remaining_effectif -= to_add
+        
+        # Phase 5: Distribuer les dernières personnes aux métiers principaux
+        if remaining_effectif > 0:
+            # Ajouter aux avocats (associés d'abord, puis collaborateurs)
+            if remaining_effectif > 0:
+                jobs['avocats_associes'] += remaining_effectif // 2 + remaining_effectif % 2
+                remaining_effectif = remaining_effectif // 2
+                
+            if remaining_effectif > 0:
+                jobs['avocats_collaborateurs'] += remaining_effectif
+                remaining_effectif = 0
+    
+    # Phase 6: Vérification finale et ajustement
+    total_assigned = sum(jobs.values())
+    
+    # Si on a trop assigné, réduire en commençant par les métiers support
+    while total_assigned > effectif:
+        # Ordre de réduction: support → juristes → secrétaires → collaborateurs
+        reduction_order = [
+            'comptabilite', 'documentation', 'communication', 'rh', 'informatique',
+            'juristes', 'assistants_juridiques', 'secretaires', 'avocats_collaborateurs'
+        ]
+        
+        reduced = False
+        for job in reduction_order:
+            if jobs[job] > 0 and total_assigned > effectif:
+                jobs[job] -= 1
+                total_assigned -= 1
+                reduced = True
                 break
-            reduction = min(count - 1, excess)
-            if reduction > 0:
-                jobs[job] = max(1, count - reduction)
-                excess -= reduction
+        
+        if not reduced:  # Sécurité pour éviter une boucle infinie
+            break
     
-    # Si le total est inférieur, ajouter aux avocats associés/collaborateurs
-    elif total_assigned < effectif:
-        shortfall = effectif - total_assigned
-        if jobs['avocats_associes'] > 0:
-            jobs['avocats_associes'] += shortfall
-        elif jobs['avocats_collaborateurs'] > 0:
-            jobs['avocats_collaborateurs'] += shortfall
+    # Si on n'a pas assez assigné, ajouter aux avocats
+    while total_assigned < effectif:
+        if jobs['avocats_associes'] < jobs['avocats_collaborateurs']:
+            jobs['avocats_associes'] += 1
         else:
-            jobs['avocats_associes'] = shortfall
+            jobs['avocats_collaborateurs'] += 1
+        total_assigned += 1
     
     return jobs
 

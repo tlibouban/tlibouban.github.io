@@ -675,6 +675,39 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof renderProfilsDyn === "function") {
       renderProfilsDyn();
       console.log("✅ Profils mis à jour:", window.profilsDynList);
+
+      // Utiliser la nouvelle fonction utilitaire pour forcer la mise à jour
+      setTimeout(() => {
+        if (typeof forceUpdateUsersCalculation === "function") {
+          const success = forceUpdateUsersCalculation();
+          if (!success) {
+            console.warn("❌ Échec de la mise à jour forcée des utilisateurs");
+          }
+        } else {
+          // Fallback vers l'ancienne méthode
+          if (typeof updateTotals === "function") {
+            updateTotals();
+            console.log(
+              "🔄 Totaux recalculés après mise à jour des profils (fallback)"
+            );
+          }
+        }
+      }, 150);
+    }
+
+    // Vérification de la cohérence des effectifs
+    const totalProfiles = newProfilesList.reduce(
+      (sum, profil) => sum + profil.nb,
+      0
+    );
+    if (totalProfiles !== clientData.effectif) {
+      console.warn(
+        `⚠️ Incohérence détectée: Total profils (${totalProfiles}) ≠ Effectif TSV (${clientData.effectif})`
+      );
+    } else {
+      console.log(
+        `✅ Cohérence vérifiée: Total profils = Effectif TSV = ${totalProfiles}`
+      );
     }
   }
 });
