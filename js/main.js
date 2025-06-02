@@ -96,20 +96,55 @@ document.addEventListener("DOMContentLoaded", function () {
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (line) {
-          const [numero, nom, type, erp, effectif] = line.split("\t");
-          if (nom && type && erp) {
+          const columns = line.split("\t");
+          if (columns.length >= 5 && columns[1] && columns[2] && columns[3]) {
+            const [
+              numero,
+              nom,
+              type,
+              erp,
+              effectif,
+              avocats_associes,
+              avocats_collaborateurs,
+              secretaires,
+              assistants_juridiques,
+              juristes,
+              informatique,
+              rh,
+              communication,
+              documentation,
+              comptabilite,
+            ] = columns;
+
             clientDatabase.push({
               numero: numero,
               nom: nom.trim(),
               type: type.trim(), // "Prospect" ou "Client"
               erp: erp.trim(), // Logiciel utilisé
               effectif: effectif ? parseInt(effectif.trim()) : 0,
+              // Nouvelles colonnes de métiers
+              avocats_associes: avocats_associes
+                ? parseInt(avocats_associes.trim())
+                : 0,
+              avocats_collaborateurs: avocats_collaborateurs
+                ? parseInt(avocats_collaborateurs.trim())
+                : 0,
+              secretaires: secretaires ? parseInt(secretaires.trim()) : 0,
+              assistants_juridiques: assistants_juridiques
+                ? parseInt(assistants_juridiques.trim())
+                : 0,
+              juristes: juristes ? parseInt(juristes.trim()) : 0,
+              informatique: informatique ? parseInt(informatique.trim()) : 0,
+              rh: rh ? parseInt(rh.trim()) : 0,
+              communication: communication ? parseInt(communication.trim()) : 0,
+              documentation: documentation ? parseInt(documentation.trim()) : 0,
+              comptabilite: comptabilite ? parseInt(comptabilite.trim()) : 0,
             });
           }
         }
       }
       console.log(
-        `📊 Base de données client chargée: ${clientDatabase.length} entrées`
+        `📊 Base de données client chargée: ${clientDatabase.length} entrées avec données de métiers`
       );
     } catch (error) {
       console.error(
@@ -179,11 +214,15 @@ document.addEventListener("DOMContentLoaded", function () {
         updateLogicielOptionsForClient(clientData.erp);
       }
     } else {
-      // Client non trouvé : options standard + vider l'effectif
+      // Client non trouvé dans la base, réinitialiser effectif et revenir aux options standard
       effectifInput.value = "";
       updateProjetOptionsStandard();
       updateLogicielOptionsStandard();
+      logicielAutreContainer.classList.remove("hidden");
     }
+
+    // Mettre à jour les profils utilisateurs selon les données TSV
+    updateProfilesFromClientData(clientData);
 
     // Mettre à jour les options de sens après changement
     updateSensOptions();
@@ -584,4 +623,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Assure que tous les listeners sont bien enregistrés
   addAllInputListeners();
+
+  // Fonction pour mettre à jour les profils selon les données client TSV
+  function updateProfilesFromClientData(clientData) {
+    if (!clientData || !window.profilsDynList) {
+      return;
+    }
+
+    console.log("📋 Mise à jour des profils pour le client:", clientData.nom);
+
+    // Mapping des colonnes TSV vers les profils par défaut
+    const profilMappings = {
+      Associé: clientData.avocats_associes || 0,
+      Collaborateur: clientData.avocats_collaborateurs || 0,
+      Secrétaire: clientData.secretaires || 0,
+      "Assistant juridique": clientData.assistants_juridiques || 0,
+      Juriste: clientData.juristes || 0,
+      Informatique: clientData.informatique || 0,
+      RH: clientData.rh || 0,
+      Communication: clientData.communication || 0,
+      Documentation: clientData.documentation || 0,
+      Comptabilité: clientData.comptabilite || 0,
+    };
+
+    // Créer une nouvelle liste de profils basée sur les données du client
+    const newProfilesList = [];
+
+    // Ajouter tous les profils qui ont des utilisateurs > 0
+    Object.entries(profilMappings).forEach(([profilName, count]) => {
+      if (count > 0) {
+        newProfilesList.push({
+          nom: profilName,
+          nb: count,
+          ajoute: false, // Ces profils viennent de la base de données
+        });
+      }
+    });
+
+    // Si aucun profil n'a été trouvé (cas improbable), garder les profils par défaut
+    if (newProfilesList.length === 0) {
+      console.log(
+        "⚠️ Aucun profil avec effectif > 0, profils par défaut conservés"
+      );
+      return;
+    }
+
+    // Remplacer la liste des profils
+    window.profilsDynList = newProfilesList;
+
+    // Re-rendre les profils
+    if (typeof renderProfilsDyn === "function") {
+      renderProfilsDyn();
+      console.log("✅ Profils mis à jour:", window.profilsDynList);
+    }
+  }
 });
