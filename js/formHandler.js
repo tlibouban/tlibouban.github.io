@@ -91,6 +91,11 @@ function renderChecklist() {
           "A LA CARTE",
           "MODULES",
         ]
+      : isSectionNamed(section, "CABINET OPTION")
+      ? // Pour Cabinet Option : trier par nombre d'éléments décroissant
+        Object.keys(sousSections).sort(
+          (a, b) => sousSections[b].length - sousSections[a].length
+        )
       : Object.keys(sousSections).sort();
 
     // Sous-sections triées dans l'ordre défini + les autres
