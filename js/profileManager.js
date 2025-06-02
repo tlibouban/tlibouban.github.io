@@ -1,7 +1,41 @@
 /**
- * profileManager.js - Gestion des profils utilisateurs
- * Contient les fonctions pour gérer l'ajout, la modification et la suppression des profils
+ * profileManager.js - Gestion des profils utilisateur
+ * Interface pour créer, gérer et sauvegarder des profils de configuration
  */
+
+/**
+ * Génère un switch moderne pour tous les types de tableaux
+ * @param {string} id - ID unique pour le switch
+ * @param {string} name - Nom du champ
+ * @param {boolean} checked - État initial
+ * @param {string} ariaLabel - Label d'accessibilité
+ * @param {string} cssClass - Classe CSS additionnelle (optionnel)
+ * @returns {string} HTML du switch moderne
+ */
+function renderModernSwitch(
+  id,
+  name,
+  checked = false,
+  ariaLabel = "",
+  cssClass = "check-feature"
+) {
+  return `
+    <div class="modern-switch-container">
+      <input 
+        id="${id}"
+        name="${name}"
+        type="checkbox" 
+        class="modern-switch-input ${cssClass}"
+        aria-label="${ariaLabel}"
+        data-idx="${id.match(/\d+$/) ? id.match(/\d+$/)[0] : ""}"
+        ${checked ? "checked" : ""}
+      >
+      <label for="${id}" class="modern-switch-label">
+        <div class="tick-mark"></div>
+      </label>
+    </div>
+  `;
+}
 
 // =====================
 // Initialisation du gestionnaire de profils
@@ -384,7 +418,13 @@ function renderProfilsDyn() {
           .map(
             (profil, idx) => `
           <tr>
-            <td><input type="checkbox" class="check-feature-profil" data-idx="${idx}" checked aria-label="Inclure ce profil" id="profil-check-${idx}" name="profil-check-${idx}" /></td>
+            <td>${renderModernSwitch(
+              `profil-check-${idx}`,
+              `profil-check-${idx}`,
+              true,
+              "Inclure ce profil",
+              "check-feature-profil"
+            )}</td>
             <td><input type="text" value="${profil.nom.replace(
               /"/g,
               "&quot;"
@@ -393,12 +433,13 @@ function renderProfilsDyn() {
               profil.nb
             }" class="profil-nb" data-idx="${idx}" style="width:60px;" aria-label="Nombre d'utilisateurs pour ce profil" id="profil-nb-${idx}" name="profil-nb-${idx}" data-unit="utilisateur" /></td>
             <td style="text-align:center;">
-              <label class="switch">
-                <input type="checkbox" class="profil-modif" data-idx="${idx}" aria-label="Modifier ce profil" id="profil-modif-${idx}" name="profil-modif-${idx}" ${
-              profil.ajoute ? "checked disabled" : ""
-            } />
-                <span class="slider"></span>
-              </label>
+              ${renderModernSwitch(
+                `profil-modif-${idx}`,
+                `profil-modif-${idx}`,
+                profil.ajoute || false,
+                "Modifier ce profil",
+                "profil-modif"
+              )}
             </td>
             <td class="profil-sous-total" data-idx="${idx}">0</td>
             <td><button type="button" class="remove-profil-btn" data-idx="${idx}" style="background:#e74c3c;color:#fff;border:none;border-radius:4px;padding:2px 10px;cursor:pointer;font-size:0.95em;" aria-label="Supprimer ce profil">Supprimer</button></td>

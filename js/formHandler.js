@@ -411,7 +411,8 @@ function renderCabinetColumn(
           `feature-${sectionId}-${ss.replace(/\s+/g, "-")}-${idxGlobal}`,
           `feature-${sectionId}-${idxGlobal}`,
           forceActive,
-          "Activer/désactiver cette fonctionnalité"
+          "Activer/désactiver cette fonctionnalité",
+          "check-feature-cabinet"
         )}</td>
         <td>${tooltipHTML}${item.FONCTIONNALITES.replace(
         /^\[PACKS\] |^\[MODULE\] /,
@@ -482,10 +483,12 @@ function renderStandardRow(
     return `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
       item.TEMPS || ""
     }">
-      <td><label class="switch">
-          <input type="checkbox" class="check-feature" aria-label="Activer/désactiver cette fonctionnalité" id="feature-${sectionId}-${idxGlobal}" name="feature-${sectionId}-${idxGlobal}" />
-          <span class="slider"></span>
-        </label></td>
+      <td>${renderModernSwitch(
+        `feature-${sectionId}-${idxGlobal}`,
+        `feature-${sectionId}-${idxGlobal}`,
+        false,
+        "Activer/désactiver cette fonctionnalité"
+      )}</td>
       <td>${item.FONCTIONNALITES.replace(
         /^\[PACKS\] |^\[MODULE\] /,
         ""
@@ -511,7 +514,12 @@ function renderStandardRow(
     return `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
       item.TEMPS || ""
     }">
-      <td><input type="checkbox" class="check-feature" aria-label="Inclure cette fonctionnalité dans le calcul" id="feature-${sectionId}-${idxGlobal}" name="feature-${sectionId}-${idxGlobal}" /></td>
+      <td>${renderModernSwitch(
+        `feature-${sectionId}-${idxGlobal}`,
+        `feature-${sectionId}-${idxGlobal}`,
+        false,
+        "Inclure cette fonctionnalité dans le calcul"
+      )}</td>
       <td>${item.FONCTIONNALITES.replace(
         /^\[PACKS\] |^\[MODULE\] /,
         ""
@@ -548,7 +556,13 @@ function renderUtilisateursRow(section, sectionId, item, idxGlobal) {
   return `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
     item.TEMPS || ""
   }">
-    <td><input type="checkbox" class="check-feature-utilisateurs" aria-label="Inclure les utilisateurs dans le calcul" id="feature-utilisateurs-${sectionId}-${idxGlobal}" name="feature-utilisateurs-${sectionId}-${idxGlobal}" /></td>
+    <td>${renderModernSwitch(
+      `feature-utilisateurs-${sectionId}-${idxGlobal}`,
+      `feature-utilisateurs-${sectionId}-${idxGlobal}`,
+      false,
+      "Inclure les utilisateurs dans le calcul",
+      "check-feature-utilisateurs"
+    )}</td>
     <td>
       Utilisateurs
       <br>
@@ -825,16 +839,23 @@ function setAllSections(expanded) {
  * @param {string} name - Nom du champ
  * @param {boolean} checked - État initial
  * @param {string} ariaLabel - Label d'accessibilité
+ * @param {string} cssClass - Classe CSS additionnelle (optionnel)
  * @returns {string} HTML du switch moderne
  */
-function renderModernSwitch(id, name, checked = false, ariaLabel = "") {
+function renderModernSwitch(
+  id,
+  name,
+  checked = false,
+  ariaLabel = "",
+  cssClass = "check-feature"
+) {
   return `
     <div class="modern-switch-container">
       <input 
         id="${id}"
         name="${name}"
         type="checkbox" 
-        class="modern-switch-input check-feature-cabinet"
+        class="modern-switch-input ${cssClass}"
         aria-label="${ariaLabel}"
         ${checked ? "checked" : ""}
       >
