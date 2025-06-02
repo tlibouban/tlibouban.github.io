@@ -103,18 +103,19 @@ function renderChecklist() {
 
     // Traitement spécial pour la section CABINET OPTION
     if (isSectionNamed(section, "CABINET OPTION")) {
-      // Affichage en deux colonnes
+      // Affichage en trois colonnes
       html += `<div class="cabinet-option-container">`;
 
       // Déterminer approximativement où couper pour équilibrer les colonnes
-      const midPoint = Math.ceil(sousSectionsKeys.length / 2);
+      const sectionCount = sousSectionsKeys.length;
+      const itemsPerColumn = Math.ceil(sectionCount / 3);
 
       // Première colonne
       html += renderCabinetColumn(
         section,
         sectionId,
         sousSections,
-        sousSectionsKeys.slice(0, midPoint),
+        sousSectionsKeys.slice(0, itemsPerColumn),
         0
       );
 
@@ -123,8 +124,17 @@ function renderChecklist() {
         section,
         sectionId,
         sousSections,
-        sousSectionsKeys.slice(midPoint),
+        sousSectionsKeys.slice(itemsPerColumn, itemsPerColumn * 2),
         100
+      );
+
+      // Troisième colonne
+      html += renderCabinetColumn(
+        section,
+        sectionId,
+        sousSections,
+        sousSectionsKeys.slice(itemsPerColumn * 2),
+        200
       );
 
       html += `</div>`;
@@ -232,7 +242,7 @@ function renderCabinetColumn(
 
   columnSections.forEach((ss) => {
     html += `<h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3>`;
-    html += `<table class="checklist-table cabinet-option-table"><thead><tr><th>On/Off</th><th>Fonctionnalité</th><th>Nb</th><th>Unité</th><th>Temps unitaire</th><th>Sous-total</th></tr></thead><tbody>`;
+    html += `<table class="checklist-table cabinet-option-table"><thead><tr><th>On/Off</th><th>Fonctionnalité</th></tr></thead><tbody>`;
 
     // Parcourir les items de cette sous-section
     sousSections[ss].forEach((item, idx) => {
@@ -248,8 +258,6 @@ function renderCabinetColumn(
 
       // S'assurer que AccesAnalytics est toujours activé par défaut
       const forceActive = optionName === "AccesAnalytics" ? true : isActive;
-
-      // Récupérer la description pour le tooltip      const description = getCabinetOptionDescription(optionName);
 
       // Créer un tooltip basé sur le nom de l'option
       let tooltipHTML = "";
@@ -407,7 +415,6 @@ function renderCabinetColumn(
           }
           ${getProduitsHTML(item.FONCTIONNALITES)}
         </td>
-        <td></td><td></td><td></td><td class=\"sous-total\">N/A</td>
       </tr>`;
     });
 

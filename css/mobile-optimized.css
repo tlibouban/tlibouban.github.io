@@ -300,10 +300,11 @@
 
   .cabinet-option-container {
     flex-direction: row;
+    flex-wrap: wrap;
   }
 
   .cabinet-option-column {
-    width: 50%;
+    width: calc(50% - 0.75rem);
   }
 }
 
@@ -336,6 +337,11 @@
   .checklist-table th:nth-child(6),
   .checklist-table td:nth-child(6) {
     width: 120px;
+  }
+
+  /* 3 colonnes sur desktop pour cabinet options */
+  .cabinet-option-column {
+    width: calc(33.333% - 1rem);
   }
 }
 

@@ -432,17 +432,6 @@ input:checked + .slider:before {
 }
 
 /* Style spécifique pour la section CABINET OPTION */
-.cabinet-option-table th:nth-child(3),
-.cabinet-option-table th:nth-child(4),
-.cabinet-option-table th:nth-child(5),
-.cabinet-option-table th:nth-child(6),
-.cabinet-option-table td:nth-child(3),
-.cabinet-option-table td:nth-child(4),
-.cabinet-option-table td:nth-child(5),
-.cabinet-option-table td:nth-child(6) {
-  display: none;
-}
-
 .cabinet-option-table th:nth-child(2),
 .cabinet-option-table td:nth-child(2) {
   width: 90%;
@@ -457,8 +446,17 @@ input:checked + .slider:before {
 }
 
 .cabinet-option-column {
-  flex: 0 0 calc(50% - 10px);
-  max-width: calc(50% - 10px);
+  flex: 0 0 calc(33.333% - 14px);
+  max-width: calc(33.333% - 14px);
+  min-width: 300px;
+}
+
+/* Ajustement pour les écrans moyens */
+@media (max-width: 1200px) {
+  .cabinet-option-column {
+    flex: 0 0 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+  }
 }
 
 /* Ajustement pour les petits écrans */
@@ -466,6 +464,7 @@ input:checked + .slider:before {
   .cabinet-option-column {
     flex: 0 0 100%;
     max-width: 100%;
+    min-width: auto;
   }
 }
 
