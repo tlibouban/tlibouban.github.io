@@ -111,16 +111,26 @@ function renderChecklist() {
       // Affichage en trois colonnes
       html += `<div class="cabinet-option-container">`;
 
-      // Déterminer approximativement où couper pour équilibrer les colonnes
+      // Répartition équilibrée des éléments dans les 3 colonnes
       const sectionCount = sousSectionsKeys.length;
-      const itemsPerColumn = Math.ceil(sectionCount / 3);
+      const baseItemsPerColumn = Math.floor(sectionCount / 3);
+      const remainder = sectionCount % 3;
+
+      // Calculer le nombre d'éléments pour chaque colonne
+      const col1Count = baseItemsPerColumn + (remainder > 0 ? 1 : 0);
+      const col2Count = baseItemsPerColumn + (remainder > 1 ? 1 : 0);
+      const col3Count = baseItemsPerColumn;
+
+      // Définir les indices de début et fin pour chaque colonne
+      const col1End = col1Count;
+      const col2End = col1End + col2Count;
 
       // Première colonne
       html += renderCabinetColumn(
         section,
         sectionId,
         sousSections,
-        sousSectionsKeys.slice(0, itemsPerColumn),
+        sousSectionsKeys.slice(0, col1End),
         0
       );
 
@@ -129,7 +139,7 @@ function renderChecklist() {
         section,
         sectionId,
         sousSections,
-        sousSectionsKeys.slice(itemsPerColumn, itemsPerColumn * 2),
+        sousSectionsKeys.slice(col1End, col2End),
         100
       );
 
@@ -138,7 +148,7 @@ function renderChecklist() {
         section,
         sectionId,
         sousSections,
-        sousSectionsKeys.slice(itemsPerColumn * 2),
+        sousSectionsKeys.slice(col2End),
         200
       );
 
