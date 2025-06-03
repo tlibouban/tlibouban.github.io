@@ -298,6 +298,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Afficher les informations de l'équipe formation
       displayFormationTeam(clientData);
+
+      // Affectation intelligente des formateurs
+      updateTrainerAssignment(clientData);
     } else {
       // Client non trouvé dans la base, réinitialiser effectif et revenir aux options standard
       effectifInput.value = "";
@@ -312,6 +315,9 @@ document.addEventListener("DOMContentLoaded", function () {
       displayDeploymentOptions(null);
 
       displayFormationTeam(null);
+
+      // Masquer l'affectation des formateurs
+      hideTrainerAssignment();
     }
 
     // Mettre à jour les profils utilisateurs selon les données TSV
@@ -1036,6 +1042,65 @@ document.addEventListener("DOMContentLoaded", function () {
       displayDeploymentOptions(null);
     });
   }
+
+  // =====================
+  // Gestion de l'affectation intelligente des formateurs
+  // =====================
+
+  /**
+   * Met à jour l'affectation des formateurs
+   * @param {Object} clientData - Données du client
+   */
+  function updateTrainerAssignment(clientData) {
+    const trainerAssignmentInstance = getTrainerAssignmentInstance();
+    if (!trainerAssignmentInstance) {
+      console.warn("⚠️ Module d'affectation des formateurs non disponible");
+      return;
+    }
+
+    const logicielSelect = document.getElementById("logiciel");
+    if (!logicielSelect || !logicielSelect.value) {
+      hideTrainerAssignment();
+      return;
+    }
+
+    // Attendre que le module soit initialisé
+    if (!trainerAssignmentInstance.isLoaded) {
+      setTimeout(() => updateTrainerAssignment(clientData), 500);
+      return;
+    }
+
+    trainerAssignmentInstance.updateTrainerDisplay(
+      clientData,
+      logicielSelect.value
+    );
+  }
+
+  /**
+   * Masque l'affectation des formateurs
+   */
+  function hideTrainerAssignment() {
+    const trainerAssignmentInstance = getTrainerAssignmentInstance();
+    if (trainerAssignmentInstance) {
+      trainerAssignmentInstance.hideTrainerDisplay();
+    }
+  }
+
+  // Ajouter des listeners pour mettre à jour l'affectation lors des changements
+  logicielSelect.addEventListener("change", () => {
+    const clientName = clientInput.value;
+    const clientData = findClientInDatabase(clientName);
+    updateTrainerAssignment(clientData);
+  });
+
+  // Listener pour les changements de type de formation (sur site / à distance)
+  document.addEventListener("change", (event) => {
+    if (event.target.name === "deployment-type") {
+      const clientName = clientInput.value;
+      const clientData = findClientInDatabase(clientName);
+      updateTrainerAssignment(clientData);
+    }
+  });
 });
 
 // Variables globales pour les bases de données

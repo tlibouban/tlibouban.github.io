@@ -1698,3 +1698,157 @@ tr:has(h3) h3,
     padding: 3px 6px;
   }
 }
+
+/* ===== AFFECTATION INTELLIGENTE DES FORMATEURS ===== */
+.trainer-assignment-container {
+  margin: 16px 0;
+  padding: 16px;
+  background: linear-gradient(135deg, #e8f5e8 0%, #d4f0d4 100%);
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.1);
+  display: none; /* Masqué par défaut */
+}
+
+.trainer-assignment-result h5 {
+  margin: 0 0 12px 0;
+  color: #2e7d32;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.assignment-details {
+  margin: 12px 0;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #c8e6c9;
+  font-size: 0.9rem;
+}
+
+.assignment-details p {
+  margin: 4px 0;
+  color: #2e7d32;
+}
+
+.assignment-details strong {
+  color: #1b5e20;
+}
+
+.primary-trainer {
+  margin: 16px 0;
+}
+
+.primary-trainer h6 {
+  margin: 0 0 8px 0;
+  color: #2e7d32;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.trainer-card {
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.trainer-card.primary {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f8e9 100%);
+  border: 2px solid #4caf50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+.trainer-card.alternative {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+}
+
+.trainer-specialty {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.trainer-zone {
+  color: #666;
+  font-style: italic;
+}
+
+.trainer-email {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.trainer-email:hover {
+  text-decoration: underline;
+}
+
+.proximity-indicator {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 6px;
+  background: #e3f2fd;
+  color: #1565c0;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.alternative-trainers {
+  margin: 16px 0;
+}
+
+.alternative-trainers h6 {
+  margin: 0 0 8px 0;
+  color: #2e7d32;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.trainers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.trainer-assignment-error {
+  padding: 12px;
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef5350;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .trainer-assignment-container {
+    margin: 12px 0;
+    padding: 12px;
+  }
+
+  .trainers-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .trainer-card {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .trainer-card.alternative {
+    font-size: 0.8rem;
+  }
+
+  .assignment-details {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
