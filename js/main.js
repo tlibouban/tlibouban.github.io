@@ -4,6 +4,11 @@
  */
 
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("📄 Page chargée, initialisation...");
+
+  // Charger les formations logiciels au démarrage
+  loadFormationsLogiciels();
+
   // Initialise le formulaire
   renderChecklist();
 
@@ -1115,3 +1120,42 @@ document.addEventListener("DOMContentLoaded", function () {
 // Variables globales pour les bases de données
 let commercialDatabase = null;
 let formationDatabase = null;
+
+// Fonction pour récupérer l'instance de TrainerAssignment
+function getTrainerAssignmentInstance() {
+  return window.trainerAssignmentInstance || null;
+}
+
+/**
+ * Charge les données des formations logiciels depuis le JSON
+ */
+function loadFormationsLogiciels() {
+  fetch("json/formations_logiciels.json")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(
+        "✅ Formations logiciels chargées:",
+        data.formations.length,
+        "formations"
+      );
+      window.formationsLogiciels = data.formations;
+    })
+    .catch((error) => {
+      console.error(
+        "❌ Erreur lors du chargement des formations logiciels:",
+        error
+      );
+      window.formationsLogiciels = [];
+    });
+}
+
+// Exposer les fonctions nécessaires dans le scope global
+window.updateClientInfo = updateClientInfo;
+window.updateTrainerAssignment = updateTrainerAssignment;
+window.getTrainerAssignmentInstance = getTrainerAssignmentInstance;
+window.loadFormationsLogiciels = loadFormationsLogiciels;

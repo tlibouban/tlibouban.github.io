@@ -71,9 +71,222 @@ function getProduitsHTML(fonctionnalite) {
   // Retire les indicateurs warning/licences pour la recherche
   const fonctionaliteBase = fonctionnalite
     .replace(/ \(warning\)| \(licences\)| \(warning \+ licences\)/g, "")
-    .replace(/^\[PACKS\] |^\[MODULE\] /, "");
+    .replace(/^\[PACKS\] |^\[MODULE\] /, "")
+    .trim();
 
-  // Recherche les produits compatibles
+  let produits = [];
+
+  // Charger les formations depuis le JSON si pas déjà fait
+  if (!window.formationsLogiciels) {
+    // Essayer de charger de façon synchrone si possible
+    fetch("json/formations_logiciels.json")
+      .then((response) => response.json())
+      .then((data) => {
+        window.formationsLogiciels = data.formations;
+      })
+      .catch((error) => {
+        console.warn(
+          "Erreur lors du chargement des formations logiciels:",
+          error
+        );
+        window.formationsLogiciels = [];
+      });
+
+    // Utiliser l'ancien système en attendant
+    return getProduitsHTMLFromModuleProduits(fonctionaliteBase);
+  }
+
+  // Rechercher dans le fichier JSON des formations
+  const formation = window.formationsLogiciels.find((f) => {
+    const nomFormation = f.nom
+      .replace(/[^\w\s]/g, "")
+      .trim()
+      .toLowerCase();
+    const fonctionnaliteSearch = fonctionaliteBase
+      .replace(/[^\w\s]/g, "")
+      .trim()
+      .toLowerCase();
+
+    // Correspondance exacte
+    if (nomFormation === fonctionnaliteSearch) return true;
+
+    // Correspondance partielle (contient)
+    if (
+      nomFormation.includes(fonctionnaliteSearch) ||
+      fonctionnaliteSearch.includes(nomFormation)
+    )
+      return true;
+
+    // Correspondances spécifiques
+    if (
+      fonctionnaliteSearch.includes("online") &&
+      nomFormation.includes("online")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("analytics") &&
+      nomFormation.includes("analytics")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("digitaldoc") &&
+      nomFormation.includes("digital doc")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("dictaplus") &&
+      nomFormation.includes("dicta")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("brain") &&
+      nomFormation.includes("intelligence artificielle")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("rpva") &&
+      nomFormation.includes("e-barreau")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("saisie immobilière") &&
+      nomFormation.includes("saisie immobilière")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("actions liées") &&
+      nomFormation.includes("actions liées")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("gestion de dossier") &&
+      nomFormation.includes("gestion de dossiers")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("gestion financière") &&
+      nomFormation.includes("gestion financière")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("gestion intégrée") &&
+      nomFormation.includes("gestion intégrée")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("assistance au démarrage") &&
+      nomFormation.includes("assistance au démarrage")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("validation des connaissances") &&
+      nomFormation.includes("validation des connaissances")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("secrétariat juridique") &&
+      nomFormation.includes("secrétariat juridique")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("passer de air à neo") &&
+      nomFormation.includes("passer de air à néo")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("facturation avancée") &&
+      nomFormation.includes("facturation avancée")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("processus de facturation") &&
+      nomFormation.includes("processus de facturation")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("calcul d'intérêt") &&
+      nomFormation.includes("calcul d'intérêt")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("modification simple de matrices") &&
+      nomFormation.includes("modification simple de matrices")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("pilotage de l'activité") &&
+      nomFormation.includes("pilotage de l'activité")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("audit de pratique") &&
+      nomFormation.includes("audit de pratique")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("suivi personnalisé") &&
+      nomFormation.includes("suivi personnalisé")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("accompagnement sur mesure") &&
+      nomFormation.includes("accompagnement sur mesure")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("formation en ligne") &&
+      nomFormation.includes("formation en ligne")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("interface comptable") &&
+      nomFormation.includes("interface comptable")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("paramétrage de base") &&
+      nomFormation.includes("paramétrage de base")
+    )
+      return true;
+    if (
+      fonctionnaliteSearch.includes("paramétrage ledes") &&
+      nomFormation.includes("paramétrage ledes")
+    )
+      return true;
+
+    return false;
+  });
+
+  if (formation) {
+    produits = formation.logiciels || [];
+  }
+
+  // Si rien trouvé dans le JSON, utiliser l'ancien système
+  if (produits.length === 0) {
+    return getProduitsHTMLFromModuleProduits(fonctionaliteBase);
+  }
+
+  // Génère les badges HTML
+  if (produits.length === 0) {
+    return "";
+  }
+
+  let html = '<div style="margin-top:6px;">';
+  produits.forEach((produit) => {
+    const classe = produit.toLowerCase() + "-badge";
+    html += `<span class="attention-badge ${classe}">${produit}</span>`;
+  });
+  html += "</div>";
+
+  return html;
+}
+
+/**
+ * Version de fallback utilisant l'ancien système moduleProduits
+ * @param {string} fonctionaliteBase - Nom de la fonctionnalité nettoyé
+ * @returns {string} - HTML des badges
+ */
+function getProduitsHTMLFromModuleProduits(fonctionaliteBase) {
   let produits = [];
 
   // Cas spécial pour les DEMARRAGE COMPLET, SECRETARIAT JURIDIQUE etc.
