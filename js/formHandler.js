@@ -235,12 +235,14 @@ function renderChecklist() {
   // Mettre à jour les totaux une première fois
   setTimeout(() => {
     updateTotals();
-
-    // Réattacher les listeners tri-state après le rendu
-    if (typeof window.reinitTriStateListeners === "function") {
-      window.reinitTriStateListeners();
-    }
   }, 100);
+
+  // Réinitialiser les listeners tri-state pour que les clics fonctionnent
+  setTimeout(() => {
+    if (typeof reinitTriStateListeners === "function") {
+      reinitTriStateListeners();
+    }
+  }, 150);
 
   // Ajoute les listeners
   document
@@ -858,6 +860,19 @@ function addAllInputListeners() {
       el.addEventListener("input", updateTotals);
     }
   });
+
+  // Ajouter un listener sur le champ effectif pour mettre à jour les quantités automatiquement
+  const effectifInput = document.getElementById("effectif");
+  if (effectifInput) {
+    effectifInput.removeEventListener(
+      "input",
+      updateFormationQuantitiesBasedOnEffectif
+    );
+    effectifInput.addEventListener(
+      "input",
+      updateFormationQuantitiesBasedOnEffectif
+    );
+  }
 }
 
 // =====================
@@ -961,4 +976,67 @@ function validateProfilesVsEffectif() {
       }
     });
   }
+}
+
+// =====================
+// Fonction pour calculer le nombre d'unités basé sur l'effectif
+// =====================
+function updateFormationQuantitiesBasedOnEffectif() {
+  const effectifInput = document.getElementById("effectif");
+  if (!effectifInput || !effectifInput.value) {
+    console.log("📊 Pas d'effectif saisi, aucune mise à jour des quantités");
+    return;
+  }
+
+  const effectif = parseInt(effectifInput.value, 10);
+  if (isNaN(effectif) || effectif <= 0) {
+    console.log("📊 Effectif invalide, aucune mise à jour des quantités");
+    return;
+  }
+
+  // Calculer le nombre d'unités nécessaires: effectif / 8 arrondi à l'unité supérieure
+  const unitesNecessaires = Math.ceil(effectif / 8);
+  let elementsUpdated = 0;
+
+  // Mettre à jour toutes les formations et modules complémentaires qui ont "Par groupe de 8"
+  document
+    .querySelectorAll(
+      'tr[data-section="FORMATIONS"], tr[data-section="MODULES COMPLEMENTAIRES"]'
+    )
+    .forEach((tr) => {
+      const attentionBadge = tr.querySelector(".attention-badge");
+
+      // Vérifier si cet élément a le badge "Par groupe de 8"
+      if (
+        attentionBadge &&
+        attentionBadge.textContent.includes("Par groupe de 8")
+      ) {
+        const nbInput = tr.querySelector(".feature-nb");
+        if (nbInput) {
+          // Mettre à jour la valeur seulement si elle est différente
+          const currentValue = parseInt(nbInput.value, 10) || 1;
+          if (currentValue !== unitesNecessaires) {
+            const fonctionnalite =
+              tr
+                .querySelector("td:nth-child(2)")
+                ?.textContent?.trim()
+                .split("\n")[0] || "Inconnue";
+            console.log(
+              `  ↳ ${fonctionnalite}: ${currentValue} → ${unitesNecessaires}`
+            );
+
+            nbInput.value = unitesNecessaires;
+            elementsUpdated++;
+
+            // Déclencher l'événement input pour mettre à jour les totaux
+            const inputEvent = new Event("input", { bubbles: true });
+            nbInput.dispatchEvent(inputEvent);
+          }
+        }
+      }
+    });
+
+  console.log(
+    `📊 Quantités mises à jour: ${effectif} personnes → ${unitesNecessaires} unités (par groupe de 8) - ${elementsUpdated} éléments modifiés`
+  );
 }

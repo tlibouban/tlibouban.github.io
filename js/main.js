@@ -267,6 +267,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Remplir le champ effectif
       effectifInput.value = clientData.effectif;
 
+      // Mettre à jour les quantités de formations basées sur l'effectif
+      if (typeof updateFormationQuantitiesBasedOnEffectif === "function") {
+        updateFormationQuantitiesBasedOnEffectif();
+      }
+
       if (clientData.type === "Prospect") {
         // Si prospect : Type de projet = "New logo" uniquement
         updateProjetOptionsForProspect();
