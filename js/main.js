@@ -620,12 +620,24 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     }
 
-    // Si un logiciel de base est sélectionné (AIR ou NEO), ne garder que les options qui commencent par ce logiciel
-    if (["AIR", "NEO"].includes(logicielSelect.value)) {
-      const prefix = logicielSelect.value.toUpperCase();
-      options = options.filter((opt) =>
-        opt.label.toUpperCase().startsWith(prefix)
-      );
+    // Logique de filtrage améliorée pour gérer tous les ERP
+    const currentLogiciel = logicielSelect.value;
+
+    if (currentLogiciel) {
+      if (["AIR", "NEO"].includes(currentLogiciel)) {
+        // Pour AIR et NEO, garder les options qui commencent par ce logiciel
+        const prefix = currentLogiciel.toUpperCase();
+        options = options.filter((opt) =>
+          opt.label.toUpperCase().startsWith(prefix)
+        );
+      } else {
+        // Pour tous les autres ERP (solutions SEPTEO), proposer migration vers AIR et NEO
+        const erpName = currentLogiciel.toUpperCase();
+        options = [
+          { value: `${erpName}versAIR`, label: `${erpName} vers AIR` },
+          { value: `${erpName}versNEO`, label: `${erpName} vers NEO` },
+        ];
+      }
     }
 
     // Avant d'ajouter les options au select sens, trie-les par ordre alphabétique sur le label
