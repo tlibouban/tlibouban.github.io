@@ -740,10 +740,12 @@ function updateTotals() {
         validateProfilesVsEffectif();
       } else {
         // Calcul standard pour les autres lignes
-        const checked = tr.querySelector(
-          ".modern-switch-input.check-feature, .modern-switch-input.check-feature-cabinet"
-        );
-        const isChecked = checked ? checked.checked : false;
+        const switchElement = tr.querySelector(".tri-state-modern-switch");
+
+        // Vérifier l'état du tri-state switch (seulement "activated" compte pour les calculs)
+        const isActivated = switchElement
+          ? isTriStateActivated(switchElement)
+          : false;
 
         // Pour la section CABINET OPTION, pas de calcul de temps mais juste comptage
         if (isCabinetOption) {
@@ -757,7 +759,7 @@ function updateTotals() {
           const nbInput = tr.querySelector(".feature-nb");
           const nb = nbInput ? parseInt(nbInput.value, 10) : 1;
           const timeMins = parseTimeToMinutes(tr.dataset.temps);
-          const sousTotal = isChecked && !isExcluded ? nb * timeMins : 0;
+          const sousTotal = isActivated && !isExcluded ? nb * timeMins : 0;
 
           // Mettre à jour l'unité avec l'accord grammatical
           if (nbInput) {
@@ -791,12 +793,13 @@ function updateTotals() {
     const badge = sectionDiv.querySelector(".section-total-badge");
     if (badge) {
       if (isCabinetOption) {
-        // Pour Cabinet Option, afficher le nombre d'options activées plutôt que le temps
-        const optionsActivees = sectionDiv.querySelectorAll(
-          ".modern-switch-input.check-feature-cabinet:checked"
-        ).length;
+        // Pour Cabinet Option, compter les tri-state switches activés
+        const optionsActivees = Array.from(
+          sectionDiv.querySelectorAll(".tri-state-modern-switch")
+        ).filter((sw) => isTriStateActivated(sw)).length;
+
         const optionsTotal = sectionDiv.querySelectorAll(
-          ".modern-switch-input.check-feature-cabinet"
+          ".tri-state-modern-switch"
         ).length;
 
         // Affichage avec accord grammatical
@@ -819,44 +822,37 @@ function updateTotals() {
 }
 
 // =====================
-// Ajoute les listeners sur tous les champs interactifs (checkbox, input)
+// Ajoute les listeners sur tous les champs interactifs (input numbers principalement)
+// Les tri-state switches gèrent leurs propres événements via onclick
 // =====================
 function addAllInputListeners() {
-  // Pour tous les champs standards
+  // Pour tous les champs input numériques
+  document.querySelectorAll(".feature-nb, .profil-nb").forEach((el) => {
+    el.removeEventListener("input", updateTotals); // évite les doublons
+    el.addEventListener("input", updateTotals);
+  });
+
+  // Pour les anciens switches s'il en reste (profils, utilisateurs, etc.)
   document
     .querySelectorAll(
-      ".modern-switch-input.check-feature, .feature-nb, .modern-switch-input.check-feature-utilisateurs, .modern-switch-input.check-feature-cabinet"
+      ".modern-switch-input.check-feature-utilisateurs, .modern-switch-input.check-feature-profil, .modern-switch-input.profil-modif"
     )
     .forEach((el) => {
-      el.removeEventListener("input", updateTotals); // évite les doublons
-      el.removeEventListener("change", updateTotals); // évite les doublons
-
-      // Pour les checkbox/switches, utiliser 'change'
-      if (el.type === "checkbox") {
-        el.addEventListener("change", updateTotals);
-      } else {
-        // Pour les input number, utiliser 'input'
-        el.addEventListener("input", updateTotals);
-      }
-    });
-
-  // Pour les profils dynamiques
-  document
-    .querySelectorAll(
-      ".modern-switch-input.check-feature-profil, .profil-nb, .modern-switch-input.profil-modif, .profil-nom, .remove-profil-btn"
-    )
-    .forEach((el) => {
-      el.removeEventListener("input", updateTotals);
       el.removeEventListener("change", updateTotals);
-
-      // Pour les checkbox/switches, utiliser 'change'
-      if (el.type === "checkbox") {
-        el.addEventListener("change", updateTotals);
-      } else {
-        // Pour les autres, utiliser 'input'
-        el.addEventListener("input", updateTotals);
-      }
+      el.addEventListener("change", updateTotals);
     });
+
+  // Pour les autres éléments (noms de profils, boutons de suppression)
+  document.querySelectorAll(".profil-nom, .remove-profil-btn").forEach((el) => {
+    el.removeEventListener("input", updateTotals);
+    el.removeEventListener("change", updateTotals);
+
+    if (el.type === "button") {
+      el.addEventListener("click", updateTotals);
+    } else {
+      el.addEventListener("input", updateTotals);
+    }
+  });
 }
 
 // =====================
@@ -881,13 +877,13 @@ function setAllSections(expanded) {
 }
 
 /**
- * Génère un switch moderne pour les tableaux Cabinet Option
+ * Génère un switch tri-state pour les tableaux (remplace les switches binaires)
  * @param {string} id - ID unique pour le switch
  * @param {string} name - Nom du champ
- * @param {boolean} checked - État initial
+ * @param {boolean} checked - État initial (converti en tri-state)
  * @param {string} ariaLabel - Label d'accessibilité
  * @param {string} cssClass - Classe CSS additionnelle (optionnel)
- * @returns {string} HTML du switch moderne
+ * @returns {string} HTML du switch tri-state
  */
 function renderModernSwitch(
   id,
@@ -896,21 +892,11 @@ function renderModernSwitch(
   ariaLabel = "",
   cssClass = "check-feature"
 ) {
-  return `
-    <div class="modern-switch-container">
-      <input 
-        id="${id}"
-        name="${name}"
-        type="checkbox" 
-        class="modern-switch-input ${cssClass}"
-        aria-label="${ariaLabel}"
-        ${checked ? "checked" : ""}
-      >
-      <label for="${id}" class="modern-switch-label">
-        <div class="tick-mark"></div>
-      </label>
-    </div>
-  `;
+  // Convertir l'état binaire en tri-state
+  const initialState = checked ? "activated" : "not-examined";
+
+  // Utiliser le nouveau système tri-state
+  return renderTriStateSwitch(id, name, initialState, ariaLabel, cssClass);
 }
 
 // =====================

@@ -1094,3 +1094,230 @@ tfoot .temps-unitaire {
     width: 100%;
   }
 }
+
+/* ===== SWITCH TRI-STATE AVEC CROIX ===== */
+.tri-state-modern-container {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.tri-state-modern-switch {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  background-color: #f72414;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s ease transform, 0.2s ease background-color,
+    0.2s ease box-shadow;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+}
+
+/* État bleu "écarté" avec croix */
+.tri-state-modern-switch.rejected {
+  background-color: #3498db;
+}
+
+/* État vert "activé" */
+.tri-state-modern-switch.activated {
+  background-color: #07d410;
+}
+
+.tri-state-modern-switch:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  width: 24px;
+  height: 23px;
+  margin: 0 auto;
+  background-color: #fff;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  box-shadow: inset 0 7px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.2s ease width, 0.2s ease height;
+}
+
+/* État rouge : cercle blanc normal */
+.tri-state-modern-switch:not(.rejected):not(.activated):before {
+  box-shadow: inset 0 7px 10px #ffbeb8;
+}
+
+/* État écarté : masquer le cercle blanc, montrer la croix */
+.tri-state-modern-switch.rejected:before {
+  width: 0;
+  height: 0;
+}
+
+/* État activé : masquer le cercle blanc, montrer le check */
+.tri-state-modern-switch.activated:before {
+  width: 0;
+  height: 0;
+}
+
+/* Tick mark pour l'état activé */
+.tri-state-tick-mark {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  left: 0;
+  width: 15px;
+  height: 18px;
+  margin: 0 auto;
+  margin-left: 5px;
+  transform: rotateZ(-40deg);
+  opacity: 0;
+  transition: 0.2s ease opacity;
+}
+
+.tri-state-tick-mark:before,
+.tri-state-tick-mark:after {
+  content: "";
+  position: absolute;
+  background-color: #fff;
+  border-radius: 2px;
+  opacity: 0;
+  transition: 0.2s ease transform, 0.2s ease opacity;
+}
+
+.tri-state-tick-mark:before {
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  height: 10px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.23);
+  transform: translateY(-68px);
+}
+
+.tri-state-tick-mark:after {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
+  transform: translateX(78px);
+}
+
+.tri-state-modern-switch.activated .tri-state-tick-mark {
+  opacity: 1;
+}
+
+.tri-state-modern-switch.activated .tri-state-tick-mark:before,
+.tri-state-modern-switch.activated .tri-state-tick-mark:after {
+  transform: translate(0);
+  opacity: 1;
+}
+
+/* Icône Croix "X" pour l'état écarté - centrage amélioré */
+.cross-icon {
+  opacity: 0;
+  transition: 0.2s ease opacity;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.tri-state-modern-switch.rejected .cross-icon {
+  opacity: 1;
+}
+
+/* ===== BOÎTE FLOTTANTE POUR LES COMPTEURS ===== */
+.floating-stats {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 2px solid #e8f4fd;
+  z-index: 1000;
+  min-width: 200px;
+  backdrop-filter: blur(10px);
+}
+
+.floating-stats h3 {
+  margin: 0 0 15px 0;
+  color: #2e4a9e;
+  font-size: 16px;
+  text-align: center;
+  border-bottom: 1px solid #e8f4fd;
+  padding-bottom: 8px;
+}
+
+.floating-stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: white;
+}
+
+.floating-stat-not-examined {
+  background: #e74c3c;
+}
+
+.floating-stat-rejected {
+  background: #3498db;
+}
+
+.floating-stat-activated {
+  background: #27ae60;
+}
+
+.floating-stat-number {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.floating-controls {
+  margin-top: 15px;
+  text-align: center;
+  border-top: 1px solid #e8f4fd;
+  padding-top: 15px;
+}
+
+.floating-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 2px;
+  font-weight: 500;
+}
+
+.floating-btn:hover {
+  background: #2980b9;
+}
+
+/* Responsive : cache la boîte flottante sur petits écrans */
+@media (max-width: 768px) {
+  .floating-stats {
+    display: none;
+  }
+}
