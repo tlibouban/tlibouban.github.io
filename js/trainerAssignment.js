@@ -371,23 +371,8 @@ class TrainerAssignment {
     const assignment = this.assignTrainers(clientData, logiciel);
     const formattedResult = this.formatAssignmentResult(assignment);
 
-    // Chercher ou créer la section d'affectation
+    // Utiliser la div existante pour l'affectation des formateurs
     let assignmentDiv = document.getElementById("trainer-assignment-info");
-
-    if (!assignmentDiv) {
-      // Créer la div après l'équipe formation
-      const formationDiv = document.getElementById("formation-team-info");
-      if (!formationDiv) return;
-
-      assignmentDiv = document.createElement("div");
-      assignmentDiv.id = "trainer-assignment-info";
-      assignmentDiv.className = "trainer-assignment-container";
-
-      formationDiv.parentNode.insertBefore(
-        assignmentDiv,
-        formationDiv.nextSibling
-      );
-    }
 
     assignmentDiv.innerHTML = formattedResult;
     assignmentDiv.style.display = "block";
