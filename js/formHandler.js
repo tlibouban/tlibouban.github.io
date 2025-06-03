@@ -161,7 +161,7 @@ function renderChecklist() {
 
       let idxGlobal = 0;
       sousSectionsKeys.forEach((ss) => {
-        html += `<tr><td colspan="6"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></td></tr>`;
+        html += `<tr class="subsection-header-row"><td colspan="6"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></td></tr>`;
         sousSections[ss].forEach((item) => {
           // Ignorer la ligne spécifique avec data-section="PARAMÉTRAGE" et data-idx="1"
           if (isSectionNamed(section, "PARAMÉTRAGE") && idxGlobal === 1) {
@@ -273,7 +273,7 @@ function renderCabinetColumn(
   let html = `<div class="cabinet-option-column">`;
 
   columnSections.forEach((ss) => {
-    html += `<h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3>`;
+    html += `<div class="cabinet-option-subsection-header"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></div>`;
     html += `<table class="checklist-table cabinet-option-table"><thead><tr><th>On/Off</th><th>Fonctionnalité</th></tr></thead><tbody>`;
 
     // Parcourir les items de cette sous-section

@@ -1392,3 +1392,62 @@ tfoot .temps-unitaire {
     display: none;
   }
 }
+
+/* Styles pour les lignes de sous-sections (tr contenant des h3) */
+tr:has(h3),
+.checklist-table tbody tr td[colspan="6"]:has(h3) {
+  background: linear-gradient(135deg, #1a2956 0%, #2e4a9e 100%);
+  border-radius: 6px;
+}
+
+tr:has(h3) td,
+.checklist-table tbody tr td[colspan="6"]:has(h3) {
+  background: linear-gradient(135deg, #1a2956 0%, #2e4a9e 100%);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+tr:has(h3) h3,
+.checklist-table tbody tr td[colspan="6"]:has(h3) h3 {
+  color: #ffffff !important;
+  margin: 8px 0 !important;
+  font-size: 1.08em !important;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Fallback pour navigateurs qui ne supportent pas :has() */
+.subsection-header-row {
+  background: linear-gradient(135deg, #1a2956 0%, #2e4a9e 100%);
+  border-radius: 6px;
+}
+
+.subsection-header-row td {
+  background: linear-gradient(135deg, #1a2956 0%, #2e4a9e 100%);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.subsection-header-row h3 {
+  color: #ffffff !important;
+  margin: 8px 0 !important;
+  font-size: 1.08em !important;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles spécifiques pour les en-têtes de sous-sections CABINET OPTION */
+.cabinet-option-subsection-header {
+  background: linear-gradient(135deg, #1a2956 0%, #2e4a9e 100%);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.cabinet-option-subsection-header h3 {
+  color: #ffffff !important;
+  margin: 8px 0 !important;
+  font-size: 1.08em !important;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
