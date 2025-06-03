@@ -293,9 +293,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Afficher les informations de l'équipe commerciale
       displayCommercialTeam(clientData);
 
-      // Afficher les options de déploiement (warnings CSM, formation à distance)
-      displayDeploymentOptions(clientData);
-
       // Afficher les informations de l'équipe formation
       displayFormationTeam(clientData);
 
