@@ -43,8 +43,7 @@ function renderTriStateSwitch(
                  data-css-class="${cssClass}"
                  aria-label="${ariaLabel}"
                  tabindex="0"
-                 role="button"
-                 onclick="cycleTriState(this)">
+                 role="button">
                 <div class="tri-state-tick-mark"></div>
                 <span class="cross-icon">❌</span>
             </div>
@@ -79,7 +78,9 @@ function cycleTriState(element) {
   setTriStateState(element, newState);
 
   // Mettre à jour les totaux
-  updateTotals();
+  if (typeof updateTotals === "function") {
+    updateTotals();
+  }
   updateTriStateCounters();
 }
 
@@ -192,10 +193,10 @@ function createFloatingStats() {
             </div>
             
             <div class="floating-controls">
-                <button class="floating-btn" onclick="bulkSetTriStateNotExamined()" title="Marquer tout comme non examiné">
+                <button class="floating-btn" id="bulk-reset-btn" title="Marquer tout comme non examiné">
                     🔄 Reset
                 </button>
-                <button class="floating-btn" onclick="bulkSetTriStateActivated()" title="Activer toutes les fonctionnalités écartées">
+                <button class="floating-btn" id="bulk-activate-btn" title="Activer toutes les fonctionnalités écartées">
                     ✅ Activer écartées
                 </button>
             </div>
@@ -204,6 +205,18 @@ function createFloatingStats() {
 
   // Ajouter au body
   document.body.insertAdjacentHTML("beforeend", floatingHTML);
+
+  // Attacher les event listeners pour les boutons de masse
+  const resetBtn = document.getElementById("bulk-reset-btn");
+  const activateBtn = document.getElementById("bulk-activate-btn");
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", bulkSetTriStateNotExamined);
+  }
+
+  if (activateBtn) {
+    activateBtn.addEventListener("click", bulkSetTriStateActivated);
+  }
 }
 
 /**
@@ -213,7 +226,9 @@ function bulkSetTriStateNotExamined() {
   document.querySelectorAll(".tri-state-modern-switch").forEach((sw) => {
     setTriStateState(sw, "not-examined");
   });
-  updateTotals();
+  if (typeof updateTotals === "function") {
+    updateTotals();
+  }
   updateTriStateCounters();
 }
 
@@ -224,39 +239,84 @@ function bulkSetTriStateActivated() {
       setTriStateState(sw, "activated");
     }
   });
-  updateTotals();
+  if (typeof updateTotals === "function") {
+    updateTotals();
+  }
   updateTriStateCounters();
+}
+
+/**
+ * Attache les event listeners aux switches tri-state
+ */
+function attachTriStateListeners() {
+  // Supprimer les anciens listeners pour éviter les doublons
+  document.removeEventListener("click", handleTriStateClick);
+  document.removeEventListener("keydown", handleTriStateKeydown);
+
+  // Ajouter les nouveaux listeners
+  document.addEventListener("click", handleTriStateClick);
+  document.addEventListener("keydown", handleTriStateKeydown);
+}
+
+/**
+ * Gestion des clics sur les switches tri-state
+ */
+function handleTriStateClick(event) {
+  if (event.target.closest(".tri-state-modern-switch")) {
+    const switchElement = event.target.closest(".tri-state-modern-switch");
+    cycleTriState(switchElement);
+  }
 }
 
 /**
  * Gestion du clavier pour l'accessibilité
  */
-function initTriStateKeyboardHandlers() {
-  document.addEventListener("keydown", function (event) {
-    if (event.target.classList.contains("tri-state-modern-switch")) {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        cycleTriState(event.target);
-      }
+function handleTriStateKeydown(event) {
+  if (event.target.classList.contains("tri-state-modern-switch")) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      cycleTriState(event.target);
     }
-  });
+  }
 }
 
 /**
  * Initialisation du système tri-state
  */
 function initTriStateSystem() {
+  console.log("🎯 Initialisation du système tri-state...");
+
   // Créer la boîte flottante
   createFloatingStats();
 
-  // Initialiser les gestionnaires de clavier
-  initTriStateKeyboardHandlers();
+  // Attacher les gestionnaires d'événements
+  attachTriStateListeners();
 
   // Compter initial
   updateTriStateCounters();
 
   console.log("🎯 Système tri-state initialisé");
 }
+
+/**
+ * Fonction pour réattacher les listeners après un nouveau rendu
+ */
+function reinitTriStateListeners() {
+  attachTriStateListeners();
+  updateTriStateCounters();
+}
+
+// Exposer les fonctions globalement pour compatibilité
+window.cycleTriState = cycleTriState;
+window.renderTriStateSwitch = renderTriStateSwitch;
+window.setTriStateState = setTriStateState;
+window.getTriStateState = getTriStateState;
+window.isTriStateActivated = isTriStateActivated;
+window.updateTriStateCounters = updateTriStateCounters;
+window.bulkSetTriStateNotExamined = bulkSetTriStateNotExamined;
+window.bulkSetTriStateActivated = bulkSetTriStateActivated;
+window.initTriStateSystem = initTriStateSystem;
+window.reinitTriStateListeners = reinitTriStateListeners;
 
 // Initialiser dès que le DOM est prêt
 if (document.readyState === "loading") {

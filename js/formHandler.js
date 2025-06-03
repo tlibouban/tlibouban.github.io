@@ -235,6 +235,11 @@ function renderChecklist() {
   // Mettre à jour les totaux une première fois
   setTimeout(() => {
     updateTotals();
+
+    // Réattacher les listeners tri-state après le rendu
+    if (typeof window.reinitTriStateListeners === "function") {
+      window.reinitTriStateListeners();
+    }
   }, 100);
 
   // Ajoute les listeners
