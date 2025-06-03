@@ -1311,6 +1311,7 @@ tfoot .temps-unitaire {
 }
 
 /* ===== BOÎTE FLOTTANTE POUR LES COMPTEURS ===== */
+/* Désactivé - Remplacé par compteurs dans les boutons de filtre
 .floating-stats {
   position: fixed;
   right: 20px;
@@ -1385,6 +1386,7 @@ tfoot .temps-unitaire {
 .floating-btn:hover {
   background: #2980b9;
 }
+*/
 
 /* Responsive : cache la boîte flottante sur petits écrans */
 @media (max-width: 768px) {
@@ -1626,6 +1628,7 @@ tr:has(h3) h3,
   height: 12px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .tri-state-filter-btn .filter-icon.not-examined {
@@ -1638,6 +1641,19 @@ tr:has(h3) h3,
 
 .tri-state-filter-btn .filter-icon.activated {
   background: #27ae60;
+}
+
+.tri-state-filter-btn .filter-count {
+  font-size: 0.8em;
+  color: #666;
+  font-weight: 600;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.tri-state-filter-btn.active .filter-count {
+  color: #1976d2;
+  font-weight: 700;
 }
 
 /* ===== LIENS TÉLÉPHONE DANS ÉQUIPE COMMERCIALE ===== */

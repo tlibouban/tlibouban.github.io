@@ -10,8 +10,10 @@ let triStateCounters = {
   activated: 0,
 };
 
-// Variable pour gérer l'état réduit/étendu de la boîte flottante
-let isFloatingStatsMinimized = false;
+/*
+ * Ancien système de compteur flottant - DÉSACTIVÉ
+ * Remplacé par compteurs intégrés dans les boutons de filtre
+ */
 
 /**
  * Génère un switch tri-state pour remplacer les switches binaires
@@ -150,31 +152,104 @@ function updateTriStateCounters() {
     }
   });
 
-  // Mettre à jour l'affichage
-  updateFloatingStatsDisplay();
+  // Mettre à jour l'affichage dans les boutons de filtre
+  updateFilterButtonCounters();
 }
 
 /**
- * Met à jour l'affichage de la boîte flottante
+ * Met à jour les compteurs dans les boutons de filtre
  */
-function updateFloatingStatsDisplay() {
-  const elements = {
-    "floating-count-not-examined": triStateCounters.notExamined,
-    "floating-count-rejected": triStateCounters.rejected,
-    "floating-count-activated": triStateCounters.activated,
+function updateFilterButtonCounters() {
+  const countElements = {
+    "count-not-examined": triStateCounters.notExamined,
+    "count-rejected": triStateCounters.rejected,
+    "count-activated": triStateCounters.activated,
   };
 
-  Object.entries(elements).forEach(([id, count]) => {
+  Object.entries(countElements).forEach(([id, count]) => {
     const element = document.getElementById(id);
     if (element) {
-      element.textContent = count;
+      element.textContent = `(${count})`;
     }
   });
 }
 
 /**
- * Bascule entre le mode réduit et étendu de la boîte flottante
+ * Attache les event listeners aux switches tri-state
  */
+function attachTriStateListeners() {
+  // Supprimer les anciens listeners pour éviter les doublons
+  document.removeEventListener("click", handleTriStateClick);
+  document.removeEventListener("keydown", handleTriStateKeydown);
+
+  // Ajouter les nouveaux listeners
+  document.addEventListener("click", handleTriStateClick);
+  document.addEventListener("keydown", handleTriStateKeydown);
+}
+
+/**
+ * Gestion des clics sur les switches tri-state
+ */
+function handleTriStateClick(event) {
+  if (event.target.closest(".tri-state-modern-switch")) {
+    const switchElement = event.target.closest(".tri-state-modern-switch");
+    cycleTriState(switchElement);
+  }
+}
+
+/**
+ * Gestion du clavier pour l'accessibilité
+ */
+function handleTriStateKeydown(event) {
+  if (event.target.classList.contains("tri-state-modern-switch")) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      cycleTriState(event.target);
+    }
+  }
+}
+
+/**
+ * Initialisation du système tri-state
+ */
+function initTriStateSystem() {
+  console.log("🎯 Initialisation du système tri-state...");
+
+  // Attacher les gestionnaires d'événements
+  attachTriStateListeners();
+
+  // Compter initial
+  updateTriStateCounters();
+
+  console.log("🎯 Système tri-state initialisé");
+}
+
+/**
+ * Fonction pour réattacher les listeners après un nouveau rendu
+ */
+function reinitTriStateListeners() {
+  attachTriStateListeners();
+  updateTriStateCounters();
+}
+
+// Exposer les fonctions globalement pour compatibilité
+window.cycleTriState = cycleTriState;
+window.renderTriStateSwitch = renderTriStateSwitch;
+window.setTriStateState = setTriStateState;
+window.getTriStateState = getTriStateState;
+window.isTriStateActivated = isTriStateActivated;
+window.updateTriStateCounters = updateTriStateCounters;
+window.initTriStateSystem = initTriStateSystem;
+window.reinitTriStateListeners = reinitTriStateListeners;
+
+// Initialiser dès que le DOM est prêt
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initTriStateSystem);
+} else {
+  initTriStateSystem();
+}
+
+/*
 function toggleFloatingStatsMode() {
   isFloatingStatsMinimized = !isFloatingStatsMinimized;
   const floatingStats = document.getElementById("floating-stats");
@@ -189,9 +264,6 @@ function toggleFloatingStatsMode() {
   }
 }
 
-/**
- * Crée la boîte flottante des compteurs - Version simple et compacte
- */
 function createFloatingStats() {
   const floatingHTML = `
         <div class="floating-stats" id="floating-stats">
@@ -329,7 +401,6 @@ function createFloatingStats() {
         min-width: 16px;
     }
     
-    /* Couleurs pour les différents états en mode réduit */
     .floating-stats.minimized .floating-stat-not-examined {
         color: #e74c3c;
     }
@@ -351,91 +422,13 @@ function createFloatingStats() {
     </style>
   `;
 
-  // Ajouter les styles au head
+  // Insertion du CSS
   document.head.insertAdjacentHTML("beforeend", styles);
 
-  // Attacher l'event listener pour le bouton toggle
+  // Écouter les clics sur le bouton de bascule
   const toggleBtn = document.getElementById("floating-toggle-btn");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", toggleFloatingStatsMode);
   }
 }
-
-/**
- * Attache les event listeners aux switches tri-state
- */
-function attachTriStateListeners() {
-  // Supprimer les anciens listeners pour éviter les doublons
-  document.removeEventListener("click", handleTriStateClick);
-  document.removeEventListener("keydown", handleTriStateKeydown);
-
-  // Ajouter les nouveaux listeners
-  document.addEventListener("click", handleTriStateClick);
-  document.addEventListener("keydown", handleTriStateKeydown);
-}
-
-/**
- * Gestion des clics sur les switches tri-state
- */
-function handleTriStateClick(event) {
-  if (event.target.closest(".tri-state-modern-switch")) {
-    const switchElement = event.target.closest(".tri-state-modern-switch");
-    cycleTriState(switchElement);
-  }
-}
-
-/**
- * Gestion du clavier pour l'accessibilité
- */
-function handleTriStateKeydown(event) {
-  if (event.target.classList.contains("tri-state-modern-switch")) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      cycleTriState(event.target);
-    }
-  }
-}
-
-/**
- * Initialisation du système tri-state
- */
-function initTriStateSystem() {
-  console.log("🎯 Initialisation du système tri-state...");
-
-  // Créer la boîte flottante
-  createFloatingStats();
-
-  // Attacher les gestionnaires d'événements
-  attachTriStateListeners();
-
-  // Compter initial
-  updateTriStateCounters();
-
-  console.log("🎯 Système tri-state initialisé");
-}
-
-/**
- * Fonction pour réattacher les listeners après un nouveau rendu
- */
-function reinitTriStateListeners() {
-  attachTriStateListeners();
-  updateTriStateCounters();
-}
-
-// Exposer les fonctions globalement pour compatibilité
-window.cycleTriState = cycleTriState;
-window.renderTriStateSwitch = renderTriStateSwitch;
-window.setTriStateState = setTriStateState;
-window.getTriStateState = getTriStateState;
-window.isTriStateActivated = isTriStateActivated;
-window.updateTriStateCounters = updateTriStateCounters;
-window.toggleFloatingStatsMode = toggleFloatingStatsMode;
-window.initTriStateSystem = initTriStateSystem;
-window.reinitTriStateListeners = reinitTriStateListeners;
-
-// Initialiser dès que le DOM est prêt
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initTriStateSystem);
-} else {
-  initTriStateSystem();
-}
+*/
