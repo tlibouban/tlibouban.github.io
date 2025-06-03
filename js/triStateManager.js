@@ -60,26 +60,46 @@ function renderTriStateSwitch(
 }
 
 /**
- * Cycle entre les états du switch tri-state
+ * Cycle entre les états du switch tri-state selon le bouton de la souris
  * @param {HTMLElement} element - Élément du switch
+ * @param {string} clickType - Type de clic ('left' ou 'right')
  */
-function cycleTriState(element) {
+function cycleTriState(element, clickType = "left") {
   const currentState = element.getAttribute("data-state");
   let newState;
 
-  // Cycle : non examiné → écarté → activé → non examiné
-  switch (currentState) {
-    case "not-examined":
-      newState = "rejected";
-      break;
-    case "rejected":
-      newState = "activated";
-      break;
-    case "activated":
-      newState = "not-examined";
-      break;
-    default:
-      newState = "not-examined";
+  if (clickType === "right") {
+    // Clic droit : Cycle Non-examinée ↔ Refusée
+    switch (currentState) {
+      case "not-examined":
+        newState = "rejected";
+        break;
+      case "rejected":
+        newState = "not-examined";
+        break;
+      case "activated":
+        // Si on était en activé et qu'on fait clic droit, on va vers refusé
+        newState = "rejected";
+        break;
+      default:
+        newState = "not-examined";
+    }
+  } else {
+    // Clic gauche : Cycle Non-examinée ↔ Activée
+    switch (currentState) {
+      case "not-examined":
+        newState = "activated";
+        break;
+      case "activated":
+        newState = "not-examined";
+        break;
+      case "rejected":
+        // Si on était en refusé et qu'on fait clic gauche, on va vers activé
+        newState = "activated";
+        break;
+      default:
+        newState = "not-examined";
+    }
   }
 
   // Mettre à jour l'état
@@ -286,22 +306,35 @@ function resetTriStateFilters() {
 function attachTriStateListeners() {
   // Supprimer les anciens listeners pour éviter les doublons
   document.removeEventListener("click", handleTriStateClick);
+  document.removeEventListener("contextmenu", handleTriStateRightClick);
   document.removeEventListener("keydown", handleTriStateKeydown);
   document.removeEventListener("click", handleTriStateFilterClick);
 
   // Ajouter les nouveaux listeners
   document.addEventListener("click", handleTriStateClick);
+  document.addEventListener("contextmenu", handleTriStateRightClick);
   document.addEventListener("keydown", handleTriStateKeydown);
   document.addEventListener("click", handleTriStateFilterClick);
 }
 
 /**
- * Gestion des clics sur les switches tri-state
+ * Gestion des clics gauche sur les switches tri-state
  */
 function handleTriStateClick(event) {
   if (event.target.closest(".tri-state-modern-switch")) {
     const switchElement = event.target.closest(".tri-state-modern-switch");
-    cycleTriState(switchElement);
+    cycleTriState(switchElement, "left");
+  }
+}
+
+/**
+ * Gestion des clics droit sur les switches tri-state
+ */
+function handleTriStateRightClick(event) {
+  if (event.target.closest(".tri-state-modern-switch")) {
+    event.preventDefault(); // Empêcher l'apparition du menu contextuel
+    const switchElement = event.target.closest(".tri-state-modern-switch");
+    cycleTriState(switchElement, "right");
   }
 }
 
@@ -312,7 +345,10 @@ function handleTriStateKeydown(event) {
   if (event.target.classList.contains("tri-state-modern-switch")) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      cycleTriState(event.target);
+      cycleTriState(event.target, "left"); // Entrée/Espace = clic gauche
+    } else if (event.key === "Delete" || event.key === "Backspace") {
+      event.preventDefault();
+      cycleTriState(event.target, "right"); // Delete/Backspace = clic droit
     }
   }
 }
