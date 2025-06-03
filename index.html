@@ -107,14 +107,21 @@
             </select>
           </div>
           <div>
-            <label for="sens">Sens du changement</label>
-            <select id="sens" name="sens" aria-label="Sens du changement">
+            <label for="sens">Solutions SEPTEO</label>
+            <select id="sens" name="sens" aria-label="Solutions SEPTEO">
               <option value="">Sélectionner…</option>
-              <option value="AIRversAIR">AIR vers AIR</option>
-              <option value="NEOversNEO">NEO vers NEO</option>
-              <option value="AIRversNEO">AIR vers NEO</option>
-              <option value="NEOversAIR">NEO vers AIR</option>
-              <option value="AutreversNEO">Autre vers NEO</option>
+              <option value="AIR_recupdonnees">
+                AIR avec récupération de données
+              </option>
+              <option value="AIR_mastervide">AIR avec master vide</option>
+              <option value="NEO_recupdonnees">
+                NEO avec récupération de données
+              </option>
+              <option value="NEO_mastervide">NEO avec master vide</option>
+              <option value="ADAPPS_recupdonnees">
+                ADAPPS avec récupération de données
+              </option>
+              <option value="ADAPPS_mastervide">ADAPPS avec master vide</option>
             </select>
           </div>
           <div>
@@ -250,6 +257,34 @@
             </div>
           </div>
         </div>
+
+        <!-- Équipe commerciale -->
+        <div
+          id="commercial-team-info"
+          class="commercial-team-container"
+          style="display: none"
+        ></div>
+
+        <!-- Options de déploiement -->
+        <div
+          id="deployment-options"
+          class="deployment-options-container"
+          style="display: none"
+        ></div>
+
+        <!-- Équipe formation -->
+        <div
+          id="formation-team-info"
+          class="formation-team-container"
+          style="display: none"
+        ></div>
+
+        <!-- Affectation automatique des formateurs -->
+        <div
+          id="trainer-assignment-info"
+          class="trainer-assignment-container"
+          style="display: none"
+        ></div>
 
         <!-- Action toggle pour déplier/replier -->
         <div class="action-buttons">

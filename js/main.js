@@ -195,24 +195,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour afficher les informations de l'équipe commerciale
   function displayCommercialTeam(clientData) {
-    // Chercher ou créer la div pour les informations commerciales
+    // Utiliser la div existante pour les informations commerciales
     let commercialDiv = document.getElementById("commercial-team-info");
-
-    if (!commercialDiv) {
-      // Créer la div après la scenario-row
-      const scenarioRow = document.querySelector(".scenario-row");
-      if (!scenarioRow) return;
-
-      commercialDiv = document.createElement("div");
-      commercialDiv.id = "commercial-team-info";
-      commercialDiv.className = "commercial-team-container";
-
-      // Insérer après la scenario-row
-      scenarioRow.parentNode.insertBefore(
-        commercialDiv,
-        scenarioRow.nextSibling
-      );
-    }
 
     if (!clientData || !clientData.departement) {
       commercialDiv.style.display = "none";
@@ -292,9 +276,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Afficher les informations de l'équipe commerciale
       displayCommercialTeam(clientData);
-
-      // Afficher les options de déploiement (warnings CSM, formation à distance)
-      displayDeploymentOptions(clientData);
 
       // Afficher les informations de l'équipe formation
       displayFormationTeam(clientData);
@@ -549,109 +530,34 @@ document.addEventListener("DOMContentLoaded", function () {
       sensLabel.textContent = "Solutions SEPTEO";
     }
 
-    // Réinitialisation des options
+    // Réinitialisation des options - utiliser les nouvelles options Solutions SEPTEO
     sensSelect.innerHTML = '<option value="">Sélectionner…</option>';
 
-    // Cas particulier : New logo - Les 6 combinaisons demandées
-    if (projetSelect.value === "newlogo") {
-      [
-        {
-          value: "AIR_recupdonnees",
-          label: "AIR avec récupération de données",
-        },
-        { value: "AIR_mastervide", label: "AIR avec master vide" },
-        {
-          value: "NEO_recupdonnees",
-          label: "NEO avec récupération de données",
-        },
-        { value: "NEO_mastervide", label: "NEO avec master vide" },
-        {
-          value: "ADAPPS_recupdonnees",
-          label: "ADAPPS avec récupération de données",
-        },
-        { value: "ADAPPS_mastervide", label: "ADAPPS avec master vide" },
-      ].forEach((opt) => {
-        const o = document.createElement("option");
-        o.value = opt.value;
-        o.textContent = opt.label;
-        sensSelect.appendChild(o);
-      });
-
-      // Conserver la valeur sélectionnée si elle existe encore dans les nouvelles options
-      if ([...sensSelect.options].some((o) => o.value === oldValue)) {
-        sensSelect.value = oldValue;
-      }
-      return;
-    }
-
-    // Cas particulier : Base collaborateur
-    if (projetSelect.value === "basecollab") {
-      [
-        { value: "recupdonnees", label: "Récupération de données" },
-        { value: "mastervide", label: "Master vide" },
-      ].forEach((opt) => {
-        const o = document.createElement("option");
-        o.value = opt.value;
-        o.textContent = opt.label;
-        sensSelect.appendChild(o);
-      });
-
-      if ([...sensSelect.options].some((o) => o.value === oldValue)) {
-        sensSelect.value = oldValue;
-      }
-      return;
-    }
-
-    // Met à jour les options de base avec NEO en majuscules et ajoute NEO vers AIR
-    let options = [
-      { value: "AIRversAIR", label: "AIR vers AIR" },
-      { value: "NEOversNEO", label: "NEO vers NEO" },
-      { value: "AIRversNEO", label: "AIR vers NEO" },
-      { value: "NEOversAIR", label: "NEO vers AIR" },
-      { value: "AutreversNEO", label: "Autre vers NEO" },
-    ];
-
-    // Si Séparation, ne garder que AIR/NEO vers AIR/NEO
-    if (projetSelect.value === "separation") {
-      options = options.filter((opt) =>
-        ["AIRversAIR", "AIRversNEO", "NEOversNEO", "NEOversAIR"].includes(
-          opt.value
-        )
-      );
-    }
-
-    // Logique de filtrage améliorée pour gérer tous les ERP
-    const currentLogiciel = logicielSelect.value;
-
-    if (currentLogiciel) {
-      if (["AIR", "NEO"].includes(currentLogiciel)) {
-        // Pour AIR et NEO, garder les options qui commencent par ce logiciel
-        const prefix = currentLogiciel.toUpperCase();
-        options = options.filter((opt) =>
-          opt.label.toUpperCase().startsWith(prefix)
-        );
-      } else {
-        // Pour tous les autres ERP (solutions SEPTEO), proposer migration vers AIR et NEO
-        const erpName = currentLogiciel.toUpperCase();
-        options = [
-          { value: `${erpName}versAIR`, label: `${erpName} vers AIR` },
-          { value: `${erpName}versNEO`, label: `${erpName} vers NEO` },
-        ];
-      }
-    }
-
-    // Avant d'ajouter les options au select sens, trie-les par ordre alphabétique sur le label
-    options.sort((a, b) =>
-      a.label.localeCompare(b.label, "fr", { sensitivity: "base" })
-    );
-
-    options.forEach((opt) => {
+    // Les 6 options Solutions SEPTEO
+    [
+      {
+        value: "AIR_recupdonnees",
+        label: "AIR avec récupération de données",
+      },
+      { value: "AIR_mastervide", label: "AIR avec master vide" },
+      {
+        value: "NEO_recupdonnees",
+        label: "NEO avec récupération de données",
+      },
+      { value: "NEO_mastervide", label: "NEO avec master vide" },
+      {
+        value: "ADAPPS_recupdonnees",
+        label: "ADAPPS avec récupération de données",
+      },
+      { value: "ADAPPS_mastervide", label: "ADAPPS avec master vide" },
+    ].forEach((opt) => {
       const o = document.createElement("option");
       o.value = opt.value;
       o.textContent = opt.label;
       sensSelect.appendChild(o);
     });
 
+    // Conserver la valeur sélectionnée si elle existe encore dans les nouvelles options
     if ([...sensSelect.options].some((o) => o.value === oldValue)) {
       sensSelect.value = oldValue;
     }
@@ -896,27 +802,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour afficher l'équipe de formation
   function displayFormationTeam(clientData) {
+    // Utiliser la div existante pour les informations de formation
     let formationDiv = document.getElementById("formation-team-info");
-
-    if (!formationDiv) {
-      // Créer la div après deployment-options ou après commercial si deployment n'existe pas
-      let insertAfter = document.getElementById("deployment-options");
-      if (!insertAfter) {
-        insertAfter = document.getElementById("commercial-team-info");
-      }
-
-      if (!insertAfter) return;
-
-      formationDiv = document.createElement("div");
-      formationDiv.id = "formation-team-info";
-      formationDiv.className = "formation-team-container";
-
-      // Insérer après deployment-options ou commercial-team-container
-      insertAfter.parentNode.insertBefore(
-        formationDiv,
-        insertAfter.nextSibling
-      );
-    }
 
     if (!clientData || !clientData.departement) {
       formationDiv.style.display = "none";
@@ -959,39 +846,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour afficher les warnings et options CSM/Déploiement à distance
   function displayDeploymentOptions(clientData) {
+    // Utiliser la div existante pour les options de déploiement
     let optionsDiv = document.getElementById("deployment-options");
-
-    if (!optionsDiv) {
-      // Créer la div après commercial-team-info ou avant PARAMÉTRAGE si commercial n'existe pas
-      let insertAfter = document.getElementById("commercial-team-info");
-
-      if (!insertAfter) {
-        // Si pas d'équipe commerciale, insérer avant PARAMÉTRAGE
-        const parametrageSection = document.querySelector(
-          '[id*="PARAMÉTRAGE"]'
-        );
-        if (!parametrageSection) return;
-
-        optionsDiv = document.createElement("div");
-        optionsDiv.id = "deployment-options";
-        optionsDiv.className = "deployment-options-container";
-
-        parametrageSection.parentNode.insertBefore(
-          optionsDiv,
-          parametrageSection
-        );
-      } else {
-        // Insérer après l'équipe commerciale
-        optionsDiv = document.createElement("div");
-        optionsDiv.id = "deployment-options";
-        optionsDiv.className = "deployment-options-container";
-
-        insertAfter.parentNode.insertBefore(
-          optionsDiv,
-          insertAfter.nextSibling
-        );
-      }
-    }
 
     const effectif = clientData
       ? clientData.effectif
