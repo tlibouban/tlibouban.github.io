@@ -36,7 +36,44 @@ Aucune dépendance externe n'est nécessaire, l'application fonctionne directeme
 
 ## Utilisation
 
-Ouvrez `index.html` dans votre navigateur pour accéder à l'interface principale de l'application. Sélectionnez un profil utilisateur et suivez les étapes de paramétrage recommandées.
+### 🌐 **Accès recommandé via GitHub Pages**
+
+**URL de production :** https://tlibouban.github.io
+
+Pour tester et utiliser l'application, **utilisez toujours GitHub Pages** plutôt que d'ouvrir les fichiers HTML en local. Cette approche garantit :
+- ✅ **Environnement identique à la production**
+- ✅ **Fonctionnalités complètes** (chargement des données JSON, etc.)
+- ✅ **Tests dans conditions réelles**
+- ✅ **Pas de problèmes de CORS ou de chemins relatifs**
+
+### Accès local (déconseillé)
+
+Si nécessaire, ouvrez `index.html` dans votre navigateur pour un développement local, mais privilégiez toujours GitHub Pages pour les tests finaux.
+
+## Bonnes pratiques de développement
+
+### 🔄 **Workflow de développement**
+
+1. **Branche de développement** : `main2` 
+   - Toutes les nouvelles fonctionnalités et améliorations
+   - Tests et développements en cours
+
+2. **Branche de production** : `main`
+   - Version stable déployée sur GitHub Pages
+   - Merge depuis `main2` après validation
+
+### 🧪 **Tests et validation**
+
+- **TOUJOURS** tester sur GitHub Pages avant validation
+- **Commande pour ouvrir GitHub Pages :** `start https://tlibouban.github.io`
+- Vérifier la configuration GitHub Pages (Settings → Pages) pour s'assurer que la bonne branche est déployée
+
+### 📱 **Fonctionnalités principales à tester**
+
+- **Header multi-format** : Vérifier l'affichage heures/journées/demi-journées avec distinction paramétrage
+- **Équipe commerciale** : Tester l'affichage automatique selon le département du client
+- **Calculs automatiques** : Vérifier les quantités basées sur l'effectif
+- **Profils utilisateurs** : S'assurer de la cohérence des calculs
 
 ## Notes de développement
 
