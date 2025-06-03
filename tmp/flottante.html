@@ -1,0 +1,44 @@
+/* PARTIE HTML */
+
+<div class="floating-stats" id="floating-stats">
+  <h3>📊 Compteur</h3>
+
+  <div class="floating-stat-item floating-stat-not-examined">
+    <span>❓</span>
+    <span class="floating-stat-number" id="floating-count-not-examined"
+      >119</span
+    >
+  </div>
+
+  <div class="floating-stat-item floating-stat-rejected">
+    <span>❌</span>
+    <span class="floating-stat-number" id="floating-count-rejected">0</span>
+  </div>
+
+  <div class="floating-stat-item floating-stat-activated">
+    <span>✅</span>
+    <span class="floating-stat-number" id="floating-count-activated">6</span>
+  </div>
+
+  <div class="floating-controls">
+    <button
+      class="floating-btn"
+      id="bulk-reset-btn"
+      title="Marquer tout comme non examiné"
+    >
+      🔄 Reset
+    </button>
+    <button
+      class="floating-btn"
+      id="bulk-activate-btn"
+      title="Activer toutes les fonctionnalités écartées"
+    >
+      ✅ Activer écartées
+    </button>
+  </div>
+</div>
+
+/* PARTIE CSS */ .floating-stats { position: fixed; right: 6rem; top: 42rem;
+transform: translateY(-50%); background: #ffffff52; border-radius: 12px;
+padding: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); border: 2px solid
+#e8f4fd; z-index: 1000; min-width: 115px; /* backdrop-filter: blur(10px); */ }

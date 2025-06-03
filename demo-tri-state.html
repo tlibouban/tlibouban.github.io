@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Démonstration - Tri-State Switches</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f5f6fa;
+      }
+
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+      }
+
+      h2 {
+        color: #2e4a9e;
+        border-bottom: 2px solid #e8f4fd;
+        padding-bottom: 10px;
+        margin-top: 30px;
+      }
+
+      .solution {
+        margin: 25px 0;
+        padding: 20px;
+        border: 1px solid #e1e8ed;
+        border-radius: 8px;
+        background: #fafbfc;
+      }
+
+      .feature-row {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        padding: 12px;
+        background: white;
+        border-radius: 6px;
+        border: 1px solid #e1e8ed;
+      }
+
+      .feature-name {
+        flex: 1;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+
+      /* ===== SOLUTION 0: Switch tri-state avec œil bleu ===== */
+      .tri-state-modern-container {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+
+      .tri-state-modern-switch {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        background-color: #f72414;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.2s ease transform, 0.2s ease background-color,
+          0.2s ease box-shadow;
+        overflow: hidden;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: white;
+      }
+
+      /* État bleu "vu" */
+      .tri-state-modern-switch.examined {
+        background-color: #3498db;
+      }
+
+      /* État vert "activé" */
+      .tri-state-modern-switch.activated {
+        background-color: #07d410;
+      }
+
+      .tri-state-modern-switch:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        width: 24px;
+        height: 23px;
+        margin: 0 auto;
+        background-color: #fff;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        box-shadow: inset 0 7px 10px rgba(0, 0, 0, 0.1);
+        transition: 0.2s ease width, 0.2s ease height;
+      }
+
+      /* État rouge : cercle blanc normal */
+      .tri-state-modern-switch:not(.examined):not(.activated):before {
+        box-shadow: inset 0 7px 10px #ffbeb8;
+      }
+
+      /* État bleu : masquer le cercle blanc, montrer l'œil */
+      .tri-state-modern-switch.examined:before {
+        width: 0;
+        height: 0;
+      }
+
+      /* État vert : masquer le cercle blanc, montrer le check */
+      .tri-state-modern-switch.activated:before {
+        width: 0;
+        height: 0;
+      }
+
+      /* Tick mark pour l'état activé */
+      .tri-state-tick-mark {
+        position: absolute;
+        top: 0px;
+        right: 0;
+        left: 0;
+        width: 15px;
+        height: 18px;
+        margin: 0 auto;
+        margin-left: 5px;
+        transform: rotateZ(-40deg);
+        opacity: 0;
+        transition: 0.2s ease opacity;
+      }
+
+      .tri-state-tick-mark:before,
+      .tri-state-tick-mark:after {
+        content: "";
+        position: absolute;
+        background-color: #fff;
+        border-radius: 2px;
+        opacity: 0;
+        transition: 0.2s ease transform, 0.2s ease opacity;
+      }
+
+      .tri-state-tick-mark:before {
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        height: 10px;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.23);
+        transform: translateY(-68px);
+      }
+
+      .tri-state-tick-mark:after {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 4px;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
+        transform: translateX(78px);
+      }
+
+      .tri-state-modern-switch.activated .tri-state-tick-mark {
+        opacity: 1;
+      }
+
+      .tri-state-modern-switch.activated .tri-state-tick-mark:before,
+      .tri-state-modern-switch.activated .tri-state-tick-mark:after {
+        transform: translate(0);
+        opacity: 1;
+      }
+
+      /* Icône œil pour l'état examiné */
+      .eye-icon {
+        opacity: 0;
+        transition: 0.2s ease opacity;
+        font-size: 16px;
+      }
+
+      .tri-state-modern-switch.examined .eye-icon {
+        opacity: 1;
+      }
+
+      /* ===== SOLUTION 1: Bouton œil ===== */
+      .solution1 .modern-switch-container {
+        margin-right: 10px;
+      }
+
+      .eye-button {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        margin-left: 8px;
+      }
+
+      .eye-button.not-examined {
+        background: #e3e3e3;
+        color: #999;
+      }
+
+      .eye-button.examined {
+        background: #3498db;
+        color: white;
+      }
+
+      .eye-button:hover {
+        transform: scale(1.1);
+      }
+
+      /* ===== SOLUTION 2: Tri-state switch ===== */
+      .tri-state-switch {
+        position: relative;
+        width: 80px;
+        height: 30px;
+        background: #e74c3c;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .tri-state-switch.examined {
+        background: #3498db;
+      }
+
+      .tri-state-switch.activated {
+        background: #27ae60;
+      }
+
+      .tri-state-switch .slider {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .tri-state-switch.examined .slider {
+        left: 28px;
+      }
+
+      .tri-state-switch.activated .slider {
+        left: 53px;
+      }
+
+      /* ===== SOLUTION 3: Boutons radio custom ===== */
+      .radio-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .radio-option {
+        position: relative;
+      }
+
+      .radio-option input[type="radio"] {
+        display: none;
+      }
+
+      .radio-option label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .radio-option.not-examined label {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .radio-option.examined label {
+        background: #3498db;
+        color: white;
+      }
+
+      .radio-option.activated label {
+        background: #27ae60;
+        color: white;
+      }
+
+      .radio-option input[type="radio"]:checked + label {
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+      }
+
+      /* Stats */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .stat-card {
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+      }
+
+      .stat-not-examined {
+        background: #e74c3c;
+      }
+
+      .stat-examined {
+        background: #3498db;
+      }
+
+      .stat-activated {
+        background: #27ae60;
+      }
+
+      .legend {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px 0;
+        font-size: 14px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+      }
+
+      .pros-cons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 15px;
+      }
+
+      .pros,
+      .cons {
+        padding: 15px;
+        border-radius: 6px;
+      }
+
+      .pros {
+        background: #d5f4e6;
+        border-left: 4px solid #27ae60;
+      }
+
+      .cons {
+        background: #ffeaa7;
+        border-left: 4px solid #fdcb6e;
+      }
+
+      .pros h4,
+      .cons h4 {
+        margin-top: 0;
+        color: #2c3e50;
+      }
+
+      .button-demo {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .demo-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        margin: 0 10px;
+      }
+
+      .demo-btn:hover {
+        background: #2980b9;
+      }
+
+      .recommended {
+        border: 3px solid #27ae60;
+        background: linear-gradient(135deg, #d5f4e6 0%, #fafbfc 100%);
+      }
+
+      .recommended h2::after {
+        content: " ⭐ RECOMMANDÉE";
+        color: #27ae60;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      /* Boîte flottante pour les compteurs */
+      .floating-stats {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 2px solid #e8f4fd;
+        z-index: 1000;
+        min-width: 200px;
+        backdrop-filter: blur(10px);
+      }
+
+      .floating-stats h3 {
+        margin: 0 0 15px 0;
+        color: #2e4a9e;
+        font-size: 16px;
+        text-align: center;
+        border-bottom: 1px solid #e8f4fd;
+        padding-bottom: 8px;
+      }
+
+      .floating-stat-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        color: white;
+      }
+
+      .floating-stat-not-examined {
+        background: #e74c3c;
+      }
+
+      .floating-stat-examined {
+        background: #3498db;
+      }
+
+      .floating-stat-rejected {
+        background: #3498db;
+      }
+
+      .floating-stat-activated {
+        background: #27ae60;
+      }
+
+      .floating-stat-number {
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .floating-controls {
+        margin-top: 15px;
+        text-align: center;
+        border-top: 1px solid #e8f4fd;
+        padding-top: 15px;
+      }
+
+      .floating-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        margin: 2px;
+        font-weight: 500;
+      }
+
+      .floating-btn:hover {
+        background: #2980b9;
+      }
+
+      /* Responsive : cache la boîte flottante sur petits écrans */
+      @media (max-width: 768px) {
+        .floating-stats {
+          display: none;
+        }
+      }
+
+      /* ===== SOLUTION 4: Switch avec Croix "X" ===== */
+      .tri-state-modern-switch-ko {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        background-color: #f72414;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.2s ease transform, 0.2s ease background-color,
+          0.2s ease box-shadow;
+        overflow: hidden;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: white;
+      }
+
+      /* État bleu avec croix (écarté) */
+      .tri-state-modern-switch-ko.rejected {
+        background-color: #3498db;
+      }
+
+      /* État vert "activé" */
+      .tri-state-modern-switch-ko.activated {
+        background-color: #07d410;
+      }
+
+      .tri-state-modern-switch-ko:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        width: 24px;
+        height: 23px;
+        margin: 0 auto;
+        background-color: #fff;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        box-shadow: inset 0 7px 10px rgba(0, 0, 0, 0.1);
+        transition: 0.2s ease width, 0.2s ease height;
+      }
+
+      /* État rouge : cercle blanc normal */
+      .tri-state-modern-switch-ko:not(.rejected):not(.activated):before {
+        box-shadow: inset 0 7px 10px #ffbeb8;
+      }
+
+      /* État écarté : masquer le cercle blanc, montrer la croix */
+      .tri-state-modern-switch-ko.rejected:before {
+        width: 0;
+        height: 0;
+      }
+
+      .tri-state-modern-switch-ko.activated .tri-state-tick-mark {
+        opacity: 1;
+      }
+
+      .tri-state-modern-switch-ko.activated .tri-state-tick-mark:before,
+      .tri-state-modern-switch-ko.activated .tri-state-tick-mark:after {
+        transform: translate(0);
+        opacity: 1;
+      }
+
+      /* Icône Croix "X" pour l'état écarté */
+      .ko-icon {
+        opacity: 0;
+        transition: 0.2s ease opacity;
+        font-size: 16px;
+      }
+
+      .tri-state-modern-switch-ko.rejected .ko-icon {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎯 Démonstration : Tri-State Switches</h1>
+    <p class="subtitle">Votre solution personnalisée + 3 alternatives</p>
+
+    <!-- Légende -->
+    <div class="container">
+      <h2>📖 Légende des états</h2>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: #e74c3c"></div>
+          <span
+            ><strong>Non examiné</strong> - Fonctionnalité pas encore
+            regardée</span
+          >
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #3498db"></div>
+          <span
+            ><strong>Examiné (👁️)</strong> - Regardé mais pas nécessaire</span
+          >
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #3498db"></div>
+          <span
+            ><strong>Écarté (❌)</strong> - Fonctionnalité écartée
+            définitivement</span
+          >
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #27ae60"></div>
+          <span
+            ><strong>Activé (✓)</strong> - Fonctionnalité incluse dans le
+            projet</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Solution recommandée -->
+    <div class="container recommended">
+      <h2>🎯 Votre Solution : Switch Tri-State avec Œil Bleu</h2>
+      <div class="solution solution0">
+        <p>
+          <strong>Principe :</strong> Votre switch actuel mais avec 3 états :
+          <span style="color: #e74c3c">●</span> Rouge →
+          <span style="color: #3498db">👁️</span> Bleu (œil) →
+          <span style="color: #27ae60">✓</span> Vert (check)
+        </p>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch"
+              onclick="cycleTriStateModern(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="eye-icon">👁️</span>
+            </div>
+          </div>
+          <span class="feature-name">Gestion multi-dossiers</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch activated"
+              onclick="cycleTriStateModern(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="eye-icon">👁️</span>
+            </div>
+          </div>
+          <span class="feature-name">Export PDF automatique</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch examined"
+              onclick="cycleTriStateModern(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="eye-icon">👁️</span>
+            </div>
+          </div>
+          <span class="feature-name">Signature électronique</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch"
+              onclick="cycleTriStateModern(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="eye-icon">👁️</span>
+            </div>
+          </div>
+          <span class="feature-name">Workflow automatisé</span>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <h4>✅ Avantages</h4>
+            <ul>
+              <li><strong>Conserve votre interface actuelle</strong></li>
+              <li>3 états visuellement distincts</li>
+              <li>Œil bleu très clair pour "vu"</li>
+              <li>Un seul clic pour changer d'état</li>
+              <li>Compact et élégant</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>⚠️ Inconvénients</h4>
+            <ul>
+              <li>Besoin de quelques clics pour arriver à l'état voulu</li>
+              <li>Ordre des états à mémoriser</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solution 1 -->
+    <div class="container">
+      <h2>💡 Solution 1 : Switch + Bouton "Œil"</h2>
+      <div class="solution solution1">
+        <p>
+          <strong>Principe :</strong> Switch classique + bouton œil pour marquer
+          "examiné"
+        </p>
+
+        <div id="solution1-features">
+          <div class="feature-row">
+            <div class="modern-switch-container">
+              <input type="checkbox" id="s1-f1" class="modern-switch-input" />
+              <label for="s1-f1" class="modern-switch-label">
+                <div class="tick-mark"></div>
+              </label>
+            </div>
+            <button
+              class="eye-button not-examined"
+              onclick="toggleExamined(this)"
+            >
+              👁️
+            </button>
+            <span class="feature-name">Gestion multi-dossiers</span>
+          </div>
+
+          <div class="feature-row">
+            <div class="modern-switch-container">
+              <input
+                type="checkbox"
+                id="s1-f2"
+                class="modern-switch-input"
+                checked
+              />
+              <label for="s1-f2" class="modern-switch-label">
+                <div class="tick-mark"></div>
+              </label>
+            </div>
+            <button
+              class="eye-button not-examined"
+              onclick="toggleExamined(this)"
+            >
+              👁️
+            </button>
+            <span class="feature-name">Export PDF automatique</span>
+          </div>
+
+          <div class="feature-row">
+            <div class="modern-switch-container">
+              <input type="checkbox" id="s1-f3" class="modern-switch-input" />
+              <label for="s1-f3" class="modern-switch-label">
+                <div class="tick-mark"></div>
+              </label>
+            </div>
+            <button class="eye-button examined" onclick="toggleExamined(this)">
+              ✓
+            </button>
+            <span class="feature-name">Signature électronique</span>
+          </div>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <h4>✅ Avantages</h4>
+            <ul>
+              <li>Très clair visuellement</li>
+              <li>Action rapide (1 clic)</li>
+              <li>Garde l'interface actuelle</li>
+              <li>Intuitive avec l'icône œil</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>⚠️ Inconvénients</h4>
+            <ul>
+              <li>Ajoute un bouton par ligne</li>
+              <li>Plus large sur mobile</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solution 2 -->
+    <div class="container">
+      <h2>💡 Solution 2 : Tri-State Switch</h2>
+      <div class="solution solution2">
+        <p>
+          <strong>Principe :</strong> Un seul switch avec 3 positions
+          (gauche/centre/droite)
+        </p>
+
+        <div class="feature-row">
+          <div class="tri-state-switch" onclick="cycleTriState(this)">
+            <div class="slider"></div>
+          </div>
+          <span class="feature-name">Gestion multi-dossiers</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-switch activated" onclick="cycleTriState(this)">
+            <div class="slider"></div>
+          </div>
+          <span class="feature-name">Export PDF automatique</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-switch examined" onclick="cycleTriState(this)">
+            <div class="slider"></div>
+          </div>
+          <span class="feature-name">Signature électronique</span>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <h4>✅ Avantages</h4>
+            <ul>
+              <li>Interface compacte</li>
+              <li>Un seul élément par ligne</li>
+              <li>Visuellement élégant</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>⚠️ Inconvénients</h4>
+            <ul>
+              <li>Moins intuitif au début</li>
+              <li>Nécessite de cliquer plusieurs fois</li>
+              <li>Difficile de distinguer les états</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solution 3 -->
+    <div class="container">
+      <h2>💡 Solution 3 : Boutons Radio Colorés</h2>
+      <div class="solution solution3">
+        <p>
+          <strong>Principe :</strong> 3 boutons radio pour chaque fonctionnalité
+        </p>
+
+        <div class="feature-row">
+          <div class="radio-group">
+            <div class="radio-option not-examined">
+              <input type="radio" name="feature1" id="f1-not" checked />
+              <label for="f1-not">❌ Non examiné</label>
+            </div>
+            <div class="radio-option examined">
+              <input type="radio" name="feature1" id="f1-exam" />
+              <label for="f1-exam">👁️ Examiné</label>
+            </div>
+            <div class="radio-option activated">
+              <input type="radio" name="feature1" id="f1-act" />
+              <label for="f1-act">✅ Activé</label>
+            </div>
+          </div>
+          <span class="feature-name">Gestion multi-dossiers</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="radio-group">
+            <div class="radio-option not-examined">
+              <input type="radio" name="feature2" id="f2-not" />
+              <label for="f2-not">❌ Non examiné</label>
+            </div>
+            <div class="radio-option examined">
+              <input type="radio" name="feature2" id="f2-exam" />
+              <label for="f2-exam">👁️ Examiné</label>
+            </div>
+            <div class="radio-option activated">
+              <input type="radio" name="feature2" id="f2-act" checked />
+              <label for="f2-act">✅ Activé</label>
+            </div>
+          </div>
+          <span class="feature-name">Export PDF automatique</span>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <h4>✅ Avantages</h4>
+            <ul>
+              <li>États très explicites</li>
+              <li>Aucune ambiguïté</li>
+              <li>Accessible aux lecteurs d'écran</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>⚠️ Inconvénients</h4>
+            <ul>
+              <li>Prend beaucoup d'espace</li>
+              <li>Plus lent à utiliser</li>
+              <li>Interface chargée</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solution 4 : Croix X -->
+    <div class="container">
+      <h2>💡 Solution 4 : Switch avec Croix "X" ❌</h2>
+      <div class="solution solution4">
+        <p>
+          <strong>Principe :</strong> Switch avec 3 états :
+          <span style="color: #e74c3c">●</span> Rouge →
+          <span style="color: #3498db">❌</span> Bleu avec croix (écarté) →
+          <span style="color: #27ae60">✓</span> Vert (activé)
+        </p>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch-ko"
+              onclick="cycleTriStateKO(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="ko-icon">❌</span>
+            </div>
+          </div>
+          <span class="feature-name">Gestion multi-dossiers</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch-ko activated"
+              onclick="cycleTriStateKO(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="ko-icon">❌</span>
+            </div>
+          </div>
+          <span class="feature-name">Export PDF automatique</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch-ko rejected"
+              onclick="cycleTriStateKO(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="ko-icon">❌</span>
+            </div>
+          </div>
+          <span class="feature-name">Signature électronique</span>
+        </div>
+
+        <div class="feature-row">
+          <div class="tri-state-modern-container">
+            <div
+              class="tri-state-modern-switch-ko"
+              onclick="cycleTriStateKO(this)"
+            >
+              <div class="tri-state-tick-mark"></div>
+              <span class="ko-icon">❌</span>
+            </div>
+          </div>
+          <span class="feature-name">Workflow automatisé</span>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <h4>✅ Avantages</h4>
+            <ul>
+              <li>Croix "X" claire et universelle</li>
+              <li>Fond bleu plus doux que rouge foncé</li>
+              <li>Distingue clairement "écarté" vs "pas regardé"</li>
+              <li>Cycle simple : Non examiné → Écarté → Activé</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>⚠️ Inconvénients</h4>
+            <ul>
+              <li>Pas d'état "examiné mais neutre"</li>
+              <li>Bleu utilisé pour deux significations différentes</li>
+              <li>Seulement 3 états au lieu de 4</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="container">
+      <h2>📊 Compteurs en temps réel</h2>
+      <div class="stats" id="stats">
+        <div class="stat-card stat-not-examined">
+          <div>❌ Non examinées</div>
+          <div id="count-not-examined">5</div>
+        </div>
+        <div class="stat-card stat-examined">
+          <div>👁️ Examinées</div>
+          <div id="count-examined">2</div>
+        </div>
+        <div class="stat-card" style="background: #3498db">
+          <div>❌ Écartées</div>
+          <div id="count-rejected">1</div>
+        </div>
+        <div class="stat-card stat-activated">
+          <div>✅ Activées</div>
+          <div id="count-activated">3</div>
+        </div>
+      </div>
+
+      <div class="button-demo">
+        <button class="demo-btn" onclick="randomizeStates()">
+          🎲 États aléatoires
+        </button>
+        <button class="demo-btn" onclick="resetAll()">
+          🔄 Tout remettre à zéro
+        </button>
+      </div>
+    </div>
+
+    <style>
+      /* Styles pour les switches modernes (repris de votre CSS) */
+      .modern-switch-container {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+      }
+
+      .modern-switch-input {
+        display: none;
+      }
+
+      .modern-switch-label {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        background-color: #f72414;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.2s ease transform, 0.2s ease background-color,
+          0.2s ease box-shadow;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .modern-switch-label:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        width: 24px;
+        height: 23px;
+        margin: 0 auto;
+        background-color: #fff;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        box-shadow: inset 0 7px 10px #ffbeb8;
+        transition: 0.2s ease width, 0.2s ease height;
+      }
+
+      .tick-mark {
+        position: absolute;
+        top: 0px;
+        right: 0;
+        left: 0;
+        width: 15px;
+        height: 18px;
+        margin: 0 auto;
+        margin-left: 5px;
+        transform: rotateZ(-40deg);
+      }
+
+      .tick-mark:before,
+      .tick-mark:after {
+        content: "";
+        position: absolute;
+        background-color: #fff;
+        border-radius: 2px;
+        opacity: 0;
+        transition: 0.2s ease transform, 0.2s ease opacity;
+      }
+
+      .tick-mark:before {
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        height: 10px;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.23);
+        transform: translateY(-68px);
+      }
+
+      .tick-mark:after {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 4px;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
+        transform: translateX(78px);
+      }
+
+      .modern-switch-input:checked + .modern-switch-label {
+        background-color: #07d410;
+      }
+
+      .modern-switch-input:checked + .modern-switch-label:before {
+        width: 0;
+        height: 0;
+      }
+
+      .modern-switch-input:checked + .modern-switch-label .tick-mark:before,
+      .modern-switch-input:checked + .modern-switch-label .tick-mark:after {
+        transform: translate(0);
+        opacity: 1;
+      }
+    </style>
+
+    <script>
+      // Solution 0: Cycle tri-state modern (votre solution)
+      function cycleTriStateModern(element) {
+        if (element.classList.contains("activated")) {
+          // Vert → Rouge
+          element.classList.remove("activated");
+        } else if (element.classList.contains("examined")) {
+          // Bleu → Vert
+          element.classList.remove("examined");
+          element.classList.add("activated");
+        } else {
+          // Rouge → Bleu
+          element.classList.add("examined");
+        }
+        updateStats();
+      }
+
+      // Solution 1: Toggle examined state
+      function toggleExamined(button) {
+        if (button.classList.contains("not-examined")) {
+          button.classList.remove("not-examined");
+          button.classList.add("examined");
+          button.textContent = "✓";
+        } else {
+          button.classList.remove("examined");
+          button.classList.add("not-examined");
+          button.textContent = "👁️";
+        }
+        updateStats();
+      }
+
+      // Solution 2: Cycle tri-state
+      function cycleTriState(element) {
+        if (element.classList.contains("activated")) {
+          element.classList.remove("activated");
+          // Default state (not-examined)
+        } else if (element.classList.contains("examined")) {
+          element.classList.remove("examined");
+          element.classList.add("activated");
+        } else {
+          element.classList.add("examined");
+        }
+        updateStats();
+      }
+
+      // Solution 4: Cycle tri-state KO
+      function cycleTriStateKO(element) {
+        if (element.classList.contains("activated")) {
+          // Vert → Rouge
+          element.classList.remove("activated");
+        } else if (element.classList.contains("rejected")) {
+          // Rouge foncé → Vert
+          element.classList.remove("rejected");
+          element.classList.add("activated");
+        } else {
+          // Rouge → Rouge foncé (rejeté)
+          element.classList.add("rejected");
+        }
+        updateStats();
+      }
+
+      // Update statistics
+      function updateStats() {
+        let notExamined = 0;
+        let examined = 0;
+        let rejected = 0;
+        let activated = 0;
+
+        // Count from solution 0 (votre solution)
+        document.querySelectorAll(".tri-state-modern-switch").forEach((sw) => {
+          if (sw.classList.contains("activated")) activated++;
+          else if (sw.classList.contains("examined")) examined++;
+          else notExamined++;
+        });
+
+        // Count from solution 4 (K.O)
+        document
+          .querySelectorAll(".tri-state-modern-switch-ko")
+          .forEach((sw) => {
+            if (sw.classList.contains("activated")) activated++;
+            else if (sw.classList.contains("rejected")) rejected++;
+            else notExamined++;
+          });
+
+        // Count from solution 1
+        document.querySelectorAll(".eye-button").forEach((btn) => {
+          if (btn.classList.contains("examined")) examined++;
+          else notExamined++;
+        });
+
+        document
+          .querySelectorAll(".modern-switch-input:checked")
+          .forEach(() => {
+            activated++;
+          });
+
+        // Count from solution 2
+        document.querySelectorAll(".tri-state-switch").forEach((sw) => {
+          if (sw.classList.contains("activated")) activated++;
+          else if (sw.classList.contains("examined")) examined++;
+          else notExamined++;
+        });
+
+        // Count from solution 3
+        document
+          .querySelectorAll('input[type="radio"]:checked')
+          .forEach((radio) => {
+            if (radio.id.includes("-act")) activated++;
+            else if (radio.id.includes("-exam")) examined++;
+            else notExamined++;
+          });
+
+        document.getElementById("count-not-examined").textContent = notExamined;
+        document.getElementById("count-examined").textContent = examined;
+        document.getElementById("count-rejected").textContent = rejected;
+        document.getElementById("count-activated").textContent = activated;
+
+        // Mettre à jour la boîte flottante
+        document.getElementById("floating-count-not-examined").textContent =
+          notExamined;
+        document.getElementById("floating-count-examined").textContent =
+          examined;
+        document.getElementById("floating-count-rejected").textContent =
+          rejected;
+        document.getElementById("floating-count-activated").textContent =
+          activated;
+      }
+
+      // Demo functions
+      function randomizeStates() {
+        // Randomize solution 0
+        document.querySelectorAll(".tri-state-modern-switch").forEach((sw) => {
+          sw.className = "tri-state-modern-switch";
+          const random = Math.random();
+          if (random > 0.66) sw.classList.add("activated");
+          else if (random > 0.33) sw.classList.add("examined");
+        });
+
+        // Randomize solution 4 (K.O)
+        document
+          .querySelectorAll(".tri-state-modern-switch-ko")
+          .forEach((sw) => {
+            sw.className = "tri-state-modern-switch-ko";
+            const random = Math.random();
+            if (random > 0.66) sw.classList.add("activated");
+            else if (random > 0.33) sw.classList.add("rejected");
+          });
+
+        // Randomize solution 1
+        document.querySelectorAll(".eye-button").forEach((btn) => {
+          const random = Math.random();
+          if (random > 0.5) {
+            btn.classList.remove("not-examined");
+            btn.classList.add("examined");
+            btn.textContent = "✓";
+          } else {
+            btn.classList.remove("examined");
+            btn.classList.add("not-examined");
+            btn.textContent = "👁️";
+          }
+        });
+
+        document.querySelectorAll(".modern-switch-input").forEach((input) => {
+          input.checked = Math.random() > 0.5;
+        });
+
+        // Randomize solution 2
+        document.querySelectorAll(".tri-state-switch").forEach((sw) => {
+          sw.className = "tri-state-switch";
+          const random = Math.random();
+          if (random > 0.66) sw.classList.add("activated");
+          else if (random > 0.33) sw.classList.add("examined");
+        });
+
+        updateStats();
+      }
+
+      function resetAll() {
+        // Reset solution 0
+        document.querySelectorAll(".tri-state-modern-switch").forEach((sw) => {
+          sw.className = "tri-state-modern-switch";
+        });
+
+        // Reset solution 4 (K.O)
+        document
+          .querySelectorAll(".tri-state-modern-switch-ko")
+          .forEach((sw) => {
+            sw.className = "tri-state-modern-switch-ko";
+          });
+
+        // Reset solution 1
+        document.querySelectorAll(".eye-button").forEach((btn) => {
+          btn.classList.remove("examined");
+          btn.classList.add("not-examined");
+          btn.textContent = "👁️";
+        });
+
+        document.querySelectorAll(".modern-switch-input").forEach((input) => {
+          input.checked = false;
+        });
+
+        // Reset solution 2
+        document.querySelectorAll(".tri-state-switch").forEach((sw) => {
+          sw.className = "tri-state-switch";
+        });
+
+        // Reset solution 3
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+          radio.checked = radio.id.includes("-not");
+        });
+
+        updateStats();
+      }
+
+      // Initialize
+      updateStats();
+    </script>
+
+    <!-- Boîte flottante pour les compteurs -->
+    <div class="floating-stats">
+      <h3>📊 Compteurs</h3>
+
+      <div class="floating-stat-item floating-stat-not-examined">
+        <span>❌ Non examinées</span>
+        <span class="floating-stat-number" id="floating-count-not-examined"
+          >5</span
+        >
+      </div>
+
+      <div class="floating-stat-item floating-stat-examined">
+        <span>👁️ Examinées</span>
+        <span class="floating-stat-number" id="floating-count-examined">2</span>
+      </div>
+
+      <div class="floating-stat-item floating-stat-rejected">
+        <span>❌ Écartées</span>
+        <span class="floating-stat-number" id="floating-count-rejected">1</span>
+      </div>
+
+      <div class="floating-stat-item floating-stat-activated">
+        <span>✅ Activées</span>
+        <span class="floating-stat-number" id="floating-count-activated"
+          >3</span
+        >
+      </div>
+
+      <div class="floating-controls">
+        <button class="floating-btn" onclick="randomizeStates()">
+          🎲 Aléatoire
+        </button>
+        <button class="floating-btn" onclick="resetAll()">🔄 Reset</button>
+      </div>
+    </div>
+  </body>
+</html>
