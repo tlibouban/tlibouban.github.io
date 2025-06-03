@@ -158,7 +158,6 @@ function updateTriStateCounters() {
  * Met à jour l'affichage de la boîte flottante
  */
 function updateFloatingStatsDisplay() {
-  // Mettre à jour les compteurs dans les deux modes
   const elements = {
     "floating-count-not-examined": triStateCounters.notExamined,
     "floating-count-rejected": triStateCounters.rejected,
@@ -191,39 +190,30 @@ function toggleFloatingStatsMode() {
 }
 
 /**
- * Crée la boîte flottante des compteurs avec design moderne
+ * Crée la boîte flottante des compteurs - Version simple et compacte
  */
 function createFloatingStats() {
   const floatingHTML = `
         <div class="floating-stats" id="floating-stats">
             <div class="floating-header">
-                <span class="floating-title">📊 Fonctionnalités</span>
+                <h3>📊 Compteur</h3>
                 <button class="floating-toggle-btn" id="floating-toggle-btn" title="Réduire la boîte">➖</button>
             </div>
-            
+
             <div class="floating-content">
                 <div class="floating-stat-item floating-stat-not-examined">
-                    <div class="stat-indicator">❓</div>
-                    <div class="stat-details">
-                        <span class="stat-label">Non examinées</span>
-                        <span class="stat-number" id="floating-count-not-examined">0</span>
-                    </div>
+                    <span>❓</span>
+                    <span class="floating-stat-number" id="floating-count-not-examined">0</span>
                 </div>
-                
+
                 <div class="floating-stat-item floating-stat-rejected">
-                    <div class="stat-indicator">❌</div>
-                    <div class="stat-details">
-                        <span class="stat-label">Écartées</span>
-                        <span class="stat-number" id="floating-count-rejected">0</span>
-                    </div>
+                    <span>❌</span>
+                    <span class="floating-stat-number" id="floating-count-rejected">0</span>
                 </div>
-                
+
                 <div class="floating-stat-item floating-stat-activated">
-                    <div class="stat-indicator">✅</div>
-                    <div class="stat-details">
-                        <span class="stat-label">Activées</span>
-                        <span class="stat-number" id="floating-count-activated">0</span>
-                    </div>
+                    <span>✅</span>
+                    <span class="floating-stat-number" id="floating-count-activated">0</span>
                 </div>
             </div>
         </div>
@@ -237,22 +227,23 @@ function createFloatingStats() {
     <style>
     .floating-stats {
         position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.95);
+        right: 6rem;
+        top: 42rem;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(224, 224, 224, 0.8);
         border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 2px solid #e8f4fd;
         z-index: 1000;
+        min-width: 115px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        min-width: 220px;
         transition: all 0.3s ease;
     }
     
     .floating-stats.minimized {
-        min-width: auto;
+        min-width: 60px;
         padding: 8px;
     }
     
@@ -260,24 +251,22 @@ function createFloatingStats() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 12px;
-        border-bottom: 1px solid rgba(224, 224, 224, 0.5);
-        padding-bottom: 8px;
+        margin-bottom: 10px;
     }
     
     .floating-stats.minimized .floating-header {
         margin-bottom: 0;
-        border-bottom: none;
-        padding-bottom: 0;
+        justify-content: center;
     }
     
-    .floating-title {
-        font-weight: 600;
+    .floating-stats h3 {
+        margin: 0;
         font-size: 14px;
         color: #2c3e50;
+        font-weight: 600;
     }
     
-    .floating-stats.minimized .floating-title {
+    .floating-stats.minimized h3 {
         display: none;
     }
     
@@ -285,8 +274,8 @@ function createFloatingStats() {
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 16px;
-        padding: 4px;
+        font-size: 12px;
+        padding: 2px;
         border-radius: 4px;
         transition: background-color 0.2s ease;
     }
@@ -302,111 +291,61 @@ function createFloatingStats() {
     }
     
     .floating-stats.minimized .floating-content {
-        flex-direction: row;
-        gap: 12px;
+        flex-direction: column;
+        gap: 4px;
     }
     
     .floating-stat-item {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 10px;
-        padding: 8px;
-        border-radius: 8px;
-        transition: background-color 0.2s ease;
+        padding: 4px 0;
     }
     
     .floating-stats.minimized .floating-stat-item {
-        flex-direction: column;
-        gap: 4px;
-        padding: 4px;
-        align-items: center;
+        justify-content: center;
+        gap: 6px;
     }
     
-    .floating-stat-item:hover {
-        background: rgba(0, 0, 0, 0.03);
+    .floating-stat-item span:first-child {
+        font-size: 16px;
     }
     
-    .floating-stat-not-examined {
-        border-left: 3px solid #e74c3c;
-    }
-    
-    .floating-stat-rejected {
-        border-left: 3px solid #3498db;
-    }
-    
-    .floating-stat-activated {
-        border-left: 3px solid #27ae60;
-    }
-    
-    .floating-stats.minimized .floating-stat-item {
-        border-left: none;
-        border-radius: 50%;
-        min-width: 32px;
-        min-height: 32px;
-    }
-    
-    .floating-stats.minimized .floating-stat-not-examined {
-        background: rgba(231, 76, 60, 0.1);
-    }
-    
-    .floating-stats.minimized .floating-stat-rejected {
-        background: rgba(52, 152, 219, 0.1);
-    }
-    
-    .floating-stats.minimized .floating-stat-activated {
-        background: rgba(39, 174, 96, 0.1);
-    }
-    
-    .stat-indicator {
-        font-size: 18px;
-        flex-shrink: 0;
-    }
-    
-    .floating-stats.minimized .stat-indicator {
+    .floating-stats.minimized .floating-stat-item span:first-child {
         font-size: 14px;
     }
     
-    .stat-details {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        flex-grow: 1;
-    }
-    
-    .floating-stats.minimized .stat-details {
-        align-items: center;
-    }
-    
-    .stat-label {
-        font-size: 12px;
-        color: #7f8c8d;
-        font-weight: 500;
-    }
-    
-    .floating-stats.minimized .stat-label {
-        display: none;
-    }
-    
-    .stat-number {
+    .floating-stat-number {
         font-size: 16px;
         font-weight: 700;
         color: #2c3e50;
+        min-width: 20px;
+        text-align: center;
     }
     
-    .floating-stats.minimized .stat-number {
+    .floating-stats.minimized .floating-stat-number {
         font-size: 12px;
         font-weight: 600;
+        min-width: 16px;
+    }
+    
+    /* Couleurs pour les différents états en mode réduit */
+    .floating-stats.minimized .floating-stat-not-examined {
+        color: #e74c3c;
+    }
+    
+    .floating-stats.minimized .floating-stat-rejected {
+        color: #3498db;
+    }
+    
+    .floating-stats.minimized .floating-stat-activated {
+        color: #27ae60;
     }
     
     @media (max-width: 768px) {
         .floating-stats {
-            top: 10px;
-            right: 10px;
-            min-width: 200px;
-        }
-        
-        .floating-stats.minimized {
-            min-width: auto;
+            right: 1rem;
+            top: 35rem;
         }
     }
     </style>
