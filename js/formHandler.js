@@ -843,6 +843,7 @@ function updateTotals() {
   const heuresDisplay = document.getElementById("heures-display");
   const journeesDisplay = document.getElementById("journees-display");
   const demiJourneesDisplay = document.getElementById("demi-journees-display");
+  const formateursDisplay = document.getElementById("formateurs-display");
 
   if (heuresDisplay) {
     heuresDisplay.textContent = formatMinutesAvecParametrage(
@@ -863,6 +864,30 @@ function updateTotals() {
       totalGeneral,
       totalParametrage
     );
+  }
+
+  // Mise à jour de l'affichage des formateurs
+  if (formateursDisplay) {
+    // Calculer le nombre de jours (sans la validation des connaissances)
+    const joursTotal = convertToJournees(totalGeneral);
+
+    // Vérifier si le paramétrage est présent
+    const hasParametrage = totalParametrage > 0;
+
+    // Calculer les formateurs nécessaires
+    const formateurs1Sem = calculateFormateurs(joursTotal, hasParametrage, 1);
+    const formateurs2Sem = calculateFormateurs(joursTotal, hasParametrage, 2);
+
+    if (joursTotal > 0) {
+      formateursDisplay.innerHTML = `
+        <div>Formateurs nécessaires</div>
+        <div style="font-size: 0.85em; opacity: 0.9; margin-top: 2px;">
+          1 sem.: ${formateurs1Sem} • 2 sem.: ${formateurs2Sem}
+        </div>
+      `;
+    } else {
+      formateursDisplay.textContent = "0 formateur";
+    }
   }
 
   // Compatibilité avec l'ancien élément (au cas où il existe encore)

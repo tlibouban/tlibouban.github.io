@@ -59,6 +59,7 @@
             <div class="time-display" id="demi-journees-display">
               0 demi-journée
             </div>
+            <div class="time-display" id="formateurs-display">0 formateur</div>
           </div>
         </div>
       </header>
@@ -187,6 +188,40 @@
                 id="filter-btn-adapps"
               >
                 ADAPPS
+              </button>
+            </div>
+
+            <!-- Filtres tri-state -->
+            <div class="tri-state-filters">
+              <button
+                type="button"
+                class="tri-state-filter-btn"
+                data-state="not-examined"
+                id="filter-not-examined"
+                title="Afficher les éléments non-examinés"
+              >
+                <span class="filter-icon not-examined"></span>
+                Non-examinées
+              </button>
+              <button
+                type="button"
+                class="tri-state-filter-btn"
+                data-state="rejected"
+                id="filter-rejected"
+                title="Afficher les éléments refusés"
+              >
+                <span class="filter-icon rejected"></span>
+                Refusées
+              </button>
+              <button
+                type="button"
+                class="tri-state-filter-btn"
+                data-state="activated"
+                id="filter-activated"
+                title="Afficher les éléments activés"
+              >
+                <span class="filter-icon activated"></span>
+                Activées
               </button>
             </div>
           </div>

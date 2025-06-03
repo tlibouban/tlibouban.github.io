@@ -1451,3 +1451,250 @@ tr:has(h3) h3,
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+
+/* ===== INFORMATIONS ÉQUIPE FORMATION ===== */
+.formation-team-container {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3c4 100%);
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.1);
+  display: none; /* Masqué par défaut */
+}
+
+.formation-team-content h4 {
+  margin: 0 0 12px 0;
+  color: #e65100;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formation-team-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.formation-item {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ffe0b2;
+  min-width: 200px;
+}
+
+.formation-item strong {
+  color: #e65100;
+  font-size: 1em;
+}
+
+.formation-specialite {
+  color: #666;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.formation-email {
+  color: #1976d2;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.formation-email:hover {
+  text-decoration: underline;
+}
+
+/* ===== OPTIONS DE DÉPLOIEMENT ===== */
+.deployment-options-container {
+  margin: 20px 0;
+  padding: 16px;
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  border: 1px solid #ba68c8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(186, 104, 200, 0.1);
+  display: none; /* Masqué par défaut */
+}
+
+.deployment-options-content h4 {
+  margin: 0 0 12px 0;
+  color: #6a1b9a;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deployment-option {
+  margin: 12px 0;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #ce93d8;
+}
+
+.deployment-option-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.deployment-option-label input[type="radio"] {
+  width: 20px;
+  height: 20px;
+}
+
+.csm-warning {
+  margin: 12px 0;
+  padding: 12px;
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.warning-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.warning-text {
+  flex-grow: 1;
+  color: #e65100;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.csm-option {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #ff6f00;
+}
+
+.csm-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== FILTRES TRI-STATE DANS LE HEADER ===== */
+.tri-state-filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.tri-state-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.2s ease;
+}
+
+.tri-state-filter-btn:hover {
+  background: #f5f5f5;
+}
+
+.tri-state-filter-btn.active {
+  background: #e3f2fd;
+  border-color: #2196f3;
+  color: #1976d2;
+}
+
+.tri-state-filter-btn .filter-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tri-state-filter-btn .filter-icon.not-examined {
+  background: #e74c3c;
+}
+
+.tri-state-filter-btn .filter-icon.rejected {
+  background: #3498db;
+}
+
+.tri-state-filter-btn .filter-icon.activated {
+  background: #27ae60;
+}
+
+/* ===== LIENS TÉLÉPHONE DANS ÉQUIPE COMMERCIALE ===== */
+.commercial-phone-link {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(25, 118, 210, 0.1);
+  transition: all 0.2s ease;
+}
+
+.commercial-phone-link:hover {
+  background: rgba(25, 118, 210, 0.2);
+  text-decoration: none;
+}
+
+.commercial-phone-link::before {
+  content: "📞";
+  font-size: 0.9em;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .formation-team-details {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .formation-item {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .deployment-option-label {
+    font-size: 0.9em;
+  }
+
+  .csm-warning {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tri-state-filters {
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-top: 8px;
+    justify-content: center;
+  }
+
+  .tri-state-filter-btn {
+    font-size: 0.8em;
+    padding: 3px 6px;
+  }
+}

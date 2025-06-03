@@ -228,15 +228,21 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    // Créer le lien téléphone si un numéro RR est disponible
+    const phoneLink = commercialData["RR Tel"]
+      ? `<a href="tel:${commercialData["RR Tel"].replace(
+          /\s/g,
+          ""
+        )}" class="commercial-phone-link">${commercialData["RR Tel"]}</a>`
+      : "";
+
     // Construire l'affichage des informations commerciales
     commercialDiv.innerHTML = `
       <div class="commercial-team-content">
         <h4>🏢 Équipe commerciale - Zone ${commercialData.Zone}</h4>
         <div class="commercial-team-details">
           <span class="commercial-item">
-            <strong>RR:</strong> ${commercialData["RR Nom"]}${
-      commercialData["RR Tel"] ? ` (${commercialData["RR Tel"]})` : ""
-    }
+            <strong>RR:</strong> ${commercialData["RR Nom"]}${phoneLink}
           </span>
           <span class="commercial-separator">•</span>
           <span class="commercial-item">
@@ -286,6 +292,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Afficher les informations de l'équipe commerciale
       displayCommercialTeam(clientData);
+
+      // Afficher les informations de l'équipe formation
+      displayFormationTeam(clientData);
+
+      // Afficher les options de déploiement (warnings CSM, formation à distance)
+      displayDeploymentOptions(clientData);
     } else {
       // Client non trouvé dans la base, réinitialiser effectif et revenir aux options standard
       effectifInput.value = "";
@@ -293,8 +305,12 @@ document.addEventListener("DOMContentLoaded", function () {
       updateLogicielOptionsStandard();
       logicielAutreContainer.classList.remove("hidden");
 
-      // Masquer les informations commerciales
+      // Masquer les informations commerciales et formation
       displayCommercialTeam(null);
+      displayFormationTeam(null);
+
+      // Afficher les options de déploiement basées sur l'effectif saisi manuellement
+      displayDeploymentOptions(null);
     }
 
     // Mettre à jour les profils utilisateurs selon les données TSV
@@ -821,9 +837,186 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // =====================
+  // Chargement des données de formation
+  // =====================
+  async function loadFormationDatabase() {
+    try {
+      const response = await fetch("json/equipe_formation.json");
+      const data = await response.json();
+
+      // Créer un map pour un accès rapide par département
+      formationDatabase = new Map();
+      data.forEach((entry) => {
+        formationDatabase.set(entry.Departement, entry);
+      });
+
+      console.log(
+        `👨‍🏫 Base de données formation chargée: ${formationDatabase.size} départements`
+      );
+    } catch (error) {
+      console.error(
+        "❌ Erreur lors du chargement de la base formation:",
+        error
+      );
+      formationDatabase = null;
+    }
+  }
+
   // Fonction pour obtenir les données commerciales d'un département
   function getCommercialDataByDepartment(departement) {
     if (!commercialDatabase || !departement) return null;
     return commercialDatabase.get(departement);
   }
+
+  // Fonction pour obtenir les données de formation d'un département
+  function getFormationDataByDepartment(departement) {
+    if (!formationDatabase || !departement) return null;
+    return formationDatabase.get(departement);
+  }
+
+  // Fonction pour afficher l'équipe de formation
+  function displayFormationTeam(clientData) {
+    let formationDiv = document.getElementById("formation-team-info");
+
+    if (!formationDiv) {
+      // Créer la div après la commercial-team-container
+      const commercialDiv = document.getElementById("commercial-team-info");
+      if (!commercialDiv) return;
+
+      formationDiv = document.createElement("div");
+      formationDiv.id = "formation-team-info";
+      formationDiv.className = "formation-team-container";
+
+      // Insérer après la commercial-team-container
+      commercialDiv.parentNode.insertBefore(
+        formationDiv,
+        commercialDiv.nextSibling
+      );
+    }
+
+    if (!clientData || !clientData.departement) {
+      formationDiv.style.display = "none";
+      return;
+    }
+
+    const formationData = getFormationDataByDepartment(clientData.departement);
+
+    if (!formationData) {
+      formationDiv.style.display = "none";
+      return;
+    }
+
+    // Construire l'affichage des informations de formation
+    let formatersHTML = "";
+    Object.keys(formationData)
+      .filter((key) => key.startsWith("Formateur_"))
+      .forEach((key) => {
+        const formateur = formationData[key];
+        formatersHTML += `
+          <div class="formation-item">
+            <strong>${formateur.Prenom} ${formateur.Nom}</strong><br>
+            <span class="formation-specialite">Spécialité: ${formateur.Specialite}</span><br>
+            <a href="mailto:${formateur.Email}" class="formation-email">${formateur.Email}</a>
+          </div>
+        `;
+      });
+
+    formationDiv.innerHTML = `
+      <div class="formation-team-content">
+        <h4>👨‍🏫 Équipe formation - Zone ${formationData.Zone}</h4>
+        <div class="formation-team-details">
+          ${formatersHTML}
+        </div>
+      </div>
+    `;
+
+    formationDiv.style.display = "block";
+  }
+
+  // Fonction pour afficher les warnings et options CSM/Déploiement à distance
+  function displayDeploymentOptions(clientData) {
+    let optionsDiv = document.getElementById("deployment-options");
+
+    if (!optionsDiv) {
+      // Créer la div avant la section PARAMÉTRAGE
+      const parametrageSection = document.querySelector('[id*="PARAMÉTRAGE"]');
+      if (!parametrageSection) return;
+
+      optionsDiv = document.createElement("div");
+      optionsDiv.id = "deployment-options";
+      optionsDiv.className = "deployment-options-container";
+
+      // Insérer avant la section PARAMÉTRAGE
+      parametrageSection.parentNode.insertBefore(
+        optionsDiv,
+        parametrageSection
+      );
+    }
+
+    const effectif = clientData
+      ? clientData.effectif
+      : parseInt(document.getElementById("effectif")?.value || "0");
+
+    let optionsHTML = "";
+
+    // Option déploiement à distance si effectif < 8
+    if (effectif > 0 && effectif < 8) {
+      optionsHTML += `
+        <div class="deployment-option">
+          <label class="deployment-option-label">
+            <input type="radio" name="deployment-type" value="sur-site" checked>
+            Formation sur site
+          </label>
+          <label class="deployment-option-label">
+            <input type="radio" name="deployment-type" value="distance">
+            Formation à distance
+          </label>
+        </div>
+      `;
+    }
+
+    // Warning CSM si effectif > 20
+    if (effectif > 20) {
+      optionsHTML += `
+        <div class="csm-warning">
+          <span class="warning-icon">⚠️</span>
+          <span class="warning-text">
+            Effectif supérieur à 20 personnes - La présence d'un CSM (Customer Success Manager) peut être nécessaire.
+          </span>
+          <label class="csm-option">
+            <input type="checkbox" id="csm-required"> Ajouter un CSM au déploiement
+          </label>
+        </div>
+      `;
+    }
+
+    if (optionsHTML) {
+      optionsDiv.innerHTML = `
+        <div class="deployment-options-content">
+          <h4>🚀 Options de déploiement</h4>
+          ${optionsHTML}
+        </div>
+      `;
+      optionsDiv.style.display = "block";
+    } else {
+      optionsDiv.style.display = "none";
+    }
+  }
+
+  // Charger les bases de données au démarrage
+  loadCommercialDatabase();
+  loadFormationDatabase();
+
+  // Ajouter un listener sur le champ effectif pour les options de déploiement
+  const effectifInput = document.getElementById("effectif");
+  if (effectifInput) {
+    effectifInput.addEventListener("input", () => {
+      displayDeploymentOptions(null);
+    });
+  }
 });
+
+// Variables globales pour les bases de données
+let commercialDatabase = null;
+let formationDatabase = null;

@@ -334,12 +334,24 @@ function recalculateAndVerify() {
 }
 
 /**
- * Convertit les minutes en journées de 7h
+ * Convertit les minutes en journées de 7h avec arrondi à la moitié supérieure
  * @param {number} mins - Nombre de minutes
- * @returns {number} - Nombre de journées (avec décimales)
+ * @returns {number} - Nombre de journées (arrondi à la moitié supérieure)
  */
 function convertToJournees(mins) {
-  return mins / (7 * 60); // 7h = 420 minutes
+  const journees = mins / (7 * 60);
+
+  // Arrondi à la moitié supérieure : 18,3 → 18,5 et 18,7 → 19
+  const partieEntiere = Math.floor(journees);
+  const partieDecimale = journees - partieEntiere;
+
+  if (partieDecimale === 0) {
+    return journees; // Nombre entier, pas d'arrondi nécessaire
+  } else if (partieDecimale <= 0.5) {
+    return partieEntiere + 0.5; // Arrondir à la moitié
+  } else {
+    return partieEntiere + 1; // Arrondir à l'unité supérieure
+  }
 }
 
 /**
@@ -426,6 +438,62 @@ function formatMinutesAvecParametrage(mins, minsParametrage = 0) {
   }
 
   return heuresFormatees;
+}
+
+/**
+ * Calcule le nombre de formateurs nécessaires pour le déploiement
+ * @param {number} totalJours - Nombre total de jours de formation (en excluant validation)
+ * @param {boolean} hasParametrage - Si le paramétrage est présent
+ * @param {number} semaines - Nombre de semaines pour le déploiement (1 ou 2)
+ * @returns {number} - Nombre de formateurs nécessaires
+ */
+function calculateFormateurs(totalJours, hasParametrage, semaines = 1) {
+  if (totalJours <= 0) return 0;
+
+  let joursDisponibles = 0;
+
+  if (hasParametrage) {
+    if (semaines === 1) {
+      joursDisponibles = 4; // 4 jours par formateur la première semaine
+    } else if (semaines === 2) {
+      joursDisponibles = 4 + 5; // 4 jours première semaine + 5 jours deuxième semaine
+    }
+  } else {
+    // Sans paramétrage, utiliser les capacités standard
+    joursDisponibles = semaines * 5; // 5 jours par semaine
+  }
+
+  return Math.ceil(totalJours / joursDisponibles);
+}
+
+/**
+ * Génère l'affichage du calcul de formateurs
+ * @param {number} totalJours - Nombre total de jours
+ * @param {boolean} hasParametrage - Si le paramétrage est présent
+ * @returns {string} - HTML de l'affichage des formateurs
+ */
+function formatFormateurs(totalJours, hasParametrage) {
+  if (totalJours <= 0) return "0 formateur";
+
+  const formateurs1Semaine = calculateFormateurs(totalJours, hasParametrage, 1);
+  const formateurs2Semaines = calculateFormateurs(
+    totalJours,
+    hasParametrage,
+    2
+  );
+
+  let html = `<div style="font-size: 0.9em; color: #666; margin-top: 4px;">`;
+  html += `• 1 semaine: ${formateurs1Semaine} ${accordUnit(
+    formateurs1Semaine,
+    "formateur"
+  )}<br>`;
+  html += `• 2 semaines: ${formateurs2Semaines} ${accordUnit(
+    formateurs2Semaines,
+    "formateur"
+  )}`;
+  html += `</div>`;
+
+  return html;
 }
 
 // Rendre ces fonctions disponibles globalement pour le débogage
