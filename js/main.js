@@ -293,11 +293,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Afficher les informations de l'équipe commerciale
       displayCommercialTeam(clientData);
 
-      // Afficher les informations de l'équipe formation
-      displayFormationTeam(clientData);
-
       // Afficher les options de déploiement (warnings CSM, formation à distance)
       displayDeploymentOptions(clientData);
+
+      // Afficher les informations de l'équipe formation
+      displayFormationTeam(clientData);
     } else {
       // Client non trouvé dans la base, réinitialiser effectif et revenir aux options standard
       effectifInput.value = "";
@@ -307,10 +307,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Masquer les informations commerciales et formation
       displayCommercialTeam(null);
-      displayFormationTeam(null);
 
       // Afficher les options de déploiement basées sur l'effectif saisi manuellement
       displayDeploymentOptions(null);
+
+      displayFormationTeam(null);
     }
 
     // Mettre à jour les profils utilisateurs selon les données TSV
@@ -880,18 +881,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let formationDiv = document.getElementById("formation-team-info");
 
     if (!formationDiv) {
-      // Créer la div après la commercial-team-container
-      const commercialDiv = document.getElementById("commercial-team-info");
-      if (!commercialDiv) return;
+      // Créer la div après deployment-options ou après commercial si deployment n'existe pas
+      let insertAfter = document.getElementById("deployment-options");
+      if (!insertAfter) {
+        insertAfter = document.getElementById("commercial-team-info");
+      }
+
+      if (!insertAfter) return;
 
       formationDiv = document.createElement("div");
       formationDiv.id = "formation-team-info";
       formationDiv.className = "formation-team-container";
 
-      // Insérer après la commercial-team-container
-      commercialDiv.parentNode.insertBefore(
+      // Insérer après deployment-options ou commercial-team-container
+      insertAfter.parentNode.insertBefore(
         formationDiv,
-        commercialDiv.nextSibling
+        insertAfter.nextSibling
       );
     }
 
@@ -939,19 +944,35 @@ document.addEventListener("DOMContentLoaded", function () {
     let optionsDiv = document.getElementById("deployment-options");
 
     if (!optionsDiv) {
-      // Créer la div avant la section PARAMÉTRAGE
-      const parametrageSection = document.querySelector('[id*="PARAMÉTRAGE"]');
-      if (!parametrageSection) return;
+      // Créer la div après commercial-team-info ou avant PARAMÉTRAGE si commercial n'existe pas
+      let insertAfter = document.getElementById("commercial-team-info");
 
-      optionsDiv = document.createElement("div");
-      optionsDiv.id = "deployment-options";
-      optionsDiv.className = "deployment-options-container";
+      if (!insertAfter) {
+        // Si pas d'équipe commerciale, insérer avant PARAMÉTRAGE
+        const parametrageSection = document.querySelector(
+          '[id*="PARAMÉTRAGE"]'
+        );
+        if (!parametrageSection) return;
 
-      // Insérer avant la section PARAMÉTRAGE
-      parametrageSection.parentNode.insertBefore(
-        optionsDiv,
-        parametrageSection
-      );
+        optionsDiv = document.createElement("div");
+        optionsDiv.id = "deployment-options";
+        optionsDiv.className = "deployment-options-container";
+
+        parametrageSection.parentNode.insertBefore(
+          optionsDiv,
+          parametrageSection
+        );
+      } else {
+        // Insérer après l'équipe commerciale
+        optionsDiv = document.createElement("div");
+        optionsDiv.id = "deployment-options";
+        optionsDiv.className = "deployment-options-container";
+
+        insertAfter.parentNode.insertBefore(
+          optionsDiv,
+          insertAfter.nextSibling
+        );
+      }
     }
 
     const effectif = clientData

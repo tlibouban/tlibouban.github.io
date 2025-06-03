@@ -354,19 +354,13 @@ class ClientSearch {
    * Ajoute un indicateur visuel de recherche
    */
   addSearchIndicator() {
-    const numeroInput = document.getElementById("numero-dossier");
+    const numeroInput = document.getElementById("numero");
     if (!numeroInput) return;
 
     // Ajouter un conteneur pour l'icône de recherche
     const container = numeroInput.parentNode;
     if (!container.classList.contains("search-input-container")) {
       container.classList.add("search-input-container");
-
-      const searchIcon = document.createElement("span");
-      searchIcon.className = "search-icon";
-      searchIcon.innerHTML = "🔍";
-      searchIcon.setAttribute("aria-hidden", "true");
-      container.appendChild(searchIcon);
     }
   }
 
