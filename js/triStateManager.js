@@ -10,6 +10,9 @@ let triStateCounters = {
   activated: 0,
 };
 
+// Variables pour le filtrage
+let activeTriStateFilter = null; // null = tous, 'not-examined', 'rejected', 'activated'
+
 /*
  * Ancien système de compteur flottant - DÉSACTIVÉ
  * Remplacé par compteurs intégrés dans les boutons de filtre
@@ -87,6 +90,11 @@ function cycleTriState(element) {
     updateTotals();
   }
   updateTriStateCounters();
+
+  // Réappliquer le filtre actif s'il y en a un
+  if (activeTriStateFilter !== null) {
+    applyTriStateFilter(activeTriStateFilter);
+  }
 }
 
 /**
@@ -175,16 +183,116 @@ function updateFilterButtonCounters() {
 }
 
 /**
+ * Applique le filtre tri-state aux éléments
+ * @param {string|null} filterState - État à filtrer ('not-examined', 'rejected', 'activated', null pour tous)
+ */
+function applyTriStateFilter(filterState) {
+  activeTriStateFilter = filterState;
+
+  // Trouver toutes les lignes qui contiennent des switches tri-state
+  const rows = document.querySelectorAll("tr:has(.tri-state-modern-switch)");
+
+  // Si le navigateur ne supporte pas :has(), utiliser une approche alternative
+  if (rows.length === 0) {
+    // Méthode alternative pour les navigateurs sans support :has()
+    const allRows = document.querySelectorAll("tr");
+    allRows.forEach((row) => {
+      const switch_ = row.querySelector(".tri-state-modern-switch");
+      if (switch_) {
+        applyFilterToRow(row, switch_, filterState);
+      }
+    });
+  } else {
+    // Méthode moderne avec :has()
+    rows.forEach((row) => {
+      const switch_ = row.querySelector(".tri-state-modern-switch");
+      applyFilterToRow(row, switch_, filterState);
+    });
+  }
+
+  // Mettre à jour l'apparence des boutons de filtre
+  updateTriStateFilterButtons();
+}
+
+/**
+ * Applique le filtre à une ligne spécifique
+ * @param {HTMLElement} row - La ligne de tableau
+ * @param {HTMLElement} switch_ - Le switch tri-state
+ * @param {string|null} filterState - État du filtre
+ */
+function applyFilterToRow(row, switch_, filterState) {
+  if (!switch_) return;
+
+  const switchState = getTriStateState(switch_);
+
+  if (filterState === null) {
+    // Afficher tous les éléments
+    row.style.display = "";
+  } else {
+    // Afficher seulement les éléments correspondant au filtre
+    if (switchState === filterState) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  }
+}
+
+/**
+ * Met à jour l'apparence des boutons de filtre tri-state
+ */
+function updateTriStateFilterButtons() {
+  const filterButtons = document.querySelectorAll(".tri-state-filter-btn");
+
+  filterButtons.forEach((button) => {
+    const buttonState = button.getAttribute("data-state");
+
+    if (activeTriStateFilter === buttonState) {
+      button.classList.add("active");
+    } else {
+      button.classList.remove("active");
+    }
+  });
+}
+
+/**
+ * Gestion des clics sur les boutons de filtre tri-state
+ * @param {Event} event - Événement de clic
+ */
+function handleTriStateFilterClick(event) {
+  if (event.target.closest(".tri-state-filter-btn")) {
+    const button = event.target.closest(".tri-state-filter-btn");
+    const filterState = button.getAttribute("data-state");
+
+    // Si le bouton est déjà actif, désactiver le filtre
+    if (activeTriStateFilter === filterState) {
+      applyTriStateFilter(null);
+    } else {
+      applyTriStateFilter(filterState);
+    }
+  }
+}
+
+/**
+ * Réinitialise tous les filtres tri-state
+ */
+function resetTriStateFilters() {
+  applyTriStateFilter(null);
+}
+
+/**
  * Attache les event listeners aux switches tri-state
  */
 function attachTriStateListeners() {
   // Supprimer les anciens listeners pour éviter les doublons
   document.removeEventListener("click", handleTriStateClick);
   document.removeEventListener("keydown", handleTriStateKeydown);
+  document.removeEventListener("click", handleTriStateFilterClick);
 
   // Ajouter les nouveaux listeners
   document.addEventListener("click", handleTriStateClick);
   document.addEventListener("keydown", handleTriStateKeydown);
+  document.addEventListener("click", handleTriStateFilterClick);
 }
 
 /**
@@ -241,6 +349,8 @@ window.isTriStateActivated = isTriStateActivated;
 window.updateTriStateCounters = updateTriStateCounters;
 window.initTriStateSystem = initTriStateSystem;
 window.reinitTriStateListeners = reinitTriStateListeners;
+window.applyTriStateFilter = applyTriStateFilter;
+window.resetTriStateFilters = resetTriStateFilters;
 
 // Initialiser dès que le DOM est prêt
 if (document.readyState === "loading") {
