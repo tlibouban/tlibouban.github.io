@@ -10,6 +10,9 @@ let triStateCounters = {
   activated: 0,
 };
 
+// Variable pour gérer l'état réduit/étendu de la boîte flottante
+let isFloatingStatsMinimized = false;
+
 /**
  * Génère un switch tri-state pour remplacer les switches binaires
  * @param {string} id - ID unique pour le switch
@@ -155,6 +158,7 @@ function updateTriStateCounters() {
  * Met à jour l'affichage de la boîte flottante
  */
 function updateFloatingStatsDisplay() {
+  // Mettre à jour les compteurs dans les deux modes
   const elements = {
     "floating-count-not-examined": triStateCounters.notExamined,
     "floating-count-rejected": triStateCounters.rejected,
@@ -170,35 +174,57 @@ function updateFloatingStatsDisplay() {
 }
 
 /**
- * Crée la boîte flottante des compteurs
+ * Bascule entre le mode réduit et étendu de la boîte flottante
+ */
+function toggleFloatingStatsMode() {
+  isFloatingStatsMinimized = !isFloatingStatsMinimized;
+  const floatingStats = document.getElementById("floating-stats");
+  const toggleBtn = document.getElementById("floating-toggle-btn");
+
+  if (floatingStats && toggleBtn) {
+    floatingStats.classList.toggle("minimized", isFloatingStatsMinimized);
+    toggleBtn.textContent = isFloatingStatsMinimized ? "📊" : "➖";
+    toggleBtn.title = isFloatingStatsMinimized
+      ? "Étendre la boîte"
+      : "Réduire la boîte";
+  }
+}
+
+/**
+ * Crée la boîte flottante des compteurs avec design moderne
  */
 function createFloatingStats() {
   const floatingHTML = `
         <div class="floating-stats" id="floating-stats">
-            <h3>📊 Fonctionnalités</h3>
-            
-            <div class="floating-stat-item floating-stat-not-examined">
-                <span>❓ Non examinées</span>
-                <span class="floating-stat-number" id="floating-count-not-examined">0</span>
+            <div class="floating-header">
+                <span class="floating-title">📊 Fonctionnalités</span>
+                <button class="floating-toggle-btn" id="floating-toggle-btn" title="Réduire la boîte">➖</button>
             </div>
             
-            <div class="floating-stat-item floating-stat-rejected">
-                <span>❌ Écartées</span>
-                <span class="floating-stat-number" id="floating-count-rejected">0</span>
-            </div>
-            
-            <div class="floating-stat-item floating-stat-activated">
-                <span>✅ Activées</span>
-                <span class="floating-stat-number" id="floating-count-activated">0</span>
-            </div>
-            
-            <div class="floating-controls">
-                <button class="floating-btn" id="bulk-reset-btn" title="Marquer tout comme non examiné">
-                    🔄 Reset
-                </button>
-                <button class="floating-btn" id="bulk-activate-btn" title="Activer toutes les fonctionnalités écartées">
-                    ✅ Activer écartées
-                </button>
+            <div class="floating-content">
+                <div class="floating-stat-item floating-stat-not-examined">
+                    <div class="stat-indicator">❓</div>
+                    <div class="stat-details">
+                        <span class="stat-label">Non examinées</span>
+                        <span class="stat-number" id="floating-count-not-examined">0</span>
+                    </div>
+                </div>
+                
+                <div class="floating-stat-item floating-stat-rejected">
+                    <div class="stat-indicator">❌</div>
+                    <div class="stat-details">
+                        <span class="stat-label">Écartées</span>
+                        <span class="stat-number" id="floating-count-rejected">0</span>
+                    </div>
+                </div>
+                
+                <div class="floating-stat-item floating-stat-activated">
+                    <div class="stat-indicator">✅</div>
+                    <div class="stat-details">
+                        <span class="stat-label">Activées</span>
+                        <span class="stat-number" id="floating-count-activated">0</span>
+                    </div>
+                </div>
             </div>
         </div>
     `;
@@ -206,43 +232,194 @@ function createFloatingStats() {
   // Ajouter au body
   document.body.insertAdjacentHTML("beforeend", floatingHTML);
 
-  // Attacher les event listeners pour les boutons de masse
-  const resetBtn = document.getElementById("bulk-reset-btn");
-  const activateBtn = document.getElementById("bulk-activate-btn");
-
-  if (resetBtn) {
-    resetBtn.addEventListener("click", bulkSetTriStateNotExamined);
-  }
-
-  if (activateBtn) {
-    activateBtn.addEventListener("click", bulkSetTriStateActivated);
-  }
-}
-
-/**
- * Actions en lot pour les switches tri-state
- */
-function bulkSetTriStateNotExamined() {
-  document.querySelectorAll(".tri-state-modern-switch").forEach((sw) => {
-    setTriStateState(sw, "not-examined");
-  });
-  if (typeof updateTotals === "function") {
-    updateTotals();
-  }
-  updateTriStateCounters();
-}
-
-function bulkSetTriStateActivated() {
-  document.querySelectorAll(".tri-state-modern-switch").forEach((sw) => {
-    const currentState = getTriStateState(sw);
-    if (currentState === "rejected") {
-      setTriStateState(sw, "activated");
+  // Ajouter les styles CSS directement
+  const styles = `
+    <style>
+    .floating-stats {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(224, 224, 224, 0.8);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        min-width: 220px;
+        transition: all 0.3s ease;
     }
-  });
-  if (typeof updateTotals === "function") {
-    updateTotals();
+    
+    .floating-stats.minimized {
+        min-width: auto;
+        padding: 8px;
+    }
+    
+    .floating-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(224, 224, 224, 0.5);
+        padding-bottom: 8px;
+    }
+    
+    .floating-stats.minimized .floating-header {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    .floating-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #2c3e50;
+    }
+    
+    .floating-stats.minimized .floating-title {
+        display: none;
+    }
+    
+    .floating-toggle-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+    }
+    
+    .floating-toggle-btn:hover {
+        background: rgba(52, 152, 219, 0.1);
+    }
+    
+    .floating-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .floating-stats.minimized .floating-content {
+        flex-direction: row;
+        gap: 12px;
+    }
+    
+    .floating-stat-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+    }
+    
+    .floating-stats.minimized .floating-stat-item {
+        flex-direction: column;
+        gap: 4px;
+        padding: 4px;
+        align-items: center;
+    }
+    
+    .floating-stat-item:hover {
+        background: rgba(0, 0, 0, 0.03);
+    }
+    
+    .floating-stat-not-examined {
+        border-left: 3px solid #e74c3c;
+    }
+    
+    .floating-stat-rejected {
+        border-left: 3px solid #3498db;
+    }
+    
+    .floating-stat-activated {
+        border-left: 3px solid #27ae60;
+    }
+    
+    .floating-stats.minimized .floating-stat-item {
+        border-left: none;
+        border-radius: 50%;
+        min-width: 32px;
+        min-height: 32px;
+    }
+    
+    .floating-stats.minimized .floating-stat-not-examined {
+        background: rgba(231, 76, 60, 0.1);
+    }
+    
+    .floating-stats.minimized .floating-stat-rejected {
+        background: rgba(52, 152, 219, 0.1);
+    }
+    
+    .floating-stats.minimized .floating-stat-activated {
+        background: rgba(39, 174, 96, 0.1);
+    }
+    
+    .stat-indicator {
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+    
+    .floating-stats.minimized .stat-indicator {
+        font-size: 14px;
+    }
+    
+    .stat-details {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex-grow: 1;
+    }
+    
+    .floating-stats.minimized .stat-details {
+        align-items: center;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+    
+    .floating-stats.minimized .stat-label {
+        display: none;
+    }
+    
+    .stat-number {
+        font-size: 16px;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+    
+    .floating-stats.minimized .stat-number {
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+        .floating-stats {
+            top: 10px;
+            right: 10px;
+            min-width: 200px;
+        }
+        
+        .floating-stats.minimized {
+            min-width: auto;
+        }
+    }
+    </style>
+  `;
+
+  // Ajouter les styles au head
+  document.head.insertAdjacentHTML("beforeend", styles);
+
+  // Attacher l'event listener pour le bouton toggle
+  const toggleBtn = document.getElementById("floating-toggle-btn");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", toggleFloatingStatsMode);
   }
-  updateTriStateCounters();
 }
 
 /**
@@ -313,8 +490,7 @@ window.setTriStateState = setTriStateState;
 window.getTriStateState = getTriStateState;
 window.isTriStateActivated = isTriStateActivated;
 window.updateTriStateCounters = updateTriStateCounters;
-window.bulkSetTriStateNotExamined = bulkSetTriStateNotExamined;
-window.bulkSetTriStateActivated = bulkSetTriStateActivated;
+window.toggleFloatingStatsMode = toggleFloatingStatsMode;
 window.initTriStateSystem = initTriStateSystem;
 window.reinitTriStateListeners = reinitTriStateListeners;
 
