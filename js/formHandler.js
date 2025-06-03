@@ -618,6 +618,7 @@ function updateTotals() {
   console.log("🔄 updateTotals() appelé");
 
   let totalGeneral = 0;
+  let totalParametrage = 0;
 
   // Fonctionnalités à exclure du calcul total
   const excludedFromTotal = [];
@@ -629,6 +630,10 @@ function updateTotals() {
     const isCabinetOption =
       sectionTitle &&
       isSectionNamed(sectionTitle.textContent, "CABINET OPTION");
+
+    // Vérifier si c'est la section PARAMÉTRAGE
+    const isParametrageSection =
+      sectionTitle && isSectionNamed(sectionTitle.textContent, "PARAMÉTRAGE");
 
     sectionDiv.querySelectorAll("tbody tr").forEach((tr, idx) => {
       // Vérifier si la ligne contient une fonctionnalité à exclure
@@ -733,6 +738,11 @@ function updateTotals() {
         // Ajoute bien la somme utilisateurs+profils au total de la section
         sectionTotal += totalUtilEtProfils;
 
+        // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
+        if (isParametrageSection) {
+          totalParametrage += totalUtilEtProfils;
+        }
+
         // Ajoute le sous-total profils à la cellule dédiée
         const profilsTotalCell = tr.querySelector(
           "#profils-dyn-list #profils-total-cell"
@@ -791,6 +801,11 @@ function updateTotals() {
           // Ajoute bien chaque sous-total au total de la section (sauf éléments exclus)
           if (!isExcluded) {
             sectionTotal += sousTotal;
+
+            // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
+            if (isParametrageSection) {
+              totalParametrage += sousTotal;
+            }
           }
         }
       }
@@ -824,8 +839,37 @@ function updateTotals() {
     }
   });
 
-  document.getElementById("total-general-h1").textContent =
-    formatMinutes(totalGeneral);
+  // Mise à jour des nouveaux éléments d'affichage dans le header
+  const heuresDisplay = document.getElementById("heures-display");
+  const journeesDisplay = document.getElementById("journees-display");
+  const demiJourneesDisplay = document.getElementById("demi-journees-display");
+
+  if (heuresDisplay) {
+    heuresDisplay.textContent = formatMinutesAvecParametrage(
+      totalGeneral,
+      totalParametrage
+    );
+  }
+
+  if (journeesDisplay) {
+    journeesDisplay.textContent = formatJournees(
+      totalGeneral,
+      totalParametrage
+    );
+  }
+
+  if (demiJourneesDisplay) {
+    demiJourneesDisplay.textContent = formatDemiJournees(
+      totalGeneral,
+      totalParametrage
+    );
+  }
+
+  // Compatibilité avec l'ancien élément (au cas où il existe encore)
+  const oldElement = document.getElementById("total-general-h1");
+  if (oldElement) {
+    oldElement.textContent = formatMinutes(totalGeneral);
+  }
 }
 
 // =====================

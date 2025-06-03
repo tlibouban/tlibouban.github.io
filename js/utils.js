@@ -333,6 +333,101 @@ function recalculateAndVerify() {
   }
 }
 
+/**
+ * Convertit les minutes en journées de 7h
+ * @param {number} mins - Nombre de minutes
+ * @returns {number} - Nombre de journées (avec décimales)
+ */
+function convertToJournees(mins) {
+  return mins / (7 * 60); // 7h = 420 minutes
+}
+
+/**
+ * Convertit les minutes en demi-journées de 3h30
+ * @param {number} mins - Nombre de minutes
+ * @returns {number} - Nombre de demi-journées (arrondi à l'entier supérieur)
+ */
+function convertToDemiJournees(mins) {
+  return Math.ceil(mins / (3.5 * 60)); // 3h30 = 210 minutes
+}
+
+/**
+ * Formate l'affichage des journées avec accord grammatical
+ * @param {number} mins - Nombre de minutes
+ * @param {number} minsParametrage - Nombre de minutes de paramétrage (optionnel)
+ * @returns {string} - Texte formaté
+ */
+function formatJournees(mins, minsParametrage = 0) {
+  const journees = convertToJournees(mins);
+  const journeesParametrage =
+    minsParametrage > 0 ? convertToJournees(minsParametrage) : 0;
+
+  // Formatage avec 1 décimale si nécessaire
+  const journeesFormatted =
+    journees % 1 === 0
+      ? journees.toString()
+      : journees.toFixed(1).replace(".", ",");
+  const journeesParametrageFormatted =
+    journeesParametrage % 1 === 0
+      ? journeesParametrage.toString()
+      : journeesParametrage.toFixed(1).replace(".", ",");
+
+  // Accord grammatical
+  const motJournee = journees <= 1 ? "journée" : "journées";
+  const motJourneeParametrage =
+    journeesParametrage <= 1 ? "journée" : "journées";
+
+  let result = `${journeesFormatted} ${motJournee}`;
+
+  if (minsParametrage > 0 && journeesParametrage > 0) {
+    result += ` - dont ${journeesParametrageFormatted} ${motJourneeParametrage} de paramétrage`;
+  }
+
+  return result;
+}
+
+/**
+ * Formate l'affichage des demi-journées avec accord grammatical
+ * @param {number} mins - Nombre de minutes
+ * @param {number} minsParametrage - Nombre de minutes de paramétrage (optionnel)
+ * @returns {string} - Texte formaté
+ */
+function formatDemiJournees(mins, minsParametrage = 0) {
+  const demiJournees = convertToDemiJournees(mins);
+  const demiJourneesParametrage =
+    minsParametrage > 0 ? convertToDemiJournees(minsParametrage) : 0;
+
+  // Accord grammatical
+  const motDemiJournee = demiJournees <= 1 ? "demi-journée" : "demi-journées";
+  const motDemiJourneeParametrage =
+    demiJourneesParametrage <= 1 ? "demi-journée" : "demi-journées";
+
+  let result = `${demiJournees} ${motDemiJournee}`;
+
+  if (minsParametrage > 0 && demiJourneesParametrage > 0) {
+    result += ` - dont ${demiJourneesParametrage} ${motDemiJourneeParametrage} de paramétrage`;
+  }
+
+  return result;
+}
+
+/**
+ * Formate l'affichage des heures avec indication du paramétrage
+ * @param {number} mins - Nombre de minutes
+ * @param {number} minsParametrage - Nombre de minutes de paramétrage (optionnel)
+ * @returns {string} - Texte formaté
+ */
+function formatMinutesAvecParametrage(mins, minsParametrage = 0) {
+  const heuresFormatees = formatMinutes(mins);
+
+  if (minsParametrage > 0) {
+    const heuresParametrageFormatees = formatMinutes(minsParametrage);
+    return `${heuresFormatees} - dont ${heuresParametrageFormatees} de paramétrage`;
+  }
+
+  return heuresFormatees;
+}
+
 // Rendre ces fonctions disponibles globalement pour le débogage
 window.debugProfilesState = debugProfilesState;
 window.verifyUsersCalculation = verifyUsersCalculation;

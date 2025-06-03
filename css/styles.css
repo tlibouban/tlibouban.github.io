@@ -35,47 +35,129 @@ body {
 
 /* Header avec logo Septeo */
 .app-header {
+  background: linear-gradient(135deg, #1a2956 0%, #2e4a9e 100%);
+  padding: 24px;
+  margin-bottom: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
-  border-bottom: 2px solid #e5e7eb;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.header-content h1 {
+  color: #fff;
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.time-displays {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.time-display {
+  font-size: 1.1rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 200px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#heures-display {
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 1.3rem;
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .septeo-logo {
-  height: 48px;
-  width: auto;
-  opacity: 1;
-  transition: opacity 0.3s ease;
+  max-width: 120px;
+  height: auto;
+  border-radius: 4px;
 }
 
 .septeo-logo:hover {
-  opacity: 0.8;
+  transform: scale(1.05);
 }
 
-.app-header h1 {
-  margin: 0;
-  flex: 1;
-}
-
-/* Ajustement responsive pour mobile */
+/* Media queries pour responsive */
 @media (max-width: 768px) {
   .app-header {
     flex-direction: column;
-    align-items: flex-start;
+    text-align: center;
     gap: 16px;
   }
 
-  .septeo-logo {
-    height: 40px;
-  }
-
-  .app-header h1 {
+  .header-content {
+    flex-direction: column;
+    gap: 16px;
     width: 100%;
   }
+
+  .time-displays {
+    align-items: center;
+    width: 100%;
+  }
+
+  .time-display {
+    min-width: auto;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .septeo-logo {
+    max-width: 100px;
+  }
+
+  .header-content h1 {
+    font-size: 1.8rem;
+  }
 }
-h1,
+
+@media (max-width: 480px) {
+  .time-display {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  #heures-display {
+    font-size: 1.1rem;
+  }
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Suppression de l'ancien style total-general-h1 qui n'est plus utilisé */
+.total-general-h1 {
+  display: none;
+}
+
 h2,
 h3 {
   color: #1a2956;
@@ -93,17 +175,6 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.total-general-h1 {
-  font-size: 2.1rem;
-  color: #fff;
-  background: linear-gradient(90deg, #1a2956 0%, #2e4a9e 100%);
-  border-radius: 12px;
-  padding: 10px 32px;
-  margin-left: 24px;
-  font-weight: 900;
-  box-shadow: 0 2px 8px rgba(30, 40, 90, 0.12);
-  letter-spacing: 1px;
 }
 h2.section-title {
   display: flex;
