@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ""
               )}" class="commercial-phone-link">${num.trim()}</a>`
           )
-          .join(" / ");
+          .join(' <span class="phone-separator">•</span> ');
       }
 
       return `<a href="tel:${phoneNumber.replace(
