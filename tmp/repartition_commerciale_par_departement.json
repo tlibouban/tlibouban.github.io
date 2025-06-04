@@ -1,0 +1,658 @@
+[
+  {
+    "Département": "59",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "62",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "80",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "60",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "76",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "95",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "91",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "28",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "45",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "77",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "51",
+    "Zone": "Nord",
+    "RR Nom": "Romain BLAS",
+    "RR Tel": "+33609504254",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Malo LAGACHE"
+  },
+  {
+    "Département": "18",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "23",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "15",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "63",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "03",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "87",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "85",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "79",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "86",
+    "Zone": "Centre-Ouest",
+    "RR Nom": "Romain LECONTE",
+    "RR Tel": "+33645883475",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Arnaud VINCART"
+  },
+  {
+    "Département": "44",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "53",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "56",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "22",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "29",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "35",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "50",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "61",
+    "Zone": "Ouest",
+    "RR Nom": "Xavier CANDEILLER",
+    "RR Tel": "+33670877227",
+    "CS MM Nom": "Clément GRAVE",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "33",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "24",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "19",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "16",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "17",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "47",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "64",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "40",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "82",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "65",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "46",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "32",
+    "Zone": "Sud-Ouest",
+    "RR Nom": "TBA",
+    "RR Tel": "",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Amir CAMY"
+  },
+  {
+    "Département": "81",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "34",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "11",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "66",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "09",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "31",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "12",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "07",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "30",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "48",
+    "Zone": "Occitanie",
+    "RR Nom": "Fabien FAYOLLE",
+    "RR Tel": "+33623910699",
+    "CS MM Nom": "Ludivine D’ANTONA",
+    "CS LM Nom": "Julie FISCHER"
+  },
+  {
+    "Département": "74",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "73",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "38",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "26",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "05",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "43",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "01",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "69",
+    "Zone": "Rhône-Alpes",
+    "RR Nom": "Anouar LAJMI",
+    "RR Tel": "+33785982575",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Imane LAHMAN"
+  },
+  {
+    "Département": "06",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "83",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "13",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "84",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "04",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "2A",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "2B",
+    "Zone": "PACA",
+    "RR Nom": "Bruno LEPERS",
+    "RR Tel": "+33616827495",
+    "CS MM Nom": "Stéphanie ABEL",
+    "CS LM Nom": "Louis BENEZECH"
+  },
+  {
+    "Département": "88",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "10",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "52",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "54",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "55",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "57",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "67",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "25",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "21",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "89",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "39",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "70",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "68",
+    "Zone": "Est",
+    "RR Nom": "Adrien EYRAUD",
+    "RR Tel": "+33628739481",
+    "CS MM Nom": "Caroline DIALLO",
+    "CS LM Nom": "Mhand TAMANITE"
+  },
+  {
+    "Département": "75",
+    "Zone": "Paris + 92",
+    "RR Nom": "Soraya GUERROUJE / Sébastien MATHIOT",
+    "RR Tel": "+33620490384 / +33628975803",
+    "CS MM Nom": "Nancy CAVALLO",
+    "CS LM Nom": "Rémi HERMER / Théos AGERON"
+  },
+  {
+    "Département": "92",
+    "Zone": "Paris + 92",
+    "RR Nom": "Soraya GUERROUJE / Sébastien MATHIOT",
+    "RR Tel": "+33620490384 / +33628975803",
+    "CS MM Nom": "Nancy CAVALLO",
+    "CS LM Nom": "Rémi HERMER / Théos AGERON"
+  },
+  {
+    "Département": "93",
+    "Zone": "Paris + 92",
+    "RR Nom": "Soraya GUERROUJE / Sébastien MATHIOT",
+    "RR Tel": "+33620490384 / +33628975803",
+    "CS MM Nom": "Nancy CAVALLO",
+    "CS LM Nom": "Rémi HERMER / Théos AGERON"
+  },
+  {
+    "Département": "94",
+    "Zone": "Paris + 92",
+    "RR Nom": "Soraya GUERROUJE / Sébastien MATHIOT",
+    "RR Tel": "+33620490384 / +33628975803",
+    "CS MM Nom": "Nancy CAVALLO",
+    "CS LM Nom": "Rémi HERMER / Théos AGERON"
+  }
+]

@@ -1,0 +1,345 @@
+<!-- Scénarios - Contexte client -->
+<div class="scenario-row">
+  <div>
+    <label for="numero-dossier">N° Dossier</label>
+    <input
+      type="text"
+      id="numero-dossier"
+      name="numero-dossier"
+      placeholder="Numéro du dossier"
+      aria-label="Numéro du dossier"
+    />
+  </div>
+  <div>
+    <label for="client">Client</label>
+    <input
+      type="text"
+      id="client"
+      name="client"
+      placeholder="Nom du client"
+      aria-label="Nom du client"
+    />
+    <div
+      id="client-suggestions"
+      class="client-suggestions-container"
+      style="display: none"
+    ></div>
+  </div>
+  <div>
+    <label for="projet">Type de projet</label>
+    <select
+      id="projet"
+      name="projet"
+      aria-label="Type de projet"
+      class="has-value"
+    >
+      <option value="">Sélectionner…</option>
+      <option value="separation">Séparation de base</option>
+      <option value="fusion">Fusion</option>
+      <option value="newlogo">New logo</option>
+      <option value="basecollab">Base collaborateur</option>
+    </select>
+  </div>
+  <div>
+    <label for="logiciel">Logiciel de base</label>
+    <select
+      id="logiciel"
+      name="logiciel"
+      aria-label="Logiciel de base"
+      class="has-value"
+    >
+      <option value="" selected="">Sélectionner...</option>
+      <option value="AIR">AIR</option>
+      <option value="NEO">NEO</option>
+      <option value="Autre">Autre</option>
+    </select>
+  </div>
+  <div>
+    <label for="sens">Solutions SEPTEO</label>
+    <select
+      id="sens"
+      name="sens"
+      aria-label="Sens du changement"
+      class="has-value"
+    >
+      <option value="">Sélectionner…</option>
+      <option value="AIR_recupdonnees">AIR avec récupération de données</option>
+      <option value="AIR_mastervide">AIR avec master vide</option>
+      <option value="NEO_recupdonnees">NEO avec récupération de données</option>
+      <option value="NEO_mastervide">NEO avec master vide</option>
+      <option value="ADAPPS_recupdonnees">
+        ADAPPS avec récupération de données
+      </option>
+      <option value="ADAPPS_mastervide">ADAPPS avec master vide</option>
+    </select>
+  </div>
+  <div>
+    <label for="effectif">Effectif</label>
+    <input
+      type="number"
+      id="effectif"
+      name="effectif"
+      placeholder="Effectif"
+      aria-label="Effectif du client"
+      readonly=""
+      min="0"
+    />
+  </div>
+</div>
+<div id="logiciel-autre-container" class="">
+  <label for="logiciel-autre">Nom du logiciel</label>
+  <input
+    type="text"
+    id="logiciel-autre"
+    name="logiciel-autre"
+    placeholder="Nom du logiciel"
+    aria-label="Nom du logiciel"
+  />
+</div>
+<!-- Filtres et recherche -->
+<div class="filters-container">
+  <div class="tag-filters">
+    <label id="tag-filter-label" for="tag-filter-btn-group" class="filter-label"
+      >Filtrer :</label
+    >
+    <div
+      id="tag-filter-btn-group"
+      class="filter-buttons"
+      role="group"
+      aria-labelledby="tag-filter-label"
+    >
+      <button
+        type="button"
+        class="tag-filter-btn all-btn active"
+        data-tag="all"
+        id="filter-btn-all"
+      >
+        Tous
+      </button>
+      <button
+        type="button"
+        class="tag-filter-btn neo-btn"
+        data-tag="neo"
+        id="filter-btn-neo"
+      >
+        NEO
+      </button>
+      <button
+        type="button"
+        class="tag-filter-btn air-btn"
+        data-tag="air"
+        id="filter-btn-air"
+      >
+        AIR
+      </button>
+      <button
+        type="button"
+        class="tag-filter-btn adapps-btn"
+        data-tag="adapps"
+        id="filter-btn-adapps"
+      >
+        ADAPPS
+      </button>
+    </div>
+
+    <!-- Filtres tri-state -->
+    <div class="tri-state-filters">
+      <button
+        type="button"
+        class="tri-state-filter-btn"
+        data-state="not-examined"
+        id="filter-not-examined"
+        title="Afficher les éléments non-examinés"
+      >
+        <span class="filter-icon not-examined"></span>
+        Non-examinées
+        <span class="filter-count" id="count-not-examined">(119)</span>
+      </button>
+      <button
+        type="button"
+        class="tri-state-filter-btn"
+        data-state="rejected"
+        id="filter-rejected"
+        title="Afficher les éléments refusés"
+      >
+        <span class="filter-icon rejected"></span>
+        Refusées
+        <span class="filter-count" id="count-rejected">(0)</span>
+      </button>
+      <button
+        type="button"
+        class="tri-state-filter-btn"
+        data-state="activated"
+        id="filter-activated"
+        title="Afficher les éléments activés"
+      >
+        <span class="filter-icon activated"></span>
+        Activées
+        <span class="filter-count" id="count-activated">(6)</span>
+      </button>
+    </div>
+  </div>
+  <div class="search-filter">
+    <label for="search-input" id="search-label" class="sr-only"
+      >Rechercher</label
+    >
+    <div class="search-input-container">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Rechercher dans le formulaire..."
+        aria-label="Rechercher dans le formulaire"
+      />
+      <button
+        type="button"
+        id="clear-search-btn"
+        class="clear-search-btn"
+        aria-label="Effacer la recherche"
+        style="display: none"
+      >
+        ×
+      </button>
+    </div>
+  </div>
+</div>
+<div
+  id="commercial-team-info"
+  class="commercial-team-container"
+  style="display: none"
+>
+  <div class="commercial-team-content">
+    <h4>🏢 Équipe commerciale - Zone Rhône-Alpes</h4>
+    <div class="commercial-team-details">
+      <span class="commercial-item">
+        <strong>RR:</strong> David PETIT<a
+          href="tel:+33785567890"
+          class="commercial-phone-link"
+          >+33785567890</a
+        >
+      </span>
+      <span class="commercial-separator">•</span>
+      <span class="commercial-item">
+        <strong>CS MM:</strong> Claire BLANC
+      </span>
+      <span class="commercial-separator">•</span>
+      <span class="commercial-item"> <strong>CS LM:</strong> Lucas ANDRE </span>
+    </div>
+  </div>
+</div>
+<div
+  id="deployment-options"
+  class="deployment-options-container"
+  style="display: none"
+>
+  <div class="deployment-options-content">
+    <h4>🚀 Options de déploiement</h4>
+
+    <div class="deployment-option">
+      <label class="deployment-option-label">
+        <input
+          type="radio"
+          name="deployment-type"
+          value="sur-site"
+          checked=""
+        />
+        Formation sur site
+      </label>
+      <label class="deployment-option-label">
+        <input type="radio" name="deployment-type" value="distance" />
+        Formation à distance
+      </label>
+    </div>
+  </div>
+</div>
+<div
+  id="formation-team-info"
+  class="formation-team-container"
+  style="display: none"
+>
+  <div class="formation-team-content">
+    <h4>👨&zwj;🏫 Équipe formation - Zone Île-de-France</h4>
+    <div class="formation-team-details">
+      <div class="formation-item">
+        <strong>Émilie GARCIA</strong><br />
+        <span class="formation-specialite">Spécialité: ADAPPS</span><br />
+        <a href="mailto:emilie.garcia@septeo.fr" class="formation-email"
+          >emilie.garcia@septeo.fr</a
+        >
+      </div>
+
+      <div class="formation-item">
+        <strong>Vincent ROUX</strong><br />
+        <span class="formation-specialite">Spécialité: NEO</span><br />
+        <a href="mailto:vincent.roux@septeo.fr" class="formation-email"
+          >vincent.roux@septeo.fr</a
+        >
+      </div>
+
+      <div class="formation-item">
+        <strong>Aurélie FABRE</strong><br />
+        <span class="formation-specialite">Spécialité: AIR</span><br />
+        <a href="mailto:aurelie.fabre@septeo.fr" class="formation-email"
+          >aurelie.fabre@septeo.fr</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  id="trainer-assignment-info"
+  class="trainer-assignment-container"
+  style="display: block"
+>
+  <div class="trainer-assignment-result">
+    <h5>🎯 Affectation automatique des formateurs</h5>
+    <div class="assignment-details">
+      <p><strong>Spécialité requise:</strong> NEO</p>
+      <p><strong>Type de formation:</strong> Sur site</p>
+    </div>
+
+    <div class="primary-trainer">
+      <h6>👨&zwj;🏫 Formateur recommandé</h6>
+      <div class="trainer-card primary">
+        <strong>Sophie MARTIN</strong><br />
+        <span class="trainer-specialty">Spécialité: NEO</span><br />
+        <span class="trainer-zone">Zone: Nord</span><br />
+        <a href="mailto:sophie.martin@septeo.fr" class="trainer-email"
+          >sophie.martin@septeo.fr</a
+        >
+      </div>
+    </div>
+
+    <div class="alternative-trainers">
+      <h6>🔄 Formateurs alternatifs (10)</h6>
+      <div class="trainers-grid">
+        <div class="trainer-card alternative">
+          <strong>Thomas ROBERT</strong><br />
+          <span class="trainer-zone">Nord</span>
+        </div>
+
+        <div class="trainer-card alternative">
+          <strong>Pierre SIMON</strong><br />
+          <span class="trainer-zone">Nord</span>
+        </div>
+
+        <div class="trainer-card alternative">
+          <strong>Anne DUBOIS</strong><br />
+          <span class="trainer-zone">Centre-Ouest</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Action toggle pour déplier/replier -->
+<div class="action-buttons">
+  <button
+    type="button"
+    class="action-btn toggle-all-btn"
+    id="toggle-all-btn"
+    aria-label="Tout déplier/replier"
+    data-state="expanded"
+  >
+    <span class="icon">▼</span> Tout replier
+  </button>
+</div>
