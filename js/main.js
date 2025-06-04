@@ -217,13 +217,36 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Créer le lien téléphone si un numéro RR est disponible
-    const phoneLink = commercialData["RR Tel"]
-      ? `<a href="tel:${commercialData["RR Tel"].replace(
-          /\s/g,
-          ""
-        )}" class="commercial-phone-link">${commercialData["RR Tel"]}</a>`
-      : "";
+    // Fonction helper pour créer un lien téléphone
+    function createPhoneLink(phoneNumber, name = "") {
+      if (!phoneNumber || phoneNumber.trim() === "") {
+        return "";
+      }
+
+      // Gérer les cas avec plusieurs numéros séparés par " / "
+      if (phoneNumber.includes(" / ")) {
+        const numbers = phoneNumber.split(" / ");
+        return numbers
+          .map(
+            (num) =>
+              `<a href="tel:${num.replace(
+                /\s/g,
+                ""
+              )}" class="commercial-phone-link">${num.trim()}</a>`
+          )
+          .join(" / ");
+      }
+
+      return `<a href="tel:${phoneNumber.replace(
+        /\s/g,
+        ""
+      )}" class="commercial-phone-link">${phoneNumber}</a>`;
+    }
+
+    // Créer les liens téléphone pour chaque membre
+    const rrPhoneLink = createPhoneLink(commercialData["RR Tel"]);
+    const csMmPhoneLink = createPhoneLink(commercialData["CS MM Tel"]);
+    const csLmPhoneLink = createPhoneLink(commercialData["CS LM Tel"]);
 
     // Construire l'affichage des informations commerciales
     commercialDiv.innerHTML = `
@@ -231,15 +254,21 @@ document.addEventListener("DOMContentLoaded", function () {
         <h4>🏢 Équipe commerciale - Zone ${commercialData.Zone}</h4>
         <div class="commercial-team-details">
           <span class="commercial-item">
-            <strong>RR:</strong> ${commercialData["RR Nom"]}${phoneLink}
+            <strong>RR:</strong> ${commercialData["RR Nom"]}${
+      rrPhoneLink ? " " + rrPhoneLink : ""
+    }
           </span>
           <span class="commercial-separator">•</span>
           <span class="commercial-item">
-            <strong>CS MM:</strong> ${commercialData["CS MM Nom"]}
+            <strong>CS MM:</strong> ${commercialData["CS MM Nom"]}${
+      csMmPhoneLink ? " " + csMmPhoneLink : ""
+    }
           </span>
           <span class="commercial-separator">•</span>
           <span class="commercial-item">
-            <strong>CS LM:</strong> ${commercialData["CS LM Nom"]}
+            <strong>CS LM:</strong> ${commercialData["CS LM Nom"]}${
+      csLmPhoneLink ? " " + csLmPhoneLink : ""
+    }
           </span>
         </div>
       </div>

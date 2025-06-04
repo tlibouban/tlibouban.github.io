@@ -5,7 +5,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "62",
@@ -13,7 +15,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "80",
@@ -21,7 +25,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "60",
@@ -29,7 +35,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "76",
@@ -37,7 +45,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "95",
@@ -45,7 +55,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "91",
@@ -53,7 +65,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "28",
@@ -61,7 +75,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "45",
@@ -69,7 +85,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "77",
@@ -77,7 +95,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "51",
@@ -85,7 +105,9 @@
     "RR Nom": "Marc MARTIN",
     "RR Tel": "+33609123456",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Thomas BERNARD"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Thomas BERNARD",
+    "CS LM Tel": "+33698765432"
   },
   {
     "Département": "18",
@@ -93,7 +115,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "23",
@@ -101,7 +125,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "15",
@@ -109,7 +135,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "63",
@@ -117,7 +145,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "03",
@@ -125,7 +155,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "87",
@@ -133,7 +165,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "85",
@@ -141,7 +175,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "79",
@@ -149,7 +185,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "86",
@@ -157,7 +195,9 @@
     "RR Nom": "Pierre DUBOIS",
     "RR Tel": "+33645234567",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Antoine ROUSSEAU"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Antoine ROUSSEAU",
+    "CS LM Tel": "+33656789012"
   },
   {
     "Département": "44",
@@ -165,7 +205,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "53",
@@ -173,7 +215,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "56",
@@ -181,7 +225,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "22",
@@ -189,7 +235,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "29",
@@ -197,7 +245,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "35",
@@ -205,7 +255,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "50",
@@ -213,7 +265,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "61",
@@ -221,7 +275,9 @@
     "RR Nom": "Nicolas LAMBERT",
     "RR Tel": "+33670345678",
     "CS MM Nom": "Sophie MOREAU",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33634567890",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "33",
@@ -229,7 +285,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "24",
@@ -237,7 +295,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "19",
@@ -245,7 +305,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "16",
@@ -253,7 +315,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "17",
@@ -261,7 +325,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "47",
@@ -269,7 +335,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "64",
@@ -277,7 +345,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "40",
@@ -285,7 +355,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "82",
@@ -293,7 +365,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "65",
@@ -301,7 +375,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "46",
@@ -309,7 +385,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "32",
@@ -317,7 +395,9 @@
     "RR Nom": "À DEFINIR",
     "RR Tel": "",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Maxime ROUX"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Maxime ROUX",
+    "CS LM Tel": "+33667890123"
   },
   {
     "Département": "81",
@@ -325,7 +405,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "34",
@@ -333,7 +415,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "11",
@@ -341,7 +425,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "66",
@@ -349,7 +435,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "09",
@@ -357,7 +445,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "31",
@@ -365,7 +455,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "12",
@@ -373,7 +465,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "07",
@@ -381,7 +475,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "30",
@@ -389,7 +485,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "48",
@@ -397,7 +495,9 @@
     "RR Nom": "Laurent SIMON",
     "RR Tel": "+33623456789",
     "CS MM Nom": "Amélie GARCIA",
-    "CS LM Nom": "Emma LEFEVRE"
+    "CS MM Tel": "+33645123456",
+    "CS LM Nom": "Emma LEFEVRE",
+    "CS LM Tel": "+33689012345"
   },
   {
     "Département": "74",
@@ -405,7 +505,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "73",
@@ -413,7 +515,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "38",
@@ -421,7 +525,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "26",
@@ -429,7 +535,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "05",
@@ -437,7 +545,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "43",
@@ -445,7 +555,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "01",
@@ -453,7 +565,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "69",
@@ -461,7 +575,9 @@
     "RR Nom": "David PETIT",
     "RR Tel": "+33785567890",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Lucas ANDRE"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Lucas ANDRE",
+    "CS LM Tel": "+33690123456"
   },
   {
     "Département": "06",
@@ -469,7 +585,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "83",
@@ -477,7 +595,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "13",
@@ -485,7 +605,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "84",
@@ -493,7 +615,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "04",
@@ -501,7 +625,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "2A",
@@ -509,7 +635,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "2B",
@@ -517,7 +645,9 @@
     "RR Nom": "Fabrice VINCENT",
     "RR Tel": "+33616678901",
     "CS MM Nom": "Julie DURAND",
-    "CS LM Nom": "Alexandre MICHEL"
+    "CS MM Tel": "+33612345678",
+    "CS LM Nom": "Alexandre MICHEL",
+    "CS LM Tel": "+33691234567"
   },
   {
     "Département": "88",
@@ -525,7 +655,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "10",
@@ -533,7 +665,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "52",
@@ -541,7 +675,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "54",
@@ -549,7 +685,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "55",
@@ -557,7 +695,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "57",
@@ -565,7 +705,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "67",
@@ -573,7 +715,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "25",
@@ -581,7 +725,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "21",
@@ -589,7 +735,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "89",
@@ -597,7 +745,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "39",
@@ -605,7 +755,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "70",
@@ -613,7 +765,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "68",
@@ -621,7 +775,9 @@
     "RR Nom": "Sébastien ROBERT",
     "RR Tel": "+33628789012",
     "CS MM Nom": "Claire BLANC",
-    "CS LM Nom": "Julien GIRARD"
+    "CS MM Tel": "+33656234567",
+    "CS LM Nom": "Julien GIRARD",
+    "CS LM Tel": "+33678901234"
   },
   {
     "Département": "75",
@@ -629,7 +785,9 @@
     "RR Nom": "Marie DURAND / Paul MARTINEZ",
     "RR Tel": "+33620890123 / +33628456789",
     "CS MM Nom": "Isabelle THOMAS",
-    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD"
+    "CS MM Tel": "+33667345678",
+    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD",
+    "CS LM Tel": "+33692456789 / +33679567890"
   },
   {
     "Département": "92",
@@ -637,7 +795,9 @@
     "RR Nom": "Marie DURAND / Paul MARTINEZ",
     "RR Tel": "+33620890123 / +33628456789",
     "CS MM Nom": "Isabelle THOMAS",
-    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD"
+    "CS MM Tel": "+33667345678",
+    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD",
+    "CS LM Tel": "+33692456789 / +33679567890"
   },
   {
     "Département": "93",
@@ -645,7 +805,9 @@
     "RR Nom": "Marie DURAND / Paul MARTINEZ",
     "RR Tel": "+33620890123 / +33628456789",
     "CS MM Nom": "Isabelle THOMAS",
-    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD"
+    "CS MM Tel": "+33667345678",
+    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD",
+    "CS LM Tel": "+33692456789 / +33679567890"
   },
   {
     "Département": "94",
@@ -653,6 +815,8 @@
     "RR Nom": "Marie DURAND / Paul MARTINEZ",
     "RR Tel": "+33620890123 / +33628456789",
     "CS MM Nom": "Isabelle THOMAS",
-    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD"
+    "CS MM Tel": "+33667345678",
+    "CS LM Nom": "Hugo LOPEZ / Victor BERNARD",
+    "CS LM Tel": "+33692456789 / +33679567890"
   }
 ]
