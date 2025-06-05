@@ -66,6 +66,24 @@ class MobileAlternative {
         this.handleGlobalInputChange(event);
       }
     });
+
+    // Listener spécialisé pour les clicks sur les switches
+    document.addEventListener("click", (event) => {
+      // Détecter les clicks sur les switches (label ou input)
+      const switchElement = event.target.closest(".switch");
+      if (switchElement) {
+        const input = switchElement.querySelector('input[type="checkbox"]');
+        if (input && this.shouldTriggerCalculation(input)) {
+          console.log("🔄 [MOBILE] Switch cliqué:", input.name || input.id);
+          // Petit délai pour laisser le temps au switch de changer d'état
+          setTimeout(() => {
+            this.handleGlobalInputChange({ target: input });
+          }, 50);
+        }
+      }
+    });
+
+    console.log("✅ [MOBILE] Délégation d'événements globale configurée");
   }
 
   /**
@@ -273,12 +291,22 @@ class MobileAlternative {
       // Copier le switch existant avec tous ses attributs
       const switchElement = cells[0].querySelector(".switch");
       const inputElement = switchElement.querySelector("input");
+
+      // Préserver tous les data-* attributs et événements
+      const dataAttributes = [];
+      Array.from(inputElement.attributes).forEach((attr) => {
+        if (attr.name.startsWith("data-") || attr.name === "value") {
+          dataAttributes.push(`${attr.name}="${attr.value}"`);
+        }
+      });
+
       checkboxHtml = `
         <label class="switch">
           <input type="checkbox" ${inputElement.checked ? "checked" : ""} 
                  class="${inputElement.className}" 
                  id="${inputElement.id}" 
                  name="${inputElement.name}"
+                 ${dataAttributes.join(" ")}
                  aria-label="${
                    inputElement.getAttribute("aria-label") ||
                    "Activer cette fonctionnalité"
@@ -502,6 +530,52 @@ const mobileCardStyles = `
 /* Adaptations pour les switches dans les cartes */
 .mobile-card-checkbox .switch {
   margin: 0;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-card-checkbox .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mobile-card-checkbox .switch .slider {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: .4s;
+  cursor: pointer;
+}
+
+.mobile-card-checkbox .switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+.mobile-card-checkbox .switch input:checked + .slider {
+  background-color: #2196F3;
+}
+
+.mobile-card-checkbox .switch input:checked + .slider:before {
+  transform: translateX(16px);
+}
+
+.mobile-card-checkbox .switch .slider:focus {
+  box-shadow: 0 0 1px #2196F3;
 }
 
 /* Style pour les badges dans les cartes */
