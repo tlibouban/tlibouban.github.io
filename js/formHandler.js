@@ -1049,15 +1049,22 @@ function validateProfilesVsEffectif() {
     return;
   }
 
-  const profilsTotal = window.profilsDynList.reduce(
-    (sum, profil) => sum + (profil.nb || 0),
-    0
-  );
+  // Calculer seulement les profils cochés (comme dans updateTotals)
+  let profilsTotal = 0;
+  window.profilsDynList.forEach((profil, idx) => {
+    const checkbox = document.querySelector(`#profil-check-${idx}`);
+    const nbInput = document.querySelector(`#profil-nb-${idx}`);
+
+    if (checkbox && checkbox.checked && nbInput) {
+      const nb = parseInt(nbInput.value, 10) || 0;
+      profilsTotal += nb;
+    }
+  });
 
   // Si les totaux ne correspondent pas, afficher un avertissement
   if (profilsTotal !== effectifTotal) {
     console.warn(
-      `⚠️ Incohérence: Somme profils (${profilsTotal}) ≠ Effectif total (${effectifTotal})`
+      `⚠️ Incohérence: Somme profils cochés (${profilsTotal}) ≠ Effectif total (${effectifTotal})`
     );
 
     // Optionnel: ajouter un indicateur visuel sur l'interface
@@ -1071,7 +1078,7 @@ function validateProfilesVsEffectif() {
         warning.className = "effectif-warning";
         warning.style.cssText =
           "color: #e74c3c; font-size: 0.8em; margin-top: 2px;";
-        warning.textContent = `⚠️ Somme: ${profilsTotal}/${effectifTotal}`;
+        warning.textContent = `⚠️ Profils cochés: ${profilsTotal}/${effectifTotal}`;
         parent.appendChild(warning);
 
         // Supprimer l'avertissement après 5 secondes
@@ -1083,7 +1090,9 @@ function validateProfilesVsEffectif() {
       }
     }
   } else {
-    console.log(`✅ Cohérence vérifiée: Profils = Effectif = ${profilsTotal}`);
+    console.log(
+      `✅ Cohérence vérifiée: Profils cochés = Effectif = ${profilsTotal}`
+    );
 
     // Supprimer les avertissements existants
     document.querySelectorAll(".effectif-warning").forEach((warning) => {
