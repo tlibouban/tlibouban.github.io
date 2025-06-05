@@ -989,9 +989,20 @@ function renderModernSwitch(
 }
 
 // =====================
-// Fonction pour valider la cohérence entre profils et effectif
+// Fonction pour valider la cohérence entre profils et effectif (avec throttling)
 // =====================
+let lastValidationTime = 0;
+const VALIDATION_THROTTLE_MS = 2000; // Throttle à 2 secondes
+
 function validateProfilesVsEffectif() {
+  const now = Date.now();
+
+  // Throttling : éviter le spam de validations
+  if (now - lastValidationTime < VALIDATION_THROTTLE_MS) {
+    return;
+  }
+  lastValidationTime = now;
+
   const effectifInput = document.getElementById("effectif");
   if (!effectifInput || !effectifInput.value || !window.profilsDynList) {
     return;

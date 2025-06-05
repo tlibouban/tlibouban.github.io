@@ -412,9 +412,13 @@ function getTrainerAssignmentInstance() {
 
 // Auto-initialisation
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initTrainerAssignment);
+  document.addEventListener("DOMContentLoaded", () => {
+    trainerAssignmentInstance = initTrainerAssignment();
+    window.trainerAssignmentInstance = trainerAssignmentInstance;
+  });
 } else {
-  initTrainerAssignment();
+  trainerAssignmentInstance = initTrainerAssignment();
+  window.trainerAssignmentInstance = trainerAssignmentInstance;
 }
 
 // Export pour usage externe
