@@ -1067,3 +1067,26 @@ window.updateClientInfo = updateClientInfo;
 window.updateTrainerAssignment = updateTrainerAssignment;
 window.getTrainerAssignmentInstance = getTrainerAssignmentInstance;
 window.loadFormationsLogiciels = loadFormationsLogiciels;
+
+// Fonction de test pour le warning CSM
+window.testCSMWarning = function (effectif) {
+  console.log(`🧪 Test CSM Warning avec effectif: ${effectif}`);
+
+  // Mettre à jour le champ effectif
+  const effectifInput = document.getElementById("effectif");
+  if (effectifInput) {
+    effectifInput.value = effectif;
+    console.log(`✅ Champ effectif mis à jour: ${effectifInput.value}`);
+  } else {
+    console.error("❌ Champ effectif non trouvé");
+    return;
+  }
+
+  // Déclencher manuellement displayDeploymentOptions
+  if (typeof displayDeploymentOptions === "function") {
+    displayDeploymentOptions(null);
+    console.log("✅ displayDeploymentOptions appelée manuellement");
+  } else {
+    console.error("❌ Fonction displayDeploymentOptions non trouvée");
+  }
+};
