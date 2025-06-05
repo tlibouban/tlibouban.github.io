@@ -1023,6 +1023,88 @@ document.addEventListener("DOMContentLoaded", function () {
       updateTrainerAssignment(clientData);
     }
   });
+
+  // ===== GESTION STICKY DES FILTRES TRI-STATE =====
+  function initStickyTriStateFilters() {
+    const filtersContainer = document.querySelector(".tri-state-filters");
+    const placeholder = document.getElementById("tri-state-placeholder");
+
+    if (!filtersContainer || !placeholder) {
+      console.warn("⚠️ Éléments tri-state filters ou placeholder non trouvés");
+      return;
+    }
+
+    // Position originale des filtres
+    let originalOffsetTop = null;
+    let isSticky = false;
+
+    // Fonction pour calculer la position originale
+    function updateOriginalPosition() {
+      if (!isSticky) {
+        originalOffsetTop = filtersContainer.offsetTop;
+      }
+    }
+
+    // Fonction de gestion du scroll
+    function handleScroll() {
+      if (originalOffsetTop === null) {
+        updateOriginalPosition();
+      }
+
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const shouldBeSticky = scrollTop > originalOffsetTop;
+
+      if (shouldBeSticky && !isSticky) {
+        // Activer le mode sticky
+        isSticky = true;
+        filtersContainer.classList.add("sticky");
+        placeholder.classList.add("active");
+        console.log("🔒 Filtres tri-state en mode sticky");
+      } else if (!shouldBeSticky && isSticky) {
+        // Désactiver le mode sticky
+        isSticky = false;
+        filtersContainer.classList.remove("sticky");
+        placeholder.classList.remove("active");
+        console.log("🔓 Filtres tri-state retour position normale");
+      }
+    }
+
+    // Fonction de debounce pour optimiser les performances
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Event listeners
+    const debouncedHandleScroll = debounce(handleScroll, 10);
+    window.addEventListener("scroll", debouncedHandleScroll, { passive: true });
+
+    // Recalculer la position lors du resize
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        if (!isSticky) {
+          updateOriginalPosition();
+        }
+      }, 250)
+    );
+
+    // Initialiser la position
+    setTimeout(updateOriginalPosition, 100);
+
+    console.log("✅ Gestion sticky des filtres tri-state initialisée");
+  }
+
+  // Initialiser le comportement sticky après chargement du DOM
+  initStickyTriStateFilters();
 });
 
 // Variables globales pour les bases de données

@@ -1596,64 +1596,131 @@ tr:has(h3) h3,
 .tri-state-filters {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 100;
+}
+
+/* État sticky */
+.tri-state-filters.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 12px 20px;
+  margin: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #e3f2fd;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  animation: sticky-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Placeholder pour maintenir l'espace */
+.tri-state-filters-placeholder {
+  height: 0;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tri-state-filters-placeholder.active {
+  height: 60px;
+  opacity: 1;
+}
+
+/* Animation d'apparition sticky */
+@keyframes sticky-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Amélioration des boutons en mode sticky */
+.tri-state-filters.sticky .tri-state-filter-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: scale(0.95);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tri-state-filters.sticky .tri-state-filter-btn:hover {
+  transform: scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tri-state-filters.sticky .tri-state-filter-btn.active {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  border-color: #1976d2;
+  color: white;
+  transform: scale(1);
+}
+
+/* Centrer les boutons en mode sticky */
+.tri-state-filters.sticky {
+  justify-content: center;
   align-items: center;
-  margin-left: 16px;
 }
 
-.tri-state-filter-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  font-size: 0.85em;
-  transition: all 0.2s ease;
+/* Responsive pour mobile en mode sticky */
+@media (max-width: 768px) {
+  .tri-state-filters.sticky {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .tri-state-filters.sticky .tri-state-filter-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    transform: scale(0.9);
+  }
+
+  .tri-state-filters.sticky .tri-state-filter-btn:hover,
+  .tri-state-filters.sticky .tri-state-filter-btn.active {
+    transform: scale(0.95);
+  }
+
+  .tri-state-filters-placeholder.active {
+    height: 50px;
+  }
 }
 
-.tri-state-filter-btn:hover {
-  background: #f5f5f5;
+/* Indicateur visuel pour le mode sticky */
+.tri-state-filters.sticky::before {
+  content: "📌";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  opacity: 0.6;
+  animation: sticky-pin-pulse 2s ease-in-out infinite;
 }
 
-.tri-state-filter-btn.active {
-  background: #e3f2fd;
-  border-color: #2196f3;
-  color: #1976d2;
+@keyframes sticky-pin-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+  }
 }
 
-.tri-state-filter-btn .filter-icon {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.tri-state-filter-btn .filter-icon.not-examined {
-  background: #e74c3c;
-}
-
-.tri-state-filter-btn .filter-icon.rejected {
-  background: #3498db;
-}
-
-.tri-state-filter-btn .filter-icon.activated {
-  background: #27ae60;
-}
-
-.tri-state-filter-btn .filter-count {
-  font-size: 0.8em;
-  color: #666;
-  font-weight: 600;
-  margin-left: 4px;
-  white-space: nowrap;
-}
-
-.tri-state-filter-btn.active .filter-count {
-  color: #1976d2;
-  font-weight: 700;
+@media (max-width: 768px) {
+  .tri-state-filters.sticky::before {
+    display: none;
+  }
 }
 
 /* ===== LIENS TÉLÉPHONE DANS ÉQUIPE COMMERCIALE ===== */
@@ -2090,4 +2157,77 @@ tr:has(h3) h3,
     transform: translateX(0) translateY(0);
     opacity: 1;
   }
+}
+
+/* ===== FILTRES TRI-STATE STICKY ===== */
+.tri-state-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 100;
+}
+
+/* Styles des boutons tri-state normaux */
+.tri-state-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.tri-state-filter-btn:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tri-state-filter-btn.active {
+  background: #e3f2fd;
+  border-color: #2196f3;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.tri-state-filter-btn .filter-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.tri-state-filter-btn .filter-icon.not-examined {
+  background: #e74c3c;
+}
+
+.tri-state-filter-btn .filter-icon.rejected {
+  background: #3498db;
+}
+
+.tri-state-filter-btn .filter-icon.activated {
+  background: #27ae60;
+}
+
+.tri-state-filter-btn .filter-count {
+  font-size: 0.8em;
+  color: #666;
+  font-weight: 600;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.tri-state-filter-btn.active .filter-count {
+  color: #1976d2;
+  font-weight: 700;
 }
