@@ -880,6 +880,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour afficher les warnings et options CSM/Déploiement à distance
   function displayDeploymentOptions(clientData) {
+    console.log("🚀 displayDeploymentOptions appelée avec:", { clientData });
+
     // Utiliser la div existante pour les options de déploiement
     let optionsDiv = document.getElementById("deployment-options");
 
@@ -887,10 +889,13 @@ document.addEventListener("DOMContentLoaded", function () {
       ? clientData.effectif
       : parseInt(document.getElementById("effectif")?.value || "0");
 
+    console.log("👥 Effectif calculé:", effectif);
+
     let optionsHTML = "";
 
     // Option déploiement à distance si effectif < 8
     if (effectif > 0 && effectif < 8) {
+      console.log("📱 Ajout option déploiement à distance (effectif < 8)");
       optionsHTML += `
         <div class="deployment-option">
           <label class="deployment-option-label">
@@ -907,6 +912,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Warning CSM si effectif > 20
     if (effectif > 20) {
+      console.log("⚠️ Ajout warning CSM (effectif > 20)");
       optionsHTML += `
         <div class="csm-warning">
           <span class="warning-icon">⚠️</span>
@@ -920,6 +926,11 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
+    console.log(
+      "📋 HTML généré:",
+      optionsHTML ? "contenu présent" : "aucun contenu"
+    );
+
     if (optionsHTML) {
       optionsDiv.innerHTML = `
         <div class="deployment-options-content">
@@ -928,8 +939,10 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       `;
       optionsDiv.style.display = "block";
+      console.log("✅ Options de déploiement affichées");
     } else {
       optionsDiv.style.display = "none";
+      console.log("❌ Aucune option de déploiement - div masquée");
     }
   }
 
@@ -940,9 +953,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // Ajouter un listener sur le champ effectif pour les options de déploiement
   const effectifInput = document.getElementById("effectif");
   if (effectifInput) {
+    console.log("✅ Event listener ajouté sur le champ effectif");
     effectifInput.addEventListener("input", () => {
+      console.log(
+        "🔄 Changement detecté dans le champ effectif:",
+        effectifInput.value
+      );
       displayDeploymentOptions(null);
     });
+  } else {
+    console.error("❌ Impossible de trouver le champ effectif dans le DOM");
   }
 
   // =====================
