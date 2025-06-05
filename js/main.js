@@ -1145,7 +1145,6 @@ function loadFormationsLogiciels() {
 }
 
 // Exposer les fonctions nécessaires dans le scope global
-window.updateClientInfo = updateClientInfo;
 window.updateTrainerAssignment = updateTrainerAssignment;
 window.getTrainerAssignmentInstance = getTrainerAssignmentInstance;
 window.loadFormationsLogiciels = loadFormationsLogiciels;

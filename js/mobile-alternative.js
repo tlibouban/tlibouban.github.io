@@ -120,10 +120,46 @@ class MobileAlternative {
   }
 
   /**
+   * Synchronise les valeurs entre les éléments originaux et mobiles
+   */
+  syncValues(mobileElement) {
+    if (!mobileElement) return;
+
+    // Trouver l'élément original correspondant
+    const mobileId = mobileElement.id;
+    if (!mobileId || !mobileId.endsWith("-mobile")) return;
+
+    const originalId = mobileId.replace("-mobile", "");
+    const originalElement = document.getElementById(originalId);
+
+    if (!originalElement) return;
+
+    // Synchroniser la valeur
+    if (mobileElement.type === "checkbox") {
+      originalElement.checked = mobileElement.checked;
+    } else if (
+      mobileElement.type === "number" ||
+      mobileElement.type === "text"
+    ) {
+      originalElement.value = mobileElement.value;
+    }
+
+    console.log(
+      "🔄 [MOBILE] Valeur synchronisée:",
+      originalId,
+      "→",
+      mobileElement.value || mobileElement.checked
+    );
+  }
+
+  /**
    * NOUVEAU : Gestionnaire global pour tous les changements d'input
    */
   handleGlobalInputChange = (event) => {
     const element = event.target;
+
+    // Synchroniser avec l'élément original si c'est un élément mobile
+    this.syncValues(element);
 
     // Appeler updateTotals si la fonction existe
     if (typeof updateTotals === "function") {
@@ -247,6 +283,9 @@ class MobileAlternative {
     table.classList.add("mobile-transformed");
     table.parentNode.insertBefore(cardsContainer, table.nextSibling);
 
+    // Nettoyer les IDs dupliqués potentiels
+    this.cleanupDuplicateIds();
+
     console.log("✅ [MOBILE] Tableau transformé en cartes - délégation active");
   }
 
@@ -304,7 +343,7 @@ class MobileAlternative {
         <label class="switch">
           <input type="checkbox" ${inputElement.checked ? "checked" : ""} 
                  class="${inputElement.className}" 
-                 id="${inputElement.id}" 
+                 id="${inputElement.id ? inputElement.id + "-mobile" : ""}" 
                  name="${inputElement.name}"
                  ${dataAttributes.join(" ")}
                  aria-label="${
@@ -320,7 +359,7 @@ class MobileAlternative {
         checkbox.checked ? "checked" : ""
       } 
                       class="${checkbox.className}" 
-                      id="${checkbox.id}" 
+                      id="${checkbox.id ? checkbox.id + "-mobile" : ""}" 
                       name="${checkbox.name}"
                       aria-label="${
                         checkbox.getAttribute("aria-label") ||
@@ -348,7 +387,7 @@ class MobileAlternative {
             <div class="mobile-card-input">
               <input type="number" min="0" value="${numberInput.value}" 
                      class="${numberInput.className}" 
-                     id="${numberInput.id}" 
+                     id="${numberInput.id ? numberInput.id + "-mobile" : ""}" 
                      name="${numberInput.name}" 
                      style="width: 80px;" 
                      data-unit="${
@@ -405,6 +444,28 @@ class MobileAlternative {
     table.classList.remove("mobile-transformed");
 
     console.log("✅ [MOBILE] Tableau restauré - délégation reste active");
+  }
+
+  /**
+   * Nettoie les IDs dupliqués qui peuvent causer des problèmes
+   */
+  cleanupDuplicateIds() {
+    // Éviter les doublons de boutons de gestion de profils
+    const profileButtons = document.querySelectorAll(
+      "#add-profil-btn, #profile-manager-btn-utilisateurs"
+    );
+    if (profileButtons.length > 1) {
+      // Garder seulement le premier de chaque type
+      const seenIds = new Set();
+      profileButtons.forEach((button, index) => {
+        if (seenIds.has(button.id)) {
+          button.remove();
+          console.log("🧹 [MOBILE] Bouton dupliqué supprimé:", button.id);
+        } else {
+          seenIds.add(button.id);
+        }
+      });
+    }
   }
 }
 
