@@ -361,12 +361,9 @@ function loadProfilesIntoSelect() {
 }
 
 // =====================
-// Gestion dynamique des profils (sous Utilisateurs)
+// Gestion dynamique des profils (intégrés dans le tableau principal)
 // =====================
 function initProfilsDyn() {
-  const profilsDiv = document.getElementById("profils-dyn-list");
-  if (!profilsDiv) return;
-
   // Profils par défaut (si non déjà initialisés)
   if (!window.profilsDynList) {
     window.profilsDynList = [
@@ -380,92 +377,108 @@ function initProfilsDyn() {
 
   renderProfilsDyn();
 
-  document.getElementById("add-profil-btn").onclick = function () {
-    window.profilsDynList.push({
-      nom: "Nouveau profil",
-      nb: 0,
-      ajoute: true,
-    });
+  // Attendre que le DOM soit prêt pour attacher le listener
+  setTimeout(() => {
+    const addBtn = document.getElementById("add-profil-btn");
+    if (addBtn) {
+      addBtn.onclick = function () {
+        window.profilsDynList.push({
+          nom: "Nouveau profil",
+          nb: 0,
+          ajoute: true,
+        });
 
-    renderProfilsDyn();
-    updateTotals();
-  };
+        renderProfilsDyn();
+        updateTotals();
+      };
+    }
+  }, 100);
 }
 
 /**
- * Affiche le tableau des profils sous la ligne Utilisateurs
- * - Ajoute une colonne "Modifiez le profil"
+ * Affiche les lignes de profils directement dans le tableau principal
+ * - Insère les lignes après la ligne "Utilisateurs"
  * - Ajoute les listeners nécessaires
  */
 function renderProfilsDyn() {
-  const profilsDiv = document.getElementById("profils-dyn-list");
-  if (!profilsDiv) return;
+  // Trouver la ligne principale des utilisateurs dans le tableau
+  const utilisateursRow = document.querySelector(".utilisateurs-main-row");
+  if (!utilisateursRow) return;
 
-  profilsDiv.innerHTML = `
-    <table style="width:100%;margin-bottom:8px;background:#f9fafb;border-radius:6px;overflow:hidden;">
-      <thead>
-        <tr style="background:#e5e7eb;">
-          <th style="padding:6px 4px;">✔</th>
-          <th style="padding:6px 4px;">Nom du profil</th>
-          <th style="padding:6px 4px;">Nb</th>
-          <th style="padding:6px 4px;">Modifiez le profil</th>
-          <th style="padding:6px 4px;">Sous-total</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        ${window.profilsDynList
-          .map(
-            (profil, idx) => `
-          <tr>
-            <td>${renderModernSwitch(
-              `profil-check-${idx}`,
-              `profil-check-${idx}`,
-              true,
-              "Inclure ce profil",
-              "check-feature-profil"
-            )}</td>
-            <td><input type="text" value="${profil.nom.replace(
-              /"/g,
-              "&quot;"
-            )}" class="profil-nom" data-idx="${idx}" style="width:120px;" aria-label="Nom du profil" id="profil-nom-${idx}" name="profil-nom-${idx}" /></td>
-            <td><input type="number" min="0" value="${
-              profil.nb
-            }" class="profil-nb" data-idx="${idx}" style="width:60px;" aria-label="Nombre d'utilisateurs pour ce profil" id="profil-nb-${idx}" name="profil-nb-${idx}" data-unit="utilisateur" /></td>
-            <td style="text-align:center;">
-              ${renderModernSwitch(
-                `profil-modif-${idx}`,
-                `profil-modif-${idx}`,
-                profil.ajoute || false,
-                "Modifier ce profil",
-                "profil-modif"
-              )}
-            </td>
-            <td class="profil-sous-total" data-idx="${idx}">0</td>
-            <td><button type="button" class="remove-profil-btn" data-idx="${idx}" style="background:#e74c3c;color:#fff;border:none;border-radius:4px;padding:2px 10px;cursor:pointer;font-size:0.95em;" aria-label="Supprimer ce profil">Supprimer</button></td>
-          </tr>
-        `
-          )
-          .join("")}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="4" style="text-align:right;font-weight:700;">Sous-total profils <span class="temps-unitaire">(30 min par profil)</span></td>
-          <td id="profils-total-cell" style="font-weight:700;">0</td>
-          <td></td>
-        </tr>
-      </tfoot>
-    </table>
+  // Supprimer les anciennes lignes de profils
+  const existingProfilRows = document.querySelectorAll("tr.profil-row");
+  existingProfilRows.forEach((row) => row.remove());
+
+  // Créer les nouvelles lignes de profils
+  const profilsHTML = window.profilsDynList
+    .map(
+      (profil, idx) => `
+      <tr class="profil-row" data-profil-idx="${idx}" style="background:#f9fafb;">
+        <td style="padding-left:20px;">${renderModernSwitch(
+          `profil-check-${idx}`,
+          `profil-check-${idx}`,
+          true,
+          "Inclure ce profil",
+          "check-feature-profil"
+        )}</td>
+        <td style="padding-left:20px;">
+          <input type="text" value="${profil.nom.replace(/"/g, "&quot;")}" 
+                 class="profil-nom" data-idx="${idx}" 
+                 style="width:120px;border:1px solid #d1d5db;border-radius:4px;padding:4px;" 
+                 aria-label="Nom du profil" id="profil-nom-${idx}" name="profil-nom-${idx}" />
+          <button type="button" class="remove-profil-btn" data-idx="${idx}" 
+                  style="background:#e74c3c;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:0.8em;margin-left:5px;" 
+                  aria-label="Supprimer ce profil">×</button>
+        </td>
+        <td>
+          <input type="number" min="0" value="${profil.nb}" 
+                 class="profil-nb" data-idx="${idx}" 
+                 style="width:60px;border:1px solid #d1d5db;border-radius:4px;padding:4px;" 
+                 aria-label="Nombre d'utilisateurs pour ce profil" 
+                 id="profil-nb-${idx}" name="profil-nb-${idx}" data-unit="utilisateur" />
+        </td>
+        <td style="text-align:center;">
+          ${renderModernSwitch(
+            `profil-modif-${idx}`,
+            `profil-modif-${idx}`,
+            profil.ajoute || false,
+            "Modifier ce profil",
+            "profil-modif"
+          )}
+        </td>
+        <td style="color:#666;">30 min</td>
+        <td class="profil-sous-total" data-idx="${idx}">0</td>
+      </tr>
+    `
+    )
+    .join("");
+
+  // Ajouter la ligne de sous-total des profils
+  const sousProfilTotalHTML = `
+    <tr class="profil-row profil-total-row" style="background:#e5e7eb;font-weight:600;">
+      <td></td>
+      <td style="text-align:right;padding-right:10px;">Sous-total profils:</td>
+      <td></td>
+      <td></td>
+      <td style="color:#666;">30 min/profil</td>
+      <td id="profils-total-cell" style="font-weight:700;">0</td>
+    </tr>
   `;
 
-  // Listeners pour chaque champ du tableau profils
-  profilsDiv.querySelectorAll(".profil-nom").forEach((input) => {
+  // Insérer les nouvelles lignes après la ligne utilisateurs
+  utilisateursRow.insertAdjacentHTML(
+    "afterend",
+    profilsHTML + sousProfilTotalHTML
+  );
+
+  // Listeners pour chaque champ du tableau profils dans le tableau principal
+  document.querySelectorAll(".profil-nom").forEach((input) => {
     input.addEventListener("input", function () {
       window.profilsDynList[this.dataset.idx].nom = this.value;
     });
   });
 
-  profilsDiv.querySelectorAll(".profil-nb").forEach((input) => {
+  document.querySelectorAll(".profil-nb").forEach((input) => {
     input.addEventListener("input", function () {
       const nb = parseInt(this.value, 10) || 0;
       window.profilsDynList[this.dataset.idx].nb = nb;
@@ -496,29 +509,26 @@ function renderProfilsDyn() {
     });
   });
 
-  profilsDiv.querySelectorAll(".remove-profil-btn").forEach((btn) => {
+  document
+    .querySelectorAll(".modern-switch-input.check-feature-profil")
+    .forEach((chk) => {
+      chk.addEventListener("change", updateTotals);
+    });
+
+  document
+    .querySelectorAll(".modern-switch-input.profil-modif")
+    .forEach((chk) => {
+      chk.addEventListener("change", updateTotals);
+    });
+
+  // Listeners pour les boutons de suppression
+  document.querySelectorAll(".remove-profil-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
       window.profilsDynList.splice(this.dataset.idx, 1);
       renderProfilsDyn();
       updateTotals();
     });
   });
-
-  profilsDiv
-    .querySelectorAll(".modern-switch-input.check-feature-profil")
-    .forEach((chk) => {
-      chk.addEventListener("change", updateTotals);
-    });
-
-  profilsDiv
-    .querySelectorAll(".modern-switch-input.profil-modif")
-    .forEach((chk) => {
-      chk.addEventListener("change", updateTotals);
-    });
-
-  // Applique l'alternance de couleurs sur le tableau généré
-  const profilsTable = profilsDiv.querySelector("table");
-  // CSS gère maintenant automatiquement l'alternance des couleurs
 
   // Mettre à jour les totaux après le rendu des profils - appel synchrone
   if (typeof updateTotals === "function") {

@@ -642,24 +642,32 @@ button {
 /* Styles pour l'alternance statique des couleurs de lignes dans les tableaux */
 table.checklist-table tbody tr:nth-child(even):not(.theme-row),
 .cabinet-option-table tbody tr:nth-child(even):not(.theme-row),
-.profile-modal table tbody tr:nth-child(even):not(.theme-row),
-#profils-dyn-list table tbody tr:nth-child(even) {
+.profile-modal table tbody tr:nth-child(even):not(.theme-row) {
   background-color: #e4eaff;
 }
 
 table.checklist-table tbody tr:nth-child(odd):not(.theme-row),
 .cabinet-option-table tbody tr:nth-child(odd):not(.theme-row),
-.profile-modal table tbody tr:nth-child(odd):not(.theme-row),
-#profils-dyn-list table tbody tr:nth-child(odd) {
+.profile-modal table tbody tr:nth-child(odd):not(.theme-row) {
   background-color: #fefefe;
 }
 
 /* S'assurer que les lignes d'en-tête conservent leur style original */
 table.checklist-table thead tr,
 .cabinet-option-table thead tr,
-.profile-modal table thead tr,
-#profils-dyn-list table thead tr {
+.profile-modal table thead tr {
   background-color: #e5e7eb !important;
+}
+
+/* Styles pour les lignes de profils intégrées dans le tableau principal */
+tr.profil-row {
+  background-color: #f9fafb !important;
+  border-left: 3px solid #6366f1;
+}
+
+tr.profil-total-row {
+  background-color: #e5e7eb !important;
+  font-weight: 600;
 }
 
 /* Style pour les lignes thématiques qui doivent conserver leur style */
@@ -839,10 +847,9 @@ tfoot .temps-unitaire {
   white-space: nowrap;
 }
 
-/* Style spécifique pour les interrupteurs dans le tableau des profils */
-#profils-dyn-list .switch {
-  display: inline-block;
-  margin: 0 auto;
+/* Style spécifique pour les interrupteurs dans les lignes de profils */
+tr.profil-row .modern-switch-container {
+  transform: scale(0.9);
 }
 
 /* Styles pour le conteneur de recherche avec bouton de suppression */

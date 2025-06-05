@@ -395,11 +395,10 @@ function forceUpdateUsersCalculation() {
   console.log("🔧 Forcing complete users calculation update...");
 
   // Vérifier que les éléments nécessaires existent
-  const profilsDiv = document.getElementById("profils-dyn-list");
   const utilisateursNb = document.getElementById("utilisateurs-nb");
   const effectifInput = document.getElementById("effectif");
 
-  if (!profilsDiv || !utilisateursNb || !window.profilsDynList) {
+  if (!utilisateursNb || !window.profilsDynList) {
     console.warn("❌ Éléments manquants pour le calcul des utilisateurs");
     return false;
   }
@@ -447,24 +446,22 @@ function debugProfilesState() {
   console.log("🐛 DEBUG: État complet des profils");
   console.log("📋 window.profilsDynList:", window.profilsDynList);
 
-  const profilsDiv = document.getElementById("profils-dyn-list");
-  if (profilsDiv) {
-    console.log("🎯 Éléments DOM dans profils-dyn-list:");
+  // Vérifier les éléments de profil dans le tableau principal
+  console.log("🎯 Éléments DOM des profils dans le tableau principal:");
 
-    const checkboxes = profilsDiv.querySelectorAll(".check-feature-profil");
-    const numbers = profilsDiv.querySelectorAll(".profil-nb");
-    const modifs = profilsDiv.querySelectorAll(".profil-modif");
+  const checkboxes = document.querySelectorAll(".check-feature-profil");
+  const numbers = document.querySelectorAll(".profil-nb");
+  const modifs = document.querySelectorAll(".profil-modif");
 
-    console.log(`  - Checkboxes: ${checkboxes.length}`);
-    console.log(`  - Number inputs: ${numbers.length}`);
-    console.log(`  - Modif switches: ${modifs.length}`);
+  console.log(`  - Checkboxes: ${checkboxes.length}`);
+  console.log(`  - Number inputs: ${numbers.length}`);
+  console.log(`  - Modif switches: ${modifs.length}`);
 
-    numbers.forEach((input, idx) => {
-      console.log(
-        `  - Profil ${idx}: value="${input.value}", data-idx="${input.dataset.idx}"`
-      );
-    });
-  }
+  numbers.forEach((input, idx) => {
+    console.log(
+      `  - Profil ${idx}: value="${input.value}", data-idx="${input.dataset.idx}"`
+    );
+  });
 
   const utilisateursNb = document.getElementById("utilisateurs-nb");
   if (utilisateursNb) {

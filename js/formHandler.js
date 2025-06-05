@@ -572,7 +572,7 @@ function renderStandardRow(
 function renderUtilisateursRow(section, sectionId, item, idxGlobal) {
   return `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
     item.TEMPS || ""
-  }">
+  }" class="utilisateurs-main-row">
     <td>${renderModernSwitch(
       `feature-utilisateurs-${sectionId}-${idxGlobal}`,
       `feature-utilisateurs-${sectionId}-${idxGlobal}`,
@@ -583,7 +583,6 @@ function renderUtilisateursRow(section, sectionId, item, idxGlobal) {
     <td>
       Utilisateurs
       <br>
-      <div id="profils-dyn-list"></div>
       <div class="profil-buttons" style="display:flex;gap:10px;margin-top:8px;">
         <button type="button" id="add-profil-btn" class="action-btn">Ajouter un profil</button>
         <button type="button" id="profile-manager-btn-utilisateurs" class="action-btn">Gérer les profils</button>
@@ -645,7 +644,7 @@ function updateTotals() {
       );
 
       // Cas spécial : ligne Utilisateurs (par user)
-      if (tr.querySelector("#profils-dyn-list")) {
+      if (tr.classList.contains("utilisateurs-main-row")) {
         console.log("📊 Calcul des utilisateurs détecté");
         let utilisateursTotal = 0;
         let profilsTotalMinutes = 0;
@@ -679,8 +678,8 @@ function updateTotals() {
             profilsTotalMinutes += checked ? tempsProfil : 0;
 
             // Met à jour le sous-total de la ligne profil
-            const sousTotalCell = tr.querySelector(
-              `#profils-dyn-list .profil-sous-total[data-idx='${pidx}']`
+            const sousTotalCell = document.querySelector(
+              `.profil-sous-total[data-idx='${pidx}']`
             );
             if (sousTotalCell) {
               sousTotalCell.textContent =
@@ -744,9 +743,7 @@ function updateTotals() {
         }
 
         // Ajoute le sous-total profils à la cellule dédiée
-        const profilsTotalCell = tr.querySelector(
-          "#profils-dyn-list #profils-total-cell"
-        );
+        const profilsTotalCell = document.querySelector("#profils-total-cell");
         if (profilsTotalCell) {
           profilsTotalCell.textContent = profilsTotalMinutes
             ? formatMinutes(profilsTotalMinutes)

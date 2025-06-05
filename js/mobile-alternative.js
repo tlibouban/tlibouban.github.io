@@ -650,8 +650,8 @@ const mobileCardStyles = `
   margin-left: 0;
 }
 
-/* Améliorer l'espacement pour les profils dynamiques */
-.mobile-feature-card #profils-dyn-list {
+/* Améliorer l'espacement pour les lignes de profils intégrées */
+.mobile-feature-card tr.profil-row {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid #f3f4f6;
