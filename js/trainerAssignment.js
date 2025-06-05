@@ -94,12 +94,12 @@ class TrainerAssignment {
   /**
    * Trouve tous les formateurs disponibles pour une spécialité donnée
    * @param {string} specialty - Spécialité recherchée
-   * @returns {Array} - Liste des formateurs avec leurs informations
+   * @returns {Array} - Liste des formateurs avec leurs informations (dédoublonnés)
    */
   findTrainersBySpecialty(specialty) {
     if (!this.formationDatabase || !specialty) return [];
 
-    const trainers = [];
+    const trainersMap = new Map(); // Utiliser une Map pour éviter les doublons
 
     this.formationDatabase.forEach((zoneData) => {
       // Parcourir tous les formateurs de cette zone
@@ -109,17 +109,24 @@ class TrainerAssignment {
           const formateur = zoneData[formKey];
 
           if (formateur.Specialite === specialty) {
-            trainers.push({
-              ...formateur,
-              Zone: zoneData.Zone,
-              Departement: zoneData.Departement,
-              id: `${zoneData.Departement}-${formKey}`,
-            });
+            // Créer un ID unique basé sur nom + prénom + email
+            const uniqueId = `${formateur.Prenom}-${formateur.Nom}-${formateur.Email}`;
+
+            // Ajouter seulement si pas déjà présent (évite les doublons)
+            if (!trainersMap.has(uniqueId)) {
+              trainersMap.set(uniqueId, {
+                ...formateur,
+                Zone: zoneData.Zone,
+                Departement: zoneData.Departement,
+                id: uniqueId,
+              });
+            }
           }
         });
     });
 
-    return trainers;
+    // Convertir la Map en Array
+    return Array.from(trainersMap.values());
   }
 
   /**
