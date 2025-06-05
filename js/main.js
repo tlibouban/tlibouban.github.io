@@ -986,9 +986,27 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Attendre que le module soit initialisé
+    // Attendre que le module soit initialisé avec vérification plus fréquente
     if (!trainerAssignmentInstance.isLoaded) {
-      setTimeout(() => updateTrainerAssignment(clientData), 500);
+      let attempts = 0;
+      const maxAttempts = 10;
+      const checkAndRetry = () => {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          console.warn(
+            "⚠️ Timeout: Module d'affectation des formateurs non chargé après",
+            maxAttempts,
+            "tentatives"
+          );
+          return;
+        }
+        if (trainerAssignmentInstance.isLoaded) {
+          updateTrainerAssignment(clientData);
+        } else {
+          setTimeout(checkAndRetry, 100); // Vérification plus fréquente (100ms au lieu de 500ms)
+        }
+      };
+      setTimeout(checkAndRetry, 100);
       return;
     }
 
@@ -1105,6 +1123,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialiser le comportement sticky après chargement du DOM
   initStickyTriStateFilters();
+
+  // Exposer les fonctions nécessaires dans le scope global (après leur définition)
+  window.updateTrainerAssignment = updateTrainerAssignment;
+  window.getTrainerAssignmentInstance = getTrainerAssignmentInstance;
+  window.loadFormationsLogiciels = loadFormationsLogiciels;
 });
 
 // Variables globales pour les bases de données
@@ -1143,11 +1166,6 @@ function loadFormationsLogiciels() {
       window.formationsLogiciels = [];
     });
 }
-
-// Exposer les fonctions nécessaires dans le scope global
-window.updateTrainerAssignment = updateTrainerAssignment;
-window.getTrainerAssignmentInstance = getTrainerAssignmentInstance;
-window.loadFormationsLogiciels = loadFormationsLogiciels;
 
 // Fonction de test pour le warning CSM
 window.testCSMWarning = function (effectif) {
