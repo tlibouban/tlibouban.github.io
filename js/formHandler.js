@@ -649,6 +649,21 @@ function updateTotals() {
         let utilisateursTotal = 0;
         let profilsTotalMinutes = 0;
 
+        // Vérifier si les lignes de profils sont présentes dans le DOM
+        const profilRows = document.querySelectorAll("tr.profil-row");
+        if (
+          profilRows.length === 0 &&
+          window.profilsDynList &&
+          window.profilsDynList.length > 0
+        ) {
+          console.warn(
+            "⚠️ Lignes de profils manquantes, tentative de re-render"
+          );
+          if (typeof renderProfilsDyn === "function") {
+            renderProfilsDyn();
+          }
+        }
+
         if (window.profilsDynList) {
           console.log("👥 Profils trouvés:", window.profilsDynList.length);
           window.profilsDynList.forEach((profil, pidx) => {
@@ -657,14 +672,25 @@ function updateTotals() {
               `#profil-check-${pidx}`
             );
             const nbInput = document.querySelector(`#profil-nb-${pidx}`);
-            const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
+
+            // Pour le switch de modification, chercher d'abord l'input puis s'il n'existe pas, chercher l'input avec la classe
+            let modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
+            if (!modifSwitch) {
+              // Chercher par classe si l'ID ne fonctionne pas
+              modifSwitch = document.querySelector(
+                `input[id="profil-modif-${pidx}"]`
+              );
+            }
 
             const checked = checkboxProfil ? checkboxProfil.checked : false;
-            const nb = nbInput ? parseInt(nbInput.value, 10) : 0;
+            const nb = nbInput ? parseInt(nbInput.value, 10) || 0 : 0;
             const modif = modifSwitch ? modifSwitch.checked : false;
 
             console.log(
               `  Profil ${pidx} (${profil.nom}): checked=${checked}, nb=${nb}, modif=${modif}`
+            );
+            console.log(
+              `    Elements found: checkbox=${!!checkboxProfil}, nbInput=${!!nbInput}, modifSwitch=${!!modifSwitch}`
             );
 
             // Ajouter au total des utilisateurs seulement si le profil est coché
@@ -749,6 +775,19 @@ function updateTotals() {
             ? formatMinutes(profilsTotalMinutes)
             : "0";
         }
+
+        // Debug: Lister tous les éléments de profils présents
+        console.log("🔍 Debug éléments de profils présents:");
+        const allProfilCheckboxes = document.querySelectorAll(
+          '[id^="profil-check-"]'
+        );
+        const allProfilNbs = document.querySelectorAll('[id^="profil-nb-"]');
+        const allProfilModifs = document.querySelectorAll(
+          '[id^="profil-modif-"]'
+        );
+        console.log(`  - Checkboxes profils: ${allProfilCheckboxes.length}`);
+        console.log(`  - Inputs nombre: ${allProfilNbs.length}`);
+        console.log(`  - Switches modif: ${allProfilModifs.length}`);
 
         // Valider la cohérence des effectifs après le calcul
         validateProfilesVsEffectif();
