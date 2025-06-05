@@ -314,6 +314,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Afficher les informations de l'équipe formation
       displayFormationTeam(clientData);
 
+      // Afficher les options de déploiement basées sur l'effectif du client
+      displayDeploymentOptions(clientData);
+
       // Affectation intelligente des formateurs
       updateTrainerAssignment(clientData);
     } else {
