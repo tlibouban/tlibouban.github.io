@@ -987,9 +987,17 @@ function setAllSections(expanded) {
   document.querySelectorAll(".toggle-section-btn").forEach((btn) => {
     btn.setAttribute("aria-expanded", String(expanded));
 
-    // Mise à jour des classes pour l'animation
-    const sectionId = btn.id.replace("toggle-", "");
-    const content = document.getElementById(`content-${sectionId}`);
+    // Gestion spéciale pour la section déploiement SEPTEO
+    const sectionData = btn.getAttribute("data-section");
+    let content;
+
+    if (sectionData === "deploiement-septeo") {
+      content = document.getElementById("content-deploiement-septeo");
+    } else {
+      // Mise à jour des classes pour l'animation (logique existante)
+      const sectionId = btn.id.replace("toggle-", "");
+      content = document.getElementById(`content-${sectionId}`);
+    }
 
     if (!expanded) {
       btn.classList.add("collapsed");
