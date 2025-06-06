@@ -1,6 +1,6 @@
 # 📋 Checklist de Déploiement - Application SEPTEO
 
-**URL de production :** https://tlibouban.github.io
+**URL de production :** <https://tlibouban.github.io>
 
 Application web moderne pour la gestion et le paramétrage des déploiements des solutions logicielles SEPTEO (AIR, NEO, ADAPPS). Cette application repense fondamentalement la manière dont SEPTEO gère le paramétrage en partant du **parcours client** pour créer une expérience unifiée.
 
@@ -19,6 +19,7 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 ## ⚡ **Fonctionnalités Principales**
 
 ### 🔍 **Recherche Client Intelligente**
+
 - **Auto-complétion** avec base de données de 23,000+ clients
 - **Recherche en temps réel** avec tolérance aux fautes de frappe
 - **Matching intelligent** : recherche exacte et approximative
@@ -26,12 +27,14 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 - **Cache optimisé** pour des performances maximales
 
 ### 🎛️ **Système Tri-State Innovant**
+
 - **3 états** : Non-examiné (🔴) → Refusé (🔵) → Activé (🟢)
 - **Logique intuitive** : clic pour passer d'un état à l'autre
 - **Calculs automatiques** uniquement sur les éléments "activés"
 - **Filtrage avancé** par état pour une navigation optimisée
 
 ### 📱 **Interface Mobile-First**
+
 - **Design responsive** avec breakpoints Tailwind CSS
 - **Transformation automatique** des tableaux en cartes sur mobile
 - **Éléments touch-friendly** (taille minimale 44px)
@@ -39,6 +42,7 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 - **Performance mobile** avec lazy loading
 
 ### 🧮 **Moteur de Calcul Intelligent**
+
 - **Calculs en temps réel** : minutes → heures → journées
 - **Assignation automatique** des formateurs par proximité géographique
 - **Gestion des effectifs** avec calculs par groupes
@@ -46,6 +50,7 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 - **Warnings contextuels** (CSM nécessaire, formation à distance...)
 
 ### 👥 **Gestion d'Équipes Dynamique**
+
 - **Auto-assignation** des équipes commerciales par département
 - **Priorisation intelligente** des formateurs :
   1. Même département + spécialité exacte
@@ -55,6 +60,7 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 - **Contacts cliquables** (téléphone, email)
 
 ### 💾 **Système de Profils Avancé**
+
 - **Profils prédéfinis** (Associé, Collaborateur, Secrétaire...)
 - **Profils personnalisés** ajoutables dynamiquement
 - **Sauvegarde LocalStorage** pour la persistance
@@ -122,18 +128,21 @@ tlibouban.github.io/
 ## 📊 **Données et Sécurité**
 
 ### Base de Données Anonymisée
+
 - **23,407 clients/prospects** avec noms générés automatiquement
 - **Confidentialité totale** : aucune donnée réelle exposée
 - **Format réaliste** : noms de cabinets français authentiques
 - **Conformité RGPD** par design
 
 ### Équipes et Ressources
+
 - **14 formateurs** répartis par zones géographiques
 - **7 départements commerciaux** avec responsables
 - **200+ formations** avec temps unitaires précis
 - **Spécialités techniques** par logiciel (NEO/AIR/ADAPPS)
 
 ### Sécurité
+
 - **Traitement 100% client-side** : aucune donnée transmise
 - **Aucun backend** : pas de serveur à sécuriser
 - **Données sensibles exclues** du repository (.gitignore)
@@ -144,9 +153,10 @@ tlibouban.github.io/
 
 ### Accès Recommandé (Production)
 
-**🌐 URL officielle :** https://tlibouban.github.io
+**🌐 URL officielle :** <https://tlibouban.github.io>
 
 **Pourquoi utiliser GitHub Pages ?**
+
 - ✅ **Environnement identique à la production**
 - ✅ **Fonctionnalités complètes** (chargement JSON/TSV)
 - ✅ **Pas de problèmes CORS**
@@ -186,12 +196,14 @@ main2 (développement) → main (production)
 4. **Effectifs** : Calcul automatique des besoins formation
 
 ### Système de Filtres
+
 - **Par produit** : NEO, AIR, ADAPPS
 - **Par état** : Non-examiné, Refusé, Activé
 - **Recherche textuelle** : Dans tout le contenu
 - **Compteurs temps réel** : Affichage des résultats filtrés
 
 ### Affichage Multi-Format
+
 - **Heures** : Format HH:MM détaillé
 - **Journées** : Conversion automatique (7h = 1 jour)
 - **Demi-journées** : Pour les formations courtes
@@ -202,6 +214,7 @@ main2 (développement) → main (production)
 ## 📱 **Optimisations Mobile**
 
 ### Breakpoints Responsives (Tailwind CSS)
+
 | Taille écran    | Colonnes visibles         | Layout             |
 | --------------- | ------------------------- | ------------------ |
 | Mobile < 640px  | Checkbox, Nom, Sous-total | Cartes empilées    |
@@ -211,6 +224,7 @@ main2 (développement) → main (production)
 | Desktop 1280px+ | Toutes colonnes           | Tableau optimisé   |
 
 ### Améliorations UX Mobile
+
 - **Transformation automatique** tableaux → cartes
 - **Touch targets 44px minimum**
 - **Navigation gestures** optimisée
@@ -260,12 +274,14 @@ document.addEventListener('profileChanged', (event) => {
 ## 📈 **Performance et Métriques**
 
 ### Volumes de Données
+
 - **~23,000 clients** chargés efficacement
 - **200+ formations** avec calculs temps réel
 - **Interface fluide** même sur mobile bas de gamme
 - **Temps de recherche** < 1ms après chargement initial
 
 ### Optimisations Implémentées
+
 - **Debouncing** sur la recherche (500ms)
 - **Cache intelligent** des résultats
 - **Lazy loading** des sections
@@ -277,6 +293,7 @@ document.addEventListener('profileChanged', (event) => {
 ## 🛠️ **Structure des Fichiers**
 
 ### Fichiers CSS
+
 - `styles.css` - Styles principaux et thème SEPTEO
 - `mobile-optimized.css` - Design mobile-first responsive
 - `client-search.css` - Interface de recherche avec états visuels
@@ -284,6 +301,7 @@ document.addEventListener('profileChanged', (event) => {
 - `profile-modal.css` - Interface de gestion des profils
 
 ### Fichiers JavaScript (ordre de chargement)
+
 1. `vue.global.prod.js` - Framework Vue.js 3
 2. `data.js` - Données et constantes
 3. `utils.js` - Fonctions utilitaires
@@ -299,6 +317,7 @@ document.addEventListener('profileChanged', (event) => {
 13. `main.js` - Orchestrateur principal
 
 ### Fichiers de Données
+
 - `equipe_formation.json` - 14 formateurs avec spécialités
 - `equipe_commerciale.json` - 7 départements commerciaux
 - `equipe_technique.json` - Équipe technique support
@@ -311,6 +330,7 @@ document.addEventListener('profileChanged', (event) => {
 ## 🧪 **Tests et Validation**
 
 ### Tests Recommandés
+
 - **Recherche client** : Tester avec/sans zéros, recherche partielle
 - **Calculs automatiques** : Vérifier totaux avec différents effectifs
 - **Interface mobile** : Tester tous les breakpoints
@@ -319,6 +339,7 @@ document.addEventListener('profileChanged', (event) => {
 - **Assignation formateurs** : Vérifier la logique de proximité
 
 ### Navigateurs Supportés
+
 - **Chrome/Edge** 85+
 - **Firefox** 85+
 - **Safari** 12+ (iOS/macOS)
@@ -329,6 +350,7 @@ document.addEventListener('profileChanged', (event) => {
 ## 📋 **Fonctionnalités Détaillées**
 
 ### Module de Recherche Client
+
 - **Base de données** : 23,407 entrées anonymisées
 - **Recherche intelligente** : Exacte puis approximative
 - **Auto-complétion** en temps réel
@@ -337,6 +359,7 @@ document.addEventListener('profileChanged', (event) => {
 - **Cache performant** pour les recherches répétitives
 
 ### Système Tri-State Avancé
+
 - **États intuitifs** : Rouge → Bleu → Vert
 - **Logique métier** : Calculs uniquement sur "Activé"
 - **Filtrage dynamique** par état
@@ -344,6 +367,7 @@ document.addEventListener('profileChanged', (event) => {
 - **Animations fluides** entre les états
 
 ### Gestion des Profils Dynamiques
+
 - **Profils prédéfinis** : Associé, Collaborateur, Secrétaire, Expert-comptable
 - **Profils personnalisés** : Ajout/suppression à la volée
 - **Validation cohérence** : Total effectifs vs profils
@@ -351,6 +375,7 @@ document.addEventListener('profileChanged', (event) => {
 - **Interface modale** dédiée avec validation
 
 ### Assignation Formateurs Intelligente
+
 - **Algorithme de proximité** :
   1. Même département + spécialité
   2. Même département (toute spécialité)
@@ -361,6 +386,7 @@ document.addEventListener('profileChanged', (event) => {
 - **Gestion de charge** : Répartition équitable
 
 ### Interface Mobile Adaptative
+
 - **Mobile-first design** avec Tailwind CSS
 - **Transformation dynamique** : Tableaux → Cartes
 - **Touch optimization** : Zones de tap 44px minimum
@@ -372,6 +398,7 @@ document.addEventListener('profileChanged', (event) => {
 ## 🔄 **Évolutions et Roadmap**
 
 ### Améliorations Récentes
+
 - ✅ **Recherche client intelligente** avec base anonymisée
 - ✅ **Interface mobile responsive** avec cartes adaptatives
 - ✅ **Système tri-state** avec filtrage avancé
@@ -380,6 +407,7 @@ document.addEventListener('profileChanged', (event) => {
 - ✅ **Optimisations performance** mobile et desktop
 
 ### Prochaines Étapes (Roadmap)
+
 - 🔲 **API REST** pour remplacer les JSON statiques
 - 🔲 **Authentification** utilisateur et gestion des droits
 - 🔲 **Export PDF** natif avec mise en page personnalisée
@@ -389,6 +417,7 @@ document.addEventListener('profileChanged', (event) => {
 - 🔲 **Analytics avancées** et tableaux de bord
 
 ### Évolutions Long Terme
+
 - 🔮 **Backend Node.js** avec base de données relationnelle
 - 🔮 **Mobile App** React Native/Flutter
 - 🔮 **IA/ML** pour l'optimisation automatique des assignations
@@ -399,18 +428,21 @@ document.addEventListener('profileChanged', (event) => {
 ## 🤝 **Contribution et Développement**
 
 ### Standards de Code
+
 - **JavaScript ES6+** avec modules natifs
 - **CSS3** avec variables personnalisées
 - **HTML5** sémantique et accessible
 - **Commentaires** exhaustifs pour la maintenance
 
 ### Bonnes Pratiques
+
 - **Mobile-first** pour toutes les nouvelles fonctionnalités
 - **Performance** : optimisation continue
 - **Accessibilité** : respect WCAG 2.1
 - **Sécurité** : validation côté client, données anonymisées
 
 ### Git Workflow
+
 ```bash
 # Développement sur main2
 git checkout main2
@@ -430,13 +462,16 @@ git push origin feature/nouvelle-fonctionnalite
 ## 📞 **Support et Contact**
 
 ### Documentation Technique
+
 - **Présentation technique** : `PRESENTATION_TECHNIQUE.md`
 - **Recherche client** : `CLIENT-SEARCH.md`
 - **Améliorations mobiles** : `MOBILE-IMPROVEMENTS.md`
 - **Données anonymisées** : `ANONYMIZED-DATA.md`
 
 ### Support
+
 Pour toute question concernant cet outil :
+
 - **Équipe Formation SEPTEO**
 - **Documentation** : Repository GitHub
 - **Issues** : GitHub Issues pour les bugs/améliorations
@@ -445,28 +480,47 @@ Pour toute question concernant cet outil :
 
 ## 📄 **Licence et Copyright**
 
-MIT
+### **Licence MIT**
+
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+### **Open Source**
+
+Cette application est développée en **Open Source** sous licence MIT. Vous êtes libre de :
+
+- ✅ **Utiliser** le code pour vos projets personnels ou commerciaux
+- ✅ **Modifier** et adapter le code selon vos besoins
+- ✅ **Distribuer** des copies du code original ou modifié
+- ✅ **Contribuer** au projet via des Pull Requests
+
+### **Attribution**
+
+Développé initialement pour **SEPTEO** avec des données anonymisées pour respecter la confidentialité. Les contributions de la communauté sont les bienvenues pour améliorer et étendre les fonctionnalités.
 
 ---
 
 ## 🎯 **Résumé des Bénéfices**
 
 ### Pour les Commerciaux
+
 - **Gain de temps** : Recherche client automatique
 - **Réduction d'erreurs** : Calculs automatisés
 - **Meilleure visibilité** : Équipes assignées automatiquement
 
 ### Pour les Formateurs
+
 - **Assignation intelligente** par proximité et spécialité
 - **Planification optimisée** : Calculs automatiques de charge
 - **Interface mobile** pour les déplacements
 
 ### Pour les Clients
+
 - **Processus standardisé** : Expérience cohérente
 - **Délais prévisibles** : Calculs temps précis
 - **Suivi transparent** : Visibilité sur le déploiement
 
 ### Pour SEPTEO
+
 - **ROI mesurable** : 30% de réduction du temps de paramétrage
 - **Standardisation** : Processus uniformes entre équipes
 - **Évolutivité** : Architecture moderne extensible
