@@ -156,12 +156,18 @@ function renderChecklist() {
     }
     // Traitement standard pour les autres sections
     else {
-      // Table header
-      html += `<table class="checklist-table"><thead><tr><th>✔</th><th>Fonctionnalité</th><th>Nb</th><th>Unité</th><th>Temps unitaire</th><th>Sous-total</th></tr></thead><tbody>`;
+      // Table header - Ajouter colonnes Prix unitaire et Montant pour FORMATIONS
+      const isFormationsSection = isSectionNamed(section, "FORMATIONS");
+      if (isFormationsSection) {
+        html += `<table class="checklist-table"><thead><tr><th>✔</th><th>Fonctionnalité</th><th>Nb</th><th>Unité</th><th>Temps unitaire</th><th>Sous-total</th><th>Prix unitaire</th><th>Montant</th></tr></thead><tbody>`;
+      } else {
+        html += `<table class="checklist-table"><thead><tr><th>✔</th><th>Fonctionnalité</th><th>Nb</th><th>Unité</th><th>Temps unitaire</th><th>Sous-total</th></tr></thead><tbody>`;
+      }
 
       let idxGlobal = 0;
       sousSectionsKeys.forEach((ss) => {
-        html += `<tr class="subsection-header-row"><td colspan="6"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></td></tr>`;
+        const colspanValue = isFormationsSection ? "8" : "6";
+        html += `<tr class="subsection-header-row"><td colspan="${colspanValue}"><h3 style="margin:18px 0 8px 0;font-size:1.08em;color:#2e4a9e;">${ss}</h3></td></tr>`;
         sousSections[ss].forEach((item) => {
           // Ignorer la ligne spécifique avec data-section="PARAMÉTRAGE" et data-idx="1"
           if (isSectionNamed(section, "PARAMÉTRAGE") && idxGlobal === 1) {
@@ -193,7 +199,8 @@ function renderChecklist() {
               item,
               idxGlobal,
               unit,
-              hasNumber
+              hasNumber,
+              isFormationsSection
             );
           }
           idxGlobal++;
@@ -459,13 +466,47 @@ function renderCabinetColumn(
 /**
  * Génère le HTML pour une ligne standard
  */
+/**
+ * Obtient le prix d'une formation basé sur son nom
+ */
+function getFormationPrice(formationName) {
+  if (!window.formationsLogiciels) return null;
+
+  // Nettoyer le nom de la formation pour la correspondance
+  const cleanName = formationName
+    .replace(/^\[PACKS\] |^\[MODULE\] /, "")
+    .trim()
+    .toUpperCase();
+
+  // Chercher dans les formations logiciels
+  const formation = window.formationsLogiciels.find((f) => {
+    const fNom = f.nom.toUpperCase();
+    // Essayer différentes correspondances
+    return (
+      fNom.includes(cleanName) ||
+      cleanName.includes(fNom) ||
+      fNom === cleanName ||
+      // Correspondances spéciales
+      (cleanName.includes("GESTION DE DOSSIER") &&
+        fNom.includes("GESTION DE DOSSIERS")) ||
+      (cleanName.includes("PASSER DE AIR") && fNom.includes("PASSER DE AIR")) ||
+      (cleanName.includes("BRAIN") && fNom.includes("SEPTEO BRAIN")) ||
+      (cleanName.includes("ACTIONS LIÉES") && fNom.includes("ACTIONS LI")) ||
+      (cleanName.includes("SECRÉTARIAT") && fNom.includes("SECRÉTARIAT"))
+    );
+  });
+
+  return formation ? formation.prix_ht : "N/A";
+}
+
 function renderStandardRow(
   section,
   sectionId,
   item,
   idxGlobal,
   unit,
-  hasNumber
+  hasNumber,
+  isFormationsSection = false
 ) {
   const isNumberType = item.TYPE === "number";
   const isSwitchType = item.TYPE === "switch";
@@ -497,9 +538,13 @@ function renderStandardRow(
 
   if (isSwitchType) {
     // Créer une ligne avec un switch on/off (similaire à CABINET OPTION)
-    return `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
+    const prixUnitaire = isFormationsSection
+      ? getFormationPrice(item.FONCTIONNALITES)
+      : null;
+
+    let switchRow = `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
       item.TEMPS || ""
-    }">
+    }" data-prix-unitaire="${prixUnitaire || ""}">
       <td>${renderModernSwitch(
         `feature-${sectionId}-${idxGlobal}`,
         `feature-${sectionId}-${idxGlobal}`,
@@ -524,13 +569,26 @@ function renderStandardRow(
       <td></td>
       <td></td>
       <td>${item.TEMPS ? item.TEMPS.slice(0, 5) : ""}</td>
-      <td class=\"sous-total\">${hideSubtotal ? "N/A" : "0"}</td>
-    </tr>`;
+      <td class=\"sous-total\">${hideSubtotal ? "N/A" : "0"}</td>`;
+
+    // Ajouter colonnes Prix unitaire et Montant pour FORMATIONS
+    if (isFormationsSection) {
+      switchRow += `
+      <td class="prix-unitaire">${prixUnitaire || "N/A"}</td>
+      <td class="montant-formation">N/A</td>`;
+    }
+
+    switchRow += `</tr>`;
+    return switchRow;
   } else {
     // Ligne standard ou avec nombre
-    return `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
+    const prixUnitaire = isFormationsSection
+      ? getFormationPrice(item.FONCTIONNALITES)
+      : null;
+
+    let baseRow = `<tr data-section="${section}" data-idx="${idxGlobal}" data-temps="${
       item.TEMPS || ""
-    }">
+    }" data-prix-unitaire="${prixUnitaire || ""}">
       <td>${renderModernSwitch(
         `feature-${sectionId}-${idxGlobal}`,
         `feature-${sectionId}-${idxGlobal}`,
@@ -554,15 +612,24 @@ function renderStandardRow(
       </td>
       <td>${
         hasNumber || isNumberType
-          ? `<input type=\"number\" min=\"0\" value=\"${defaultValue}\" class=\"feature-nb\" style=\"width:60px;\" aria-label=\"Quantité\" id=\"nb-${sectionId}-${idxGlobal}\" name=\"nb-${sectionId}-${idxGlobal}\" data-unit="${uniteSingulier}" />`
+          ? `<input type=\"number\" min=\"0\" value=\"${defaultValue}\" class=\"feature-nb formation-nb\" style=\"width:60px;\" aria-label=\"Quantité\" id=\"nb-${sectionId}-${idxGlobal}\" name=\"nb-${sectionId}-${idxGlobal}\" data-unit="${uniteSingulier}" />`
           : ""
       }</td>
       <td class="unite-cell" data-unit-base="${uniteSingulier}">${
       uniteSingulier ? accordUnit(defaultValue, uniteSingulier) : ""
     }</td>
       <td>${item.TEMPS ? item.TEMPS.slice(0, 5) : ""}</td>
-      <td class=\"sous-total\">0</td>
-    </tr>`;
+      <td class=\"sous-total\">0</td>`;
+
+    // Ajouter colonnes Prix unitaire et Montant pour FORMATIONS
+    if (isFormationsSection) {
+      baseRow += `
+      <td class="prix-unitaire">${prixUnitaire || "N/A"}</td>
+      <td class="montant-formation">0 €</td>`;
+    }
+
+    baseRow += `</tr>`;
+    return baseRow;
   }
 }
 
@@ -927,6 +994,9 @@ function updateTotals() {
   if (oldElement) {
     oldElement.textContent = formatMinutes(totalGeneral);
   }
+
+  // Mettre à jour les montants des formations
+  updateFormationMontants();
 }
 
 // =====================
@@ -938,6 +1008,12 @@ function addAllInputListeners() {
   document.querySelectorAll(".feature-nb, .profil-nb").forEach((el) => {
     el.removeEventListener("input", updateTotals); // évite les doublons
     el.addEventListener("input", updateTotals);
+
+    // Ajouter listener spécial pour les formations pour calculer le montant
+    if (el.classList.contains("formation-nb")) {
+      el.removeEventListener("input", updateFormationMontants);
+      el.addEventListener("input", updateFormationMontants);
+    }
   });
 
   // Pour les anciens switches s'il en reste (profils, utilisateurs, etc.)
@@ -1085,6 +1161,43 @@ function renderModernSwitch(
 
   // Utiliser le nouveau système tri-state
   return renderTriStateSwitch(id, name, initialState, ariaLabel, cssClass);
+}
+
+// =====================
+// Fonction pour calculer les montants des formations
+// =====================
+function updateFormationMontants() {
+  // Trouver toutes les lignes de formations
+  document.querySelectorAll('tr[data-section="FORMATIONS"]').forEach((row) => {
+    const nbInput = row.querySelector(".formation-nb");
+    const montantCell = row.querySelector(".montant-formation");
+    const switchElement = row.querySelector(".tri-state-modern-switch");
+    const prixUnitaire = row.getAttribute("data-prix-unitaire");
+
+    if (!nbInput || !montantCell || !prixUnitaire || prixUnitaire === "N/A") {
+      if (montantCell) montantCell.textContent = "N/A";
+      return;
+    }
+
+    // Vérifier si le switch est activé
+    const isActivated = switchElement
+      ? isTriStateActivated(switchElement)
+      : false;
+
+    if (!isActivated) {
+      montantCell.textContent = "0 €";
+      return;
+    }
+
+    const nb = parseInt(nbInput.value, 10) || 0;
+
+    // Extraire le nombre du prix (enlever le symbole € et les caractères non numériques)
+    const prixMatch = prixUnitaire.match(/(\d+)/);
+    const prix = prixMatch ? parseInt(prixMatch[1], 10) : 0;
+
+    const montant = nb * prix;
+    montantCell.textContent = montant > 0 ? `${montant} €` : "0 €";
+  });
 }
 
 // =====================
@@ -1238,3 +1351,6 @@ function updateFormationQuantitiesBasedOnEffectif() {
     `📊 Quantités mises à jour: ${effectif} personnes → ${unitesNecessaires} unités (par groupe de 8) - ${elementsUpdated} éléments modifiés`
   );
 }
+
+// Exposer updateFormationMontants globalement
+window.updateFormationMontants = updateFormationMontants;

@@ -109,6 +109,12 @@ function cycleTriState(element, clickType = "left") {
   if (typeof updateTotals === "function") {
     updateTotals();
   }
+
+  // Mettre à jour les montants des formations si disponible
+  if (typeof updateFormationMontants === "function") {
+    updateFormationMontants();
+  }
+
   updateTriStateCounters();
 
   // Réappliquer le filtre actif s'il y en a un
