@@ -53,14 +53,6 @@
           <h1>
             <span id="main-title">Checklist du déploiement</span>
           </h1>
-          <div class="time-displays">
-            <div class="time-display" id="heures-display">0h 00min</div>
-            <div class="time-display" id="journees-display">0 journée</div>
-            <div class="time-display" id="demi-journees-display">
-              0 demi-journée
-            </div>
-            <div class="time-display" id="formateurs-display">0 formateur</div>
-          </div>
         </div>
       </header>
 
@@ -197,41 +189,59 @@
               </button>
             </div>
 
-            <!-- Filtres tri-state -->
+            <!-- Filtres tri-state avec affichage des temps -->
             <div class="tri-state-filters">
-              <button
-                type="button"
-                class="tri-state-filter-btn"
-                data-state="not-examined"
-                id="filter-not-examined"
-                title="Afficher les éléments non-examinés"
-              >
-                <span class="filter-icon not-examined"></span>
-                Non-examinées
-                <span class="filter-count" id="count-not-examined">(0)</span>
-              </button>
-              <button
-                type="button"
-                class="tri-state-filter-btn"
-                data-state="rejected"
-                id="filter-rejected"
-                title="Afficher les éléments refusés"
-              >
-                <span class="filter-icon rejected"></span>
-                Refusées
-                <span class="filter-count" id="count-rejected">(0)</span>
-              </button>
-              <button
-                type="button"
-                class="tri-state-filter-btn"
-                data-state="activated"
-                id="filter-activated"
-                title="Afficher les éléments activés"
-              >
-                <span class="filter-icon activated"></span>
-                Activées
-                <span class="filter-count" id="count-activated">(0)</span>
-              </button>
+              <div class="filters-row">
+                <div class="tri-state-buttons">
+                  <button
+                    type="button"
+                    class="tri-state-filter-btn"
+                    data-state="not-examined"
+                    id="filter-not-examined"
+                    title="Afficher les éléments non-examinés"
+                  >
+                    <span class="filter-icon not-examined"></span>
+                    Non-examinées
+                    <span class="filter-count" id="count-not-examined"
+                      >(0)</span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="tri-state-filter-btn"
+                    data-state="rejected"
+                    id="filter-rejected"
+                    title="Afficher les éléments refusés"
+                  >
+                    <span class="filter-icon rejected"></span>
+                    Refusées
+                    <span class="filter-count" id="count-rejected">(0)</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="tri-state-filter-btn"
+                    data-state="activated"
+                    id="filter-activated"
+                    title="Afficher les éléments activés"
+                  >
+                    <span class="filter-icon activated"></span>
+                    Activées
+                    <span class="filter-count" id="count-activated">(0)</span>
+                  </button>
+                </div>
+                <div class="time-displays">
+                  <div class="time-display" id="heures-display">0h 00min</div>
+                  <div class="time-display" id="journees-display">
+                    0 journée
+                  </div>
+                  <div class="time-display" id="demi-journees-display">
+                    0 demi-journée
+                  </div>
+                  <div class="time-display" id="formateurs-display">
+                    0 formateur
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Placeholder pour maintenir l'espace en mode sticky -->

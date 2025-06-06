@@ -61,33 +61,38 @@ body {
   font-weight: 700;
 }
 
+/* Styles pour les time-displays dans leur nouveau contexte sticky */
 .time-displays {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .time-display {
-  font-size: 1.1rem;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  padding: 6px 16px;
+  font-size: 0.9rem;
+  color: #1a2956;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-radius: 6px;
+  padding: 4px 12px;
   font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  min-width: 200px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #90caf9;
+  min-width: 120px;
   text-align: center;
   white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #heures-display {
-  background: rgba(255, 255, 255, 0.25);
-  font-size: 1.3rem;
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  color: white;
+  font-size: 1rem;
   font-weight: 700;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid #1565c0;
+  min-width: 140px;
 }
 
 .septeo-logo {
@@ -114,15 +119,20 @@ body {
     width: 100%;
   }
 
+  .filters-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
   .time-displays {
-    align-items: center;
+    justify-content: center;
     width: 100%;
   }
 
   .time-display {
     min-width: auto;
-    width: 100%;
-    max-width: 300px;
+    flex: 1;
+    max-width: 150px;
   }
 
   .septeo-logo {
@@ -1601,13 +1611,27 @@ tr:has(h3) h3,
 
 /* ===== FILTRES TRI-STATE DANS LE HEADER ===== */
 .tri-state-filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
   margin: 12px 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   z-index: 100;
+}
+
+/* Structure pour la ligne des filtres */
+.filters-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Conteneur des boutons tri-state */
+.tri-state-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* État sticky */
@@ -1671,17 +1695,37 @@ tr:has(h3) h3,
   transform: scale(1);
 }
 
-/* Centrer les boutons en mode sticky */
-.tri-state-filters.sticky {
+/* Adaptation de la structure en mode sticky */
+.tri-state-filters.sticky .filters-row {
   justify-content: center;
   align-items: center;
+  gap: 12px;
+}
+
+.tri-state-filters.sticky .time-displays {
+  gap: 6px;
+}
+
+.tri-state-filters.sticky .time-display {
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  min-width: 100px;
+}
+
+.tri-state-filters.sticky #heures-display {
+  font-size: 0.9rem;
+  min-width: 120px;
 }
 
 /* Responsive pour mobile en mode sticky */
 @media (max-width: 768px) {
   .tri-state-filters.sticky {
     padding: 8px 12px;
-    gap: 6px;
+  }
+
+  .tri-state-filters.sticky .filters-row {
+    flex-direction: column;
+    gap: 8px;
   }
 
   .tri-state-filters.sticky .tri-state-filter-btn {
@@ -1695,8 +1739,24 @@ tr:has(h3) h3,
     transform: scale(0.95);
   }
 
+  .tri-state-filters.sticky .time-displays {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .tri-state-filters.sticky .time-display {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    min-width: 80px;
+  }
+
+  .tri-state-filters.sticky #heures-display {
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+
   .tri-state-filters-placeholder.active {
-    height: 50px;
+    height: 80px;
   }
 }
 
