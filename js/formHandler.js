@@ -978,6 +978,73 @@ function addAllInputListeners() {
       updateFormationQuantitiesBasedOnEffectif
     );
   }
+
+  // Générer la section DEPLOIEMENT
+  renderDeploymentSection();
+}
+
+// Fonction pour générer la section DEPLOIEMENT dynamiquement
+function renderDeploymentSection() {
+  const container = document.getElementById("checklist-sections");
+  if (!container) return;
+
+  const sectionId = "DEPLOIEMENT";
+
+  // Insérer la section DEPLOIEMENT en premier (avant les autres sections)
+  let html = `<div class="section" id="section-${sectionId}">`;
+  html += `<h2 class="section-title">
+    <button type="button" class="toggle-section-btn" id="toggle-${sectionId}" aria-label="Replier ou déplier la section" aria-expanded="true"></button>
+    VOTRE DEPLOIEMENT SEPTEO SOLUTIONS AVOCATS
+    <span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span>
+  </h2>`;
+  html += `<div class="section-content" id="content-${sectionId}">`;
+
+  // Contenu de la section avec les différentes équipes
+  html += `
+    <!-- Équipe commerciale -->
+    <div id="commercial-team-info" class="commercial-team-container" style="display: none"></div>
+
+    <!-- Équipe CSM -->
+    <div id="csm-team-info" class="csm-team-container" style="display: none"></div>
+
+    <!-- Équipe technique -->
+    <div id="technical-team-info" class="technical-team-container" style="display: none"></div>
+
+    <!-- Équipe formation -->
+    <div id="formation-team-info" class="formation-team-container" style="display: none"></div>
+
+    <!-- Affectation automatique des formateurs -->
+    <div id="trainer-assignment-info" class="trainer-assignment-container" style="display: none"></div>
+
+    <!-- Options de déploiement -->
+    <div id="deployment-options" class="deployment-options-container" style="display: none"></div>
+  `;
+
+  html += `</div></div>`;
+
+  // Insérer au début du container pour que ce soit la première section
+  container.insertAdjacentHTML("afterbegin", html);
+
+  // Ajouter la logique de toggle après un délai pour s'assurer que le DOM est prêt
+  setTimeout(() => {
+    const btn = document.getElementById(`toggle-${sectionId}`);
+    const content = document.getElementById(`content-${sectionId}`);
+    if (btn && content) {
+      btn.onclick = function () {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!expanded));
+
+        // Utiliser les nouvelles classes pour l'animation
+        if (expanded) {
+          btn.classList.add("collapsed");
+          content.classList.add("collapsed");
+        } else {
+          btn.classList.remove("collapsed");
+          content.classList.remove("collapsed");
+        }
+      };
+    }
+  }, 0);
 }
 
 // =====================
@@ -987,17 +1054,9 @@ function setAllSections(expanded) {
   document.querySelectorAll(".toggle-section-btn").forEach((btn) => {
     btn.setAttribute("aria-expanded", String(expanded));
 
-    // Gestion spéciale pour la section déploiement SEPTEO
-    const sectionData = btn.getAttribute("data-section");
-    let content;
-
-    if (sectionData === "deploiement-septeo") {
-      content = document.getElementById("content-deploiement-septeo");
-    } else {
-      // Mise à jour des classes pour l'animation (logique existante)
-      const sectionId = btn.id.replace("toggle-", "");
-      content = document.getElementById(`content-${sectionId}`);
-    }
+    // Mise à jour des classes pour l'animation
+    const sectionId = btn.id.replace("toggle-", "");
+    const content = document.getElementById(`content-${sectionId}`);
 
     if (!expanded) {
       btn.classList.add("collapsed");

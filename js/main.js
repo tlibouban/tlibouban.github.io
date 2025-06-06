@@ -46,56 +46,14 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.setAttribute("aria-expanded", "true");
       btn.classList.remove("collapsed");
 
-      // Gestion spéciale pour la section déploiement SEPTEO
-      const sectionData = btn.getAttribute("data-section");
-      let content;
-
-      if (sectionData === "deploiement-septeo") {
-        content = document.getElementById("content-deploiement-septeo");
-      } else {
-        content = document.getElementById(
-          `content-${btn.id.replace("toggle-", "")}`
-        );
-      }
+      const content = document.getElementById(
+        `content-${btn.id.replace("toggle-", "")}`
+      );
 
       if (content) {
         content.classList.remove("collapsed");
       }
-
-      // Ajouter l'event listener pour le clic
-      btn.addEventListener("click", function () {
-        toggleSection(this);
-      });
     });
-  }
-
-  // Fonction pour gérer le toggle d'une section
-  function toggleSection(btn) {
-    const isExpanded = btn.getAttribute("aria-expanded") === "true";
-    const sectionData = btn.getAttribute("data-section");
-    let content;
-
-    if (sectionData === "deploiement-septeo") {
-      content = document.getElementById("content-deploiement-septeo");
-    } else {
-      content = document.getElementById(
-        `content-${btn.id.replace("toggle-", "")}`
-      );
-    }
-
-    if (content) {
-      if (isExpanded) {
-        // Replier la section
-        btn.setAttribute("aria-expanded", "false");
-        btn.classList.add("collapsed");
-        content.classList.add("collapsed");
-      } else {
-        // Déplier la section
-        btn.setAttribute("aria-expanded", "true");
-        btn.classList.remove("collapsed");
-        content.classList.remove("collapsed");
-      }
-    }
   }
 
   // Réattacher les gestionnaires d'événements après le rendu
