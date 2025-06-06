@@ -328,6 +328,33 @@ table.checklist-table tr:last-child td {
 .scenario-row > div {
   flex: 1;
 }
+
+/* Styles spécifiques pour le champ département */
+#departement {
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#departement:focus {
+  background-color: #f8f9fa;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.25);
+}
+
+#departement::placeholder {
+  font-weight: 400;
+  color: #999;
+}
+
+/* Validation visuelle pour le département */
+#departement:valid {
+  border-color: #28a745;
+}
+
+#departement:invalid:not(:placeholder-shown) {
+  border-color: #dc3545;
+}
 @media (max-width: 700px) {
   .container {
     padding: 18px 4vw;

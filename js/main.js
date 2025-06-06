@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const projetSelect = document.getElementById("projet");
   const sensSelect = document.getElementById("sens");
   const clientInput = document.getElementById("client");
+  const departementInput = document.getElementById("departement");
   const logicielAutreContainer = document.getElementById(
     "logiciel-autre-container"
   );
@@ -198,19 +199,49 @@ document.addEventListener("DOMContentLoaded", function () {
     updateOptionsBasedOnClient();
   });
 
+  // Écouter les changements dans le champ département
+  if (departementInput) {
+    departementInput.addEventListener("input", function () {
+      // Mettre à jour les équipes basées sur le nouveau département
+      const clientName = clientInput.value;
+      const clientData = findClientInDatabase(clientName);
+
+      // Mettre à jour toutes les équipes
+      displayCommercialTeam(clientData);
+      displayFormationTeam(clientData);
+      displayTechnicalTeam(clientData);
+
+      // Mettre à jour l'affectation des formateurs si applicable
+      updateTrainerAssignment(clientData);
+    });
+  }
+
+  // Fonction helper pour obtenir le département effectif
+  function getEffectiveDepartement(clientData) {
+    // Priorité : département du client trouvé, sinon département saisi manuellement
+    if (clientData && clientData.departement) {
+      return clientData.departement;
+    }
+
+    // Sinon, utiliser le département saisi manuellement
+    const manualDepartement = departementInput
+      ? departementInput.value.trim()
+      : "";
+    return manualDepartement || null;
+  }
+
   // Fonction pour afficher les informations de l'équipe commerciale
   function displayCommercialTeam(clientData) {
     // Utiliser la div existante pour les informations commerciales
     let commercialDiv = document.getElementById("commercial-team-info");
 
-    if (!clientData || !clientData.departement) {
+    const departement = getEffectiveDepartement(clientData);
+    if (!departement) {
       commercialDiv.style.display = "none";
       return;
     }
 
-    const commercialData = getCommercialDataByDepartment(
-      clientData.departement
-    );
+    const commercialData = getCommercialDataByDepartment(departement);
 
     if (!commercialData) {
       commercialDiv.style.display = "none";
@@ -288,8 +319,11 @@ document.addEventListener("DOMContentLoaded", function () {
         `🔍 Client trouvé: ${clientData.nom} (${clientData.type}) - ERP: ${clientData.erp} - Effectif: ${clientData.effectif} - Dép: ${clientData.departement}`
       );
 
-      // Remplir le champ effectif
+      // Remplir les champs effectif et département
       effectifInput.value = clientData.effectif;
+      if (departementInput) {
+        departementInput.value = clientData.departement || "";
+      }
 
       // Mettre à jour les quantités de formations basées sur l'effectif
       if (typeof updateFormationQuantitiesBasedOnEffectif === "function") {
@@ -325,6 +359,10 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       // Client non trouvé dans la base, réinitialiser effectif et revenir aux options standard
       effectifInput.value = "";
+      if (departementInput) {
+        // Ne pas vider le département - permettre la saisie manuelle pour nouveaux clients
+        // departementInput.value = "";
+      }
       updateProjetOptionsStandard();
       updateLogicielOptionsStandard();
       logicielAutreContainer.classList.remove("hidden");
@@ -851,12 +889,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Utiliser la div existante pour les informations de formation
     let formationDiv = document.getElementById("formation-team-info");
 
-    if (!clientData || !clientData.departement) {
+    const departement = getEffectiveDepartement(clientData);
+    if (!departement) {
       formationDiv.style.display = "none";
       return;
     }
 
-    const formationData = getFormationDataByDepartment(clientData.departement);
+    const formationData = getFormationDataByDepartment(departement);
 
     if (!formationData) {
       formationDiv.style.display = "none";
@@ -1091,15 +1130,10 @@ document.addEventListener("DOMContentLoaded", function () {
         (item) => item.Type === "TERRAIN"
       );
 
-      if (
-        clientData &&
-        clientData.departement &&
-        terrainTechnicians.length > 0
-      ) {
+      const departement = getEffectiveDepartement(clientData);
+      if (departement && terrainTechnicians.length > 0) {
         // Essayer de trouver un technicien dans la même zone que le commercial
-        const commercialData = getCommercialDataByDepartment(
-          clientData.departement
-        );
+        const commercialData = getCommercialDataByDepartment(departement);
         if (commercialData && commercialData.Zone) {
           const zoneTechnician = terrainTechnicians.find(
             (item) => item.Zone === commercialData.Zone
