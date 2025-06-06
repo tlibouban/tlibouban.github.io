@@ -445,9 +445,7 @@ Pour toute question concernant cet outil :
 
 ## 📄 **Licence et Copyright**
 
-© **SEPTEO** - Tous droits réservés
-
-Cette application est développée pour un usage interne SEPTEO et contient des données propriétaires anonymisées. Le code source est disponible pour l'équipe de développement et les parties prenantes autorisées.
+MIT
 
 ---
 
