@@ -1861,6 +1861,140 @@ tr:has(h3) h3,
   }
 }
 
+/* ===== ÉQUIPE CSM ===== */
+.csm-team-container {
+  margin: 16px 0;
+  padding: 16px;
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  border: 1px solid #9c27b0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(156, 39, 176, 0.15);
+}
+
+.csm-team-content h4 {
+  color: #6a1b9a;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.csm-team-content h4::before {
+  content: "🎯";
+  font-size: 1.2rem;
+}
+
+.csm-team-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.csm-item {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(156, 39, 176, 0.2);
+  min-width: 280px;
+  flex: 1;
+}
+
+.csm-item strong {
+  color: #4a148c;
+  font-weight: 600;
+}
+
+.csm-specialty {
+  display: inline-block;
+  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.csm-email {
+  color: #7b1fa2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.csm-email:hover {
+  text-decoration: underline;
+}
+
+/* ===== ÉQUIPE TECHNIQUE ===== */
+.technical-team-container {
+  margin: 16px 0;
+  padding: 16px;
+  background: linear-gradient(135deg, #e8f4f8 0%, #b3e5fc 100%);
+  border: 1px solid #0277bd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(2, 119, 189, 0.15);
+}
+
+.technical-team-content h4 {
+  color: #01579b;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.technical-team-content h4::before {
+  content: "🔧";
+  font-size: 1.2rem;
+}
+
+.technical-team-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.technical-item {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(2, 119, 189, 0.2);
+  min-width: 280px;
+  flex: 1;
+}
+
+.technical-item strong {
+  color: #0d47a1;
+  font-weight: 600;
+}
+
+.technical-type {
+  display: inline-block;
+  background: linear-gradient(135deg, #0277bd 0%, #0288d1 100%);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.technical-email {
+  color: #0277bd;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.technical-email:hover {
+  text-decoration: underline;
+}
+
 /* ===== AFFECTATION INTELLIGENTE DES FORMATEURS ===== */
 .trainer-assignment-container {
   margin: 16px 0;

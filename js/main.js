@@ -314,6 +314,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Afficher les informations de l'équipe formation
       displayFormationTeam(clientData);
 
+      // Afficher l'équipe technique (toujours affichée)
+      displayTechnicalTeam(clientData);
+
       // Afficher les options de déploiement basées sur l'effectif du client
       displayDeploymentOptions(clientData);
 
@@ -328,6 +331,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Masquer les informations commerciales et formation
       displayCommercialTeam(null);
+
+      // Masquer l'équipe CSM
+      displayCSMTeam(false);
+
+      // Afficher l'équipe technique (toujours affichée)
+      displayTechnicalTeam(null);
 
       // Afficher les options de déploiement basées sur l'effectif saisi manuellement
       displayDeploymentOptions(null);
@@ -923,7 +932,7 @@ document.addEventListener("DOMContentLoaded", function () {
             Effectif supérieur à 20 personnes - La présence d'un CSM (Customer Success Manager) peut être nécessaire.
           </span>
           <label class="csm-option">
-            <input type="checkbox" id="csm-required"> Ajouter un CSM au déploiement
+            <input type="checkbox" id="csm-required" onchange="handleCSMCheckboxChange()"> Ajouter un CSM au déploiement
           </label>
         </div>
       `;
@@ -949,9 +958,265 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // =====================
+  // Gestion des équipes CSM et Technique
+  // =====================
+
+  // Variables pour stocker les données des équipes
+  let equipeCSMData = [];
+  let equipeTechniqueData = [];
+
+  // Fonction pour charger les données de l'équipe CSM
+  async function loadCSMDatabase() {
+    try {
+      const response = await fetch("json/equipe_CSM.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      equipeCSMData = await response.json();
+      console.log(
+        "✅ Base de données CSM chargée:",
+        equipeCSMData.length,
+        "entrées"
+      );
+    } catch (error) {
+      console.error("❌ Erreur lors du chargement de la base CSM:", error);
+      equipeCSMData = [];
+    }
+  }
+
+  // Fonction pour charger les données de l'équipe technique
+  async function loadTechnicalDatabase() {
+    try {
+      const response = await fetch("json/equipe_technique.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      equipeTechniqueData = await response.json();
+      console.log(
+        "✅ Base de données technique chargée:",
+        equipeTechniqueData.length,
+        "entrées"
+      );
+    } catch (error) {
+      console.error(
+        "❌ Erreur lors du chargement de la base technique:",
+        error
+      );
+      equipeTechniqueData = [];
+    }
+  }
+
+  // Fonction pour afficher l'équipe CSM
+  function displayCSMTeam(showCSM = false) {
+    let csmDiv = document.getElementById("csm-team-info");
+
+    if (!showCSM || equipeCSMData.length === 0) {
+      csmDiv.style.display = "none";
+      return;
+    }
+
+    // Obtenir la spécialité requise selon le logiciel sélectionné
+    const logicielSelect = document.getElementById("logiciel");
+    const logicielValue = logicielSelect ? logicielSelect.value : "";
+
+    // Trouver le CSM le plus adapté selon la spécialité
+    let selectedCSM = null;
+    if (logicielValue && equipeCSMData.length > 0) {
+      // Chercher un CSM avec la spécialité exacte
+      selectedCSM = equipeCSMData.find(
+        (item) =>
+          item.CSM &&
+          item.CSM.Specialite &&
+          item.CSM.Specialite.toLowerCase() === logicielValue.toLowerCase()
+      );
+
+      // Si pas trouvé, prendre le premier disponible
+      if (!selectedCSM) {
+        selectedCSM = equipeCSMData[0];
+      }
+    } else {
+      selectedCSM = equipeCSMData[0];
+    }
+
+    if (!selectedCSM || !selectedCSM.CSM) {
+      csmDiv.style.display = "none";
+      return;
+    }
+
+    const csm = selectedCSM.CSM;
+    const phoneLink = `<a href="tel:${csm.Telephone.replace(
+      /\s/g,
+      ""
+    )}" class="commercial-phone-link">${csm.Telephone}</a>`;
+
+    csmDiv.innerHTML = `
+      <div class="csm-team-content">
+        <h4>🎯 Customer Success Manager</h4>
+        <div class="csm-team-details">
+          <div class="csm-item">
+            <strong>${csm.Prenom} ${csm.Nom}</strong>
+            <span class="csm-specialty">${csm.Specialite}</span><br>
+            <a href="mailto:${csm.Email}" class="csm-email">${csm.Email}</a><br>
+            ${phoneLink}
+          </div>
+        </div>
+      </div>
+    `;
+
+    csmDiv.style.display = "block";
+  }
+
+  // Fonction pour afficher l'équipe technique
+  function displayTechnicalTeam(clientData) {
+    let technicalDiv = document.getElementById("technical-team-info");
+
+    if (equipeTechniqueData.length === 0) {
+      technicalDiv.style.display = "none";
+      return;
+    }
+
+    // Déterminer le type de déploiement (sur site ou IAD)
+    const deploymentTypeRadio = document.querySelector(
+      'input[name="deployment-type"]:checked'
+    );
+    const isSurSite =
+      !deploymentTypeRadio || deploymentTypeRadio.value === "sur-site";
+
+    let selectedTechnicians = [];
+
+    if (isSurSite) {
+      // Déploiement sur site -> techniciens TERRAIN
+      const terrainTechnicians = equipeTechniqueData.filter(
+        (item) => item.Type === "TERRAIN"
+      );
+
+      if (
+        clientData &&
+        clientData.departement &&
+        terrainTechnicians.length > 0
+      ) {
+        // Essayer de trouver un technicien dans la même zone que le commercial
+        const commercialData = getCommercialDataByDepartment(
+          clientData.departement
+        );
+        if (commercialData && commercialData.Zone) {
+          const zoneTechnician = terrainTechnicians.find(
+            (item) => item.Zone === commercialData.Zone
+          );
+          if (zoneTechnician) {
+            selectedTechnicians = [zoneTechnician];
+          }
+        }
+      }
+
+      // Si pas trouvé par zone, prendre un technicien terrain aléatoire
+      if (selectedTechnicians.length === 0 && terrainTechnicians.length > 0) {
+        selectedTechnicians = [terrainTechnicians[0]];
+      }
+    } else {
+      // Déploiement à distance -> techniciens IAD
+      const iadTechnicians = equipeTechniqueData.filter(
+        (item) => item.Type === "IAD"
+      );
+
+      if (iadTechnicians.length > 0) {
+        selectedTechnicians = [iadTechnicians[0]];
+      }
+    }
+
+    if (selectedTechnicians.length === 0) {
+      technicalDiv.style.display = "none";
+      return;
+    }
+
+    let techniciansHTML = "";
+    selectedTechnicians.forEach((item) => {
+      const tech = item.Technicien;
+      const phoneLink = `<a href="tel:${tech.Telephone.replace(
+        /\s/g,
+        ""
+      )}" class="technical-email">${tech.Telephone}</a>`;
+
+      techniciansHTML += `
+        <div class="technical-item">
+          <strong>${tech.Prenom} ${tech.Nom}</strong>
+          <span class="technical-type">${item.Type}</span><br>
+          ${item.Zone ? `Zone: ${item.Zone}<br>` : ""}
+          <a href="mailto:${tech.Email}" class="technical-email">${
+        tech.Email
+      }</a><br>
+          ${phoneLink}
+        </div>
+      `;
+    });
+
+    technicalDiv.innerHTML = `
+      <div class="technical-team-content">
+        <h4>🔧 Équipe technique</h4>
+        <div class="technical-team-details">
+          ${techniciansHTML}
+        </div>
+      </div>
+    `;
+
+    technicalDiv.style.display = "block";
+  }
+
+  // =====================
+  // Gestion des événements pour CSM et déploiement
+  // =====================
+
+  // Fonction globale pour gérer le changement du checkbox CSM
+  window.handleCSMCheckboxChange = function () {
+    const csmCheckbox = document.getElementById("csm-required");
+    if (csmCheckbox) {
+      displayCSMTeam(csmCheckbox.checked);
+    }
+  };
+
+  // Fonction pour ajouter les listeners sur les options de déploiement
+  function addDeploymentTypeListeners() {
+    const deploymentRadios = document.querySelectorAll(
+      'input[name="deployment-type"]'
+    );
+    deploymentRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        // Mettre à jour l'équipe technique selon le type de déploiement
+        const clientName = clientInput.value;
+        const clientData = findClientInDatabase(clientName);
+        displayTechnicalTeam(clientData);
+      });
+    });
+  }
+
+  // Observer pour détecter l'ajout des options de déploiement dans le DOM
+  const deploymentObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        const deploymentOptions = document.getElementById("deployment-options");
+        if (deploymentOptions && deploymentOptions.style.display !== "none") {
+          // Ajouter les listeners quand les options de déploiement sont affichées
+          setTimeout(addDeploymentTypeListeners, 100);
+        }
+      }
+    });
+  });
+
+  // Observer les changements dans le conteneur des options de déploiement
+  const deploymentContainer = document.getElementById("deployment-options");
+  if (deploymentContainer) {
+    deploymentObserver.observe(deploymentContainer, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
   // Charger les bases de données au démarrage
   loadCommercialDatabase();
   loadFormationDatabase();
+  loadCSMDatabase();
+  loadTechnicalDatabase();
 
   // Ajouter un listener sur le champ effectif pour les options de déploiement
   const effectifInput = document.getElementById("effectif");
@@ -963,6 +1228,11 @@ document.addEventListener("DOMContentLoaded", function () {
         effectifInput.value
       );
       displayDeploymentOptions(null);
+
+      // Mettre à jour l'équipe technique aussi
+      const clientName = clientInput.value;
+      const clientData = findClientInDatabase(clientName);
+      displayTechnicalTeam(clientData);
     });
   } else {
     console.error("❌ Impossible de trouver le champ effectif dans le DOM");

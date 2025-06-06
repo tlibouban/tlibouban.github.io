@@ -1,0 +1,57 @@
+[
+  {
+    "CSM": {
+      "Prenom": "Alexandre",
+      "Nom": "DUBOIS",
+      "Specialite": "AIR",
+      "Email": "alexandre.dubois@septeo.fr",
+      "Telephone": "06.15.27.39.48",
+      "Zone": "National",
+      "Commune_Residence": "Paris"
+    }
+  },
+  {
+    "CSM": {
+      "Prenom": "Camille",
+      "Nom": "MARTINEZ",
+      "Specialite": "NEO",
+      "Email": "camille.martinez@septeo.fr",
+      "Telephone": "06.28.41.56.73",
+      "Zone": "National",
+      "Commune_Residence": "Lyon"
+    }
+  },
+  {
+    "CSM": {
+      "Prenom": "Maxime",
+      "Nom": "GARCIA",
+      "Specialite": "ADAPPS",
+      "Email": "maxime.garcia@septeo.fr",
+      "Telephone": "06.37.52.68.84",
+      "Zone": "National",
+      "Commune_Residence": "Toulouse"
+    }
+  },
+  {
+    "CSM": {
+      "Prenom": "Léa",
+      "Nom": "ROUSSEAU",
+      "Specialite": "AIR",
+      "Email": "lea.rousseau@septeo.fr",
+      "Telephone": "06.46.63.79.95",
+      "Zone": "National",
+      "Commune_Residence": "Marseille"
+    }
+  },
+  {
+    "CSM": {
+      "Prenom": "Julien",
+      "Nom": "VINCENT",
+      "Specialite": "NEO",
+      "Email": "julien.vincent@septeo.fr",
+      "Telephone": "06.59.74.81.26",
+      "Zone": "National",
+      "Commune_Residence": "Bordeaux"
+    }
+  }
+]
