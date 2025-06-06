@@ -1465,6 +1465,11 @@ function loadFormationsLogiciels() {
         "formations"
       );
       window.formationsLogiciels = data.formations;
+
+      // Mettre à jour les prix des formations dans l'interface
+      if (typeof updateFormationPrices === "function") {
+        setTimeout(updateFormationPrices, 100); // Petit délai pour s'assurer que le DOM est prêt
+      }
     })
     .catch((error) => {
       console.error(

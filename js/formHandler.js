@@ -470,7 +470,13 @@ function renderCabinetColumn(
  * Obtient le prix d'une formation basé sur son nom
  */
 function getFormationPrice(formationName) {
-  if (!window.formationsLogiciels) return null;
+  if (!window.formationsLogiciels) {
+    console.log(
+      "⚠️ formationsLogiciels pas encore chargé pour:",
+      formationName
+    );
+    return "N/A";
+  }
 
   // Nettoyer le nom de la formation pour la correspondance
   const cleanName = formationName
@@ -478,11 +484,13 @@ function getFormationPrice(formationName) {
     .trim()
     .toUpperCase();
 
+  console.log("🔍 Recherche prix pour:", cleanName);
+
   // Chercher dans les formations logiciels
   const formation = window.formationsLogiciels.find((f) => {
     const fNom = f.nom.toUpperCase();
     // Essayer différentes correspondances
-    return (
+    const match =
       fNom.includes(cleanName) ||
       cleanName.includes(fNom) ||
       fNom === cleanName ||
@@ -492,9 +500,23 @@ function getFormationPrice(formationName) {
       (cleanName.includes("PASSER DE AIR") && fNom.includes("PASSER DE AIR")) ||
       (cleanName.includes("BRAIN") && fNom.includes("SEPTEO BRAIN")) ||
       (cleanName.includes("ACTIONS LIÉES") && fNom.includes("ACTIONS LI")) ||
-      (cleanName.includes("SECRÉTARIAT") && fNom.includes("SECRÉTARIAT"))
-    );
+      (cleanName.includes("SECRÉTARIAT") && fNom.includes("SECRÉTARIAT"));
+
+    if (match) {
+      console.log(
+        `✅ Correspondance trouvée: "${cleanName}" -> "${fNom}" = ${f.prix_ht}`
+      );
+    }
+    return match;
   });
+
+  if (!formation) {
+    console.log(`❌ Aucune correspondance trouvée pour: "${cleanName}"`);
+    console.log(
+      "💡 Formations disponibles:",
+      window.formationsLogiciels.map((f) => f.nom)
+    );
+  }
 
   return formation ? formation.prix_ht : "N/A";
 }
@@ -700,6 +722,10 @@ function updateTotals() {
     // Vérifier si c'est la section PARAMÉTRAGE
     const isParametrageSection =
       sectionTitle && isSectionNamed(sectionTitle.textContent, "PARAMÉTRAGE");
+
+    // Vérifier si c'est la section FORMATIONS
+    const isFormationsSection =
+      sectionTitle && isSectionNamed(sectionTitle.textContent, "FORMATIONS");
 
     sectionDiv.querySelectorAll("tbody tr").forEach((tr, idx) => {
       // Vérifier si la ligne contient une fonctionnalité à exclure
@@ -927,6 +953,16 @@ function updateTotals() {
         const texteOption =
           optionsActivees <= 1 ? "option active" : "options actives";
         badge.textContent = `${optionsActivees}/${optionsTotal} ${texteOption}`;
+      } else if (isFormationsSection) {
+        // Pour FORMATIONS, afficher temps + sous-total financier
+        const sousTotal = calculateFormationSousTotal();
+        if (sousTotal > 0) {
+          badge.innerHTML = `${formatMinutes(
+            sectionTotal
+          )}<br><span style="font-size:0.85em;color:#1565c0;">${sousTotal} € HT</span>`;
+        } else {
+          badge.textContent = formatMinutes(sectionTotal);
+        }
       } else {
         badge.textContent = formatMinutes(sectionTotal);
       }
@@ -943,6 +979,9 @@ function updateTotals() {
   const journeesDisplay = document.getElementById("journees-display");
   const demiJourneesDisplay = document.getElementById("demi-journees-display");
   const formateursDisplay = document.getElementById("formateurs-display");
+  const formationsCoutDisplay = document.getElementById(
+    "formations-cout-display"
+  );
 
   if (heuresDisplay) {
     heuresDisplay.textContent = formatMinutesAvecParametrage(
@@ -993,6 +1032,13 @@ function updateTotals() {
   const oldElement = document.getElementById("total-general-h1");
   if (oldElement) {
     oldElement.textContent = formatMinutes(totalGeneral);
+  }
+
+  // Mise à jour du sous-total financier des formations
+  if (formationsCoutDisplay) {
+    const sousTotal = calculateFormationSousTotal();
+    formationsCoutDisplay.textContent =
+      sousTotal > 0 ? `${sousTotal} € HT` : "0 € HT";
   }
 
   // Mettre à jour les montants des formations
@@ -1164,6 +1210,31 @@ function renderModernSwitch(
 }
 
 // =====================
+// Fonction pour mettre à jour les prix après chargement des données JSON
+// =====================
+function updateFormationPrices() {
+  console.log("🔄 Mise à jour des prix des formations...");
+  document.querySelectorAll('tr[data-section="FORMATIONS"]').forEach((row) => {
+    const fonctionnalite = row
+      .querySelector("td:nth-child(2)")
+      ?.textContent?.trim();
+    if (!fonctionnalite) return;
+
+    const newPrice = getFormationPrice(fonctionnalite);
+    const prixUnitaireCell = row.querySelector(".prix-unitaire");
+
+    if (prixUnitaireCell && newPrice !== "N/A") {
+      prixUnitaireCell.textContent = newPrice;
+      row.setAttribute("data-prix-unitaire", newPrice);
+      console.log(`✅ Prix mis à jour pour "${fonctionnalite}": ${newPrice}`);
+    }
+  });
+
+  // Recalculer les montants après la mise à jour des prix
+  updateFormationMontants();
+}
+
+// =====================
 // Fonction pour calculer les montants des formations
 // =====================
 function updateFormationMontants() {
@@ -1198,6 +1269,29 @@ function updateFormationMontants() {
     const montant = nb * prix;
     montantCell.textContent = montant > 0 ? `${montant} €` : "0 €";
   });
+}
+
+// =====================
+// Fonction pour calculer le sous-total financier des formations
+// =====================
+function calculateFormationSousTotal() {
+  let totalFinancier = 0;
+
+  document.querySelectorAll('tr[data-section="FORMATIONS"]').forEach((row) => {
+    const montantCell = row.querySelector(".montant-formation");
+    if (!montantCell) return;
+
+    const montantText = montantCell.textContent.trim();
+    if (montantText === "N/A" || montantText === "0 €") return;
+
+    // Extraire le montant (enlever le symbole €)
+    const montantMatch = montantText.match(/(\d+)/);
+    if (montantMatch) {
+      totalFinancier += parseInt(montantMatch[1], 10);
+    }
+  });
+
+  return totalFinancier;
 }
 
 // =====================
@@ -1352,5 +1446,6 @@ function updateFormationQuantitiesBasedOnEffectif() {
   );
 }
 
-// Exposer updateFormationMontants globalement
+// Exposer les fonctions de formation globalement
 window.updateFormationMontants = updateFormationMontants;
+window.updateFormationPrices = updateFormationPrices;
