@@ -417,7 +417,7 @@ function renderProfilsDyn() {
         <td style="padding-left:20px;">${renderModernSwitch(
           `profil-check-${idx}`,
           `profil-check-${idx}`,
-          true,
+          idx === 0 && profil.nom === "Associé", // Cocher par défaut seulement l'Associé
           "Inclure ce profil",
           "check-feature-profil"
         )}</td>

@@ -673,18 +673,14 @@ function updateTotals() {
             );
             const nbInput = document.querySelector(`#profil-nb-${pidx}`);
 
-            // Pour le switch de modification, chercher d'abord l'input puis s'il n'existe pas, chercher l'input avec la classe
-            let modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
-            if (!modifSwitch) {
-              // Chercher par classe si l'ID ne fonctionne pas
-              modifSwitch = document.querySelector(
-                `input[id="profil-modif-${pidx}"]`
-              );
-            }
+            // Pour le switch de modification, utiliser le système tri-state
+            const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
 
             const checked = checkboxProfil ? checkboxProfil.checked : false;
             const nb = nbInput ? parseInt(nbInput.value, 10) || 0 : 0;
-            const modif = modifSwitch ? modifSwitch.checked : false;
+            const modif = modifSwitch
+              ? isTriStateActivated(modifSwitch)
+              : false;
 
             console.log(
               `  Profil ${pidx} (${profil.nom}): checked=${checked}, nb=${nb}, modif=${modif}`
@@ -1108,6 +1104,7 @@ function validateProfilesVsEffectif() {
 
   const effectifInput = document.getElementById("effectif");
   if (!effectifInput || !effectifInput.value || !window.profilsDynList) {
+    // Ne plus afficher d'avertissement si pas d'effectif saisi
     return;
   }
 
@@ -1118,6 +1115,8 @@ function validateProfilesVsEffectif() {
 
   // Calculer seulement les profils cochés (comme dans updateTotals)
   let profilsTotal = 0;
+  let profilsCochesCount = 0;
+
   window.profilsDynList.forEach((profil, idx) => {
     const checkbox = document.querySelector(`#profil-check-${idx}`);
     const nbInput = document.querySelector(`#profil-nb-${idx}`);
@@ -1125,11 +1124,18 @@ function validateProfilesVsEffectif() {
     if (checkbox && checkbox.checked && nbInput) {
       const nb = parseInt(nbInput.value, 10) || 0;
       profilsTotal += nb;
+      profilsCochesCount++;
     }
   });
 
+  // Ne valider que si au moins 1 profil est coché ET qu'un effectif est saisi
+  if (profilsCochesCount === 0 && effectifTotal > 0) {
+    // Cas spécial : effectif saisi mais aucun profil coché - pas d'erreur immédiate
+    return;
+  }
+
   // Si les totaux ne correspondent pas, afficher un avertissement
-  if (profilsTotal !== effectifTotal) {
+  if (profilsTotal !== effectifTotal && profilsCochesCount > 0) {
     console.warn(
       `⚠️ Incohérence: Somme profils cochés (${profilsTotal}) ≠ Effectif total (${effectifTotal})`
     );
@@ -1156,7 +1162,7 @@ function validateProfilesVsEffectif() {
         }, 5000);
       }
     }
-  } else {
+  } else if (profilsTotal === effectifTotal && profilsCochesCount > 0) {
     console.log(
       `✅ Cohérence vérifiée: Profils cochés = Effectif = ${profilsTotal}`
     );
