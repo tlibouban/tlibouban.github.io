@@ -1,0 +1,203 @@
+[
+  {
+    "Zone": "Nord",
+    "Responsable_Regional": {
+      "Prenom": "Marc",
+      "Nom": "MARTIN",
+      "Email": "marc.martin@septeo.fr",
+      "Telephone": "+33609123456"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Julie",
+      "Nom": "DURAND",
+      "Email": "julie.durand@septeo.fr",
+      "Telephone": "+33612345678"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Thomas",
+      "Nom": "BERNARD",
+      "Email": "thomas.bernard@septeo.fr",
+      "Telephone": "+33698765432"
+    }
+  },
+  {
+    "Zone": "Centre-Ouest",
+    "Responsable_Regional": {
+      "Prenom": "Pierre",
+      "Nom": "DUBOIS",
+      "Email": "pierre.dubois@septeo.fr",
+      "Telephone": "+33645234567"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Sophie",
+      "Nom": "MOREAU",
+      "Email": "sophie.moreau@septeo.fr",
+      "Telephone": "+33634567890"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Antoine",
+      "Nom": "ROUSSEAU",
+      "Email": "antoine.rousseau@septeo.fr",
+      "Telephone": "+33656789012"
+    }
+  },
+  {
+    "Zone": "Ouest",
+    "Responsable_Regional": {
+      "Prenom": "Nicolas",
+      "Nom": "LAMBERT",
+      "Email": "nicolas.lambert@septeo.fr",
+      "Telephone": "+33670345678"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Sophie",
+      "Nom": "MOREAU",
+      "Email": "sophie.moreau@septeo.fr",
+      "Telephone": "+33634567890"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Julien",
+      "Nom": "GIRARD",
+      "Email": "julien.girard@septeo.fr",
+      "Telephone": "+33678901234"
+    }
+  },
+  {
+    "Zone": "Sud-Ouest",
+    "Responsable_Regional": {
+      "Prenom": "À définir",
+      "Nom": "À définir",
+      "Email": "a.definir@septeo.fr",
+      "Telephone": ""
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Amélie",
+      "Nom": "GARCIA",
+      "Email": "amelie.garcia@septeo.fr",
+      "Telephone": "+33645123456"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Maxime",
+      "Nom": "ROUX",
+      "Email": "maxime.roux@septeo.fr",
+      "Telephone": "+33667890123"
+    }
+  },
+  {
+    "Zone": "Occitanie",
+    "Responsable_Regional": {
+      "Prenom": "Laurent",
+      "Nom": "SIMON",
+      "Email": "laurent.simon@septeo.fr",
+      "Telephone": "+33623456789"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Amélie",
+      "Nom": "GARCIA",
+      "Email": "amelie.garcia@septeo.fr",
+      "Telephone": "+33645123456"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Emma",
+      "Nom": "LEFEVRE",
+      "Email": "emma.lefevre@septeo.fr",
+      "Telephone": "+33689012345"
+    }
+  },
+  {
+    "Zone": "Rhône-Alpes",
+    "Responsable_Regional": {
+      "Prenom": "David",
+      "Nom": "PETIT",
+      "Email": "david.petit@septeo.fr",
+      "Telephone": "+33785567890"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Claire",
+      "Nom": "BLANC",
+      "Email": "claire.blanc@septeo.fr",
+      "Telephone": "+33656234567"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Lucas",
+      "Nom": "ANDRE",
+      "Email": "lucas.andre@septeo.fr",
+      "Telephone": "+33690123456"
+    }
+  },
+  {
+    "Zone": "PACA",
+    "Responsable_Regional": {
+      "Prenom": "Fabrice",
+      "Nom": "VINCENT",
+      "Email": "fabrice.vincent@septeo.fr",
+      "Telephone": "+33616678901"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Julie",
+      "Nom": "DURAND",
+      "Email": "julie.durand@septeo.fr",
+      "Telephone": "+33612345678"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Alexandre",
+      "Nom": "MICHEL",
+      "Email": "alexandre.michel@septeo.fr",
+      "Telephone": "+33691234567"
+    }
+  },
+  {
+    "Zone": "Est",
+    "Responsable_Regional": {
+      "Prenom": "Sébastien",
+      "Nom": "ROBERT",
+      "Email": "sebastien.robert@septeo.fr",
+      "Telephone": "+33628789012"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Claire",
+      "Nom": "BLANC",
+      "Email": "claire.blanc@septeo.fr",
+      "Telephone": "+33656234567"
+    },
+    "CS_Liberaux_Moyens": {
+      "Prenom": "Julien",
+      "Nom": "GIRARD",
+      "Email": "julien.girard@septeo.fr",
+      "Telephone": "+33678901234"
+    }
+  },
+  {
+    "Zone": "Paris + 92",
+    "Responsable_Regional_1": {
+      "Prenom": "Marie",
+      "Nom": "DURAND",
+      "Email": "marie.durand@septeo.fr",
+      "Telephone": "+33620890123"
+    },
+    "Responsable_Regional_2": {
+      "Prenom": "Paul",
+      "Nom": "MARTINEZ",
+      "Email": "paul.martinez@septeo.fr",
+      "Telephone": "+33628456789"
+    },
+    "CS_Marche_Moyens": {
+      "Prenom": "Isabelle",
+      "Nom": "THOMAS",
+      "Email": "isabelle.thomas@septeo.fr",
+      "Telephone": "+33667345678"
+    },
+    "CS_Liberaux_Moyens_1": {
+      "Prenom": "Hugo",
+      "Nom": "LOPEZ",
+      "Email": "hugo.lopez@septeo.fr",
+      "Telephone": "+33692456789"
+    },
+    "CS_Liberaux_Moyens_2": {
+      "Prenom": "Victor",
+      "Nom": "BERNARD",
+      "Email": "victor.bernard@septeo.fr",
+      "Telephone": "+33679567890"
+    }
+  }
+]

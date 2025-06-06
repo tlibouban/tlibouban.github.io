@@ -1,0 +1,165 @@
+[
+  {
+    "Type": "IAD",
+    "Technicien": {
+      "Prenom": "Thomas",
+      "Nom": "BERNARD",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "thomas.bernard@septeo.fr",
+      "Telephone": "06.12.34.56.78",
+      "Commune_Residence": "Lyon"
+    }
+  },
+  {
+    "Type": "IAD",
+    "Technicien": {
+      "Prenom": "Marie",
+      "Nom": "LEROY",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "marie.leroy@septeo.fr",
+      "Telephone": "06.23.45.67.89",
+      "Commune_Residence": "Toulouse"
+    }
+  },
+  {
+    "Type": "IAD",
+    "Technicien": {
+      "Prenom": "Kevin",
+      "Nom": "MOREAU",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "kevin.moreau@septeo.fr",
+      "Telephone": "06.34.56.78.90",
+      "Commune_Residence": "Nantes"
+    }
+  },
+  {
+    "Type": "IAD",
+    "Technicien": {
+      "Prenom": "Sarah",
+      "Nom": "SIMON",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "sarah.simon@septeo.fr",
+      "Telephone": "06.45.67.89.01",
+      "Commune_Residence": "Bordeaux"
+    }
+  },
+  {
+    "Type": "IAD",
+    "Technicien": {
+      "Prenom": "Florian",
+      "Nom": "LAURENT",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "florian.laurent@septeo.fr",
+      "Telephone": "06.56.78.90.12",
+      "Commune_Residence": "Marseille"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Nord",
+    "Technicien": {
+      "Prenom": "David",
+      "Nom": "PETIT",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "david.petit@septeo.fr",
+      "Telephone": "06.67.89.01.23",
+      "Commune_Residence": "Lille"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Nord",
+    "Technicien": {
+      "Prenom": "Amélie",
+      "Nom": "ROUSSEL",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "amelie.roussel@septeo.fr",
+      "Telephone": "06.78.90.12.34",
+      "Commune_Residence": "Amiens"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Île-de-France",
+    "Technicien": {
+      "Prenom": "Jonathan",
+      "Nom": "ROBERT",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "jonathan.robert@septeo.fr",
+      "Telephone": "06.89.01.23.45",
+      "Commune_Residence": "Créteil"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Île-de-France",
+    "Technicien": {
+      "Prenom": "Claire",
+      "Nom": "RICHARD",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "claire.richard@septeo.fr",
+      "Telephone": "06.90.12.34.56",
+      "Commune_Residence": "Versailles"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Est",
+    "Technicien": {
+      "Prenom": "Benjamin",
+      "Nom": "MERCIER",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "benjamin.mercier@septeo.fr",
+      "Telephone": "06.01.23.45.67",
+      "Commune_Residence": "Strasbourg"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Centre-Ouest",
+    "Technicien": {
+      "Prenom": "Nathalie",
+      "Nom": "LEFEBVRE",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "nathalie.lefebvre@septeo.fr",
+      "Telephone": "06.12.34.56.78",
+      "Commune_Residence": "Tours"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Ouest",
+    "Technicien": {
+      "Prenom": "Sébastien",
+      "Nom": "MULLER",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "sebastien.muller@septeo.fr",
+      "Telephone": "06.23.45.67.89",
+      "Commune_Residence": "Rennes"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Sud-Est",
+    "Technicien": {
+      "Prenom": "Virginie",
+      "Nom": "HENRY",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "virginie.henry@septeo.fr",
+      "Telephone": "06.34.56.78.90",
+      "Commune_Residence": "Nice"
+    }
+  },
+  {
+    "Type": "TERRAIN",
+    "Zone": "Sud-Ouest",
+    "Technicien": {
+      "Prenom": "Ludovic",
+      "Nom": "MOREAU",
+      "Specialite": "STACK_COMPLETE",
+      "Email": "ludovic.moreau@septeo.fr",
+      "Telephone": "06.45.67.89.01",
+      "Commune_Residence": "Montpellier"
+    }
+  }
+]
