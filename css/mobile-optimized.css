@@ -168,7 +168,8 @@
   position: relative;
   display: inline-block;
   width: 50px;
-  height: 28px;
+  /*height: 28px;*/
+  flex-grow: 1;
   /* Touch-friendly */
   min-height: 44px;
   min-width: 44px;
