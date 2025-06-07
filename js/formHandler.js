@@ -982,13 +982,35 @@ function updateTotals() {
     if (montantBadge) {
       const sectionTitle = sectionDiv.querySelector("h2");
       const sectionName = sectionTitle ? sectionTitle.textContent.trim() : "";
-      const montantTotal = calculateSectionMontantTotal(sectionName);
+
+      // Nettoyer le nom de section en enlevant les badges et boutons
+      const cleanSectionName = sectionName
+        .replace(/^\s*▼?\s*/, "") // Enlever le symbole de toggle éventuel
+        .replace(/\d+h\s+\d+min.*$/, "") // Enlever les badges de temps
+        .replace(/\d+\s*€.*$/, "") // Enlever les badges de montant
+        .replace(/VOTRE DEPLOIEMENT SEPTEO SOLUTIONS AVOCATS/, "DEPLOIEMENT") // Normaliser le nom de déploiement
+        .trim();
+
+      console.log(
+        `🔍 Debug badge montant - Section: "${cleanSectionName}" (original: "${sectionName}")`
+      );
+
+      const montantTotal = calculateSectionMontantTotal(cleanSectionName);
+      console.log(
+        `💰 Montant calculé pour "${cleanSectionName}": ${montantTotal}€`
+      );
 
       if (montantTotal > 0) {
         montantBadge.textContent = `${montantTotal} € HT`;
         montantBadge.style.display = "inline-block";
+        console.log(
+          `✅ Badge montant affiché pour "${cleanSectionName}": ${montantTotal} € HT`
+        );
       } else {
         montantBadge.style.display = "none";
+        console.log(
+          `❌ Badge montant masqué pour "${cleanSectionName}" (montant: ${montantTotal})`
+        );
       }
     }
 
@@ -1327,25 +1349,57 @@ function calculateFormationSousTotal() {
 function calculateSectionMontantTotal(sectionName) {
   let totalMontant = 0;
 
+  console.log(`🧮 calculateSectionMontantTotal appelé pour: "${sectionName}"`);
+  console.log(
+    `🔍 isSectionNamed("${sectionName}", "FORMATIONS"): ${isSectionNamed(
+      sectionName,
+      "FORMATIONS"
+    )}`
+  );
+
   // Pour l'instant, seule la section FORMATIONS a des montants
   if (isSectionNamed(sectionName, "FORMATIONS")) {
-    document
-      .querySelectorAll('tr[data-section="FORMATIONS"]')
-      .forEach((row) => {
-        const montantCell = row.querySelector(".montant-formation");
-        if (!montantCell) return;
+    const formationRows = document.querySelectorAll(
+      'tr[data-section="FORMATIONS"]'
+    );
+    console.log(`📋 Lignes FORMATIONS trouvées: ${formationRows.length}`);
 
-        const montantText = montantCell.textContent.trim();
-        if (montantText === "N/A" || montantText === "0 €") return;
+    formationRows.forEach((row, index) => {
+      const montantCell = row.querySelector(".montant-formation");
+      if (!montantCell) {
+        console.log(`  ❌ Ligne ${index}: Pas de cellule montant-formation`);
+        return;
+      }
 
-        // Extraire le montant (enlever le symbole €)
-        const montantMatch = montantText.match(/(\d+)/);
-        if (montantMatch) {
-          totalMontant += parseInt(montantMatch[1], 10);
-        }
-      });
+      const montantText = montantCell.textContent.trim();
+      console.log(`  💰 Ligne ${index}: montant = "${montantText}"`);
+
+      if (montantText === "N/A" || montantText === "0 €") {
+        console.log(`  ⏭️ Ligne ${index}: montant ignoré (N/A ou 0 €)`);
+        return;
+      }
+
+      // Extraire le montant (enlever le symbole €)
+      const montantMatch = montantText.match(/(\d+)/);
+      if (montantMatch) {
+        const montant = parseInt(montantMatch[1], 10);
+        totalMontant += montant;
+        console.log(
+          `  ✅ Ligne ${index}: ajout de ${montant}€ (total: ${totalMontant}€)`
+        );
+      } else {
+        console.log(
+          `  ❌ Ligne ${index}: impossible d'extraire le montant de "${montantText}"`
+        );
+      }
+    });
+  } else {
+    console.log(
+      `❌ Section "${sectionName}" n'est pas reconnue comme FORMATIONS`
+    );
   }
 
+  console.log(`🎯 Total final pour "${sectionName}": ${totalMontant}€`);
   return totalMontant;
 }
 
