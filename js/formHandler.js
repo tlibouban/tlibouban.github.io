@@ -64,11 +64,19 @@ function renderChecklist() {
       html += `<h2 class="section-title">
         <button type="button" class="toggle-section-btn" id="toggle-${sectionId}" aria-label="Replier ou déplier la section" aria-expanded="true"></button>
         ${section}
-        <span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span>
+        <span class="section-badges">
+          <span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span>
+          <span class="section-montant-badge" id="section-montant-${sectionId}" style="display: none;">0 €</span>
+        </span>
       </h2>`;
       html += `<div class="section-content" id="content-${sectionId}">`;
     } else {
-      html += `<h2 class="section-title">${section}<span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span></h2>`;
+      html += `<h2 class="section-title">${section}
+        <span class="section-badges">
+          <span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span>
+          <span class="section-montant-badge" id="section-montant-${sectionId}" style="display: none;">0 €</span>
+        </span>
+      </h2>`;
       html += `<div class="section-content">`;
     }
 
@@ -938,6 +946,8 @@ function updateTotals() {
 
     // Met à jour le badge de la section
     const badge = sectionDiv.querySelector(".section-total-badge");
+    const montantBadge = sectionDiv.querySelector(".section-montant-badge");
+
     if (badge) {
       if (isCabinetOption) {
         // Pour Cabinet Option, compter les tri-state switches activés
@@ -965,6 +975,20 @@ function updateTotals() {
         }
       } else {
         badge.textContent = formatMinutes(sectionTotal);
+      }
+    }
+
+    // Mettre à jour le badge de montant
+    if (montantBadge) {
+      const sectionTitle = sectionDiv.querySelector("h2");
+      const sectionName = sectionTitle ? sectionTitle.textContent.trim() : "";
+      const montantTotal = calculateSectionMontantTotal(sectionName);
+
+      if (montantTotal > 0) {
+        montantBadge.textContent = `${montantTotal} € HT`;
+        montantBadge.style.display = "inline-block";
+      } else {
+        montantBadge.style.display = "none";
       }
     }
 
@@ -1113,7 +1137,10 @@ function renderDeploymentSection() {
   html += `<h2 class="section-title">
     <button type="button" class="toggle-section-btn" id="toggle-${sectionId}" aria-label="Replier ou déplier la section" aria-expanded="true"></button>
     VOTRE DEPLOIEMENT SEPTEO SOLUTIONS AVOCATS
-    <span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span>
+    <span class="section-badges">
+      <span class="section-total-badge" id="section-total-${sectionId}">0h 00min</span>
+      <span class="section-montant-badge" id="section-montant-${sectionId}" style="display: none;">0 €</span>
+    </span>
   </h2>`;
   html += `<div class="section-content" id="content-${sectionId}">`;
 
@@ -1292,6 +1319,34 @@ function calculateFormationSousTotal() {
   });
 
   return totalFinancier;
+}
+
+// =====================
+// Fonction pour calculer le montant total d'une section
+// =====================
+function calculateSectionMontantTotal(sectionName) {
+  let totalMontant = 0;
+
+  // Pour l'instant, seule la section FORMATIONS a des montants
+  if (isSectionNamed(sectionName, "FORMATIONS")) {
+    document
+      .querySelectorAll('tr[data-section="FORMATIONS"]')
+      .forEach((row) => {
+        const montantCell = row.querySelector(".montant-formation");
+        if (!montantCell) return;
+
+        const montantText = montantCell.textContent.trim();
+        if (montantText === "N/A" || montantText === "0 €") return;
+
+        // Extraire le montant (enlever le symbole €)
+        const montantMatch = montantText.match(/(\d+)/);
+        if (montantMatch) {
+          totalMontant += parseInt(montantMatch[1], 10);
+        }
+      });
+  }
+
+  return totalMontant;
 }
 
 // =====================
