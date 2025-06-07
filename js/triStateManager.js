@@ -105,14 +105,9 @@ function cycleTriState(element, clickType = "left") {
   // Mettre à jour l'état
   setTriStateState(element, newState);
 
-  // Mettre à jour les totaux
+  // Mettre à jour les totaux (qui inclut maintenant updateFormationMontants)
   if (typeof updateTotals === "function") {
     updateTotals();
-  }
-
-  // Mettre à jour les montants des formations si disponible
-  if (typeof updateFormationMontants === "function") {
-    updateFormationMontants();
   }
 
   updateTriStateCounters();

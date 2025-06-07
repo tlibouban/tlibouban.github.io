@@ -713,6 +713,10 @@ function updateTotals() {
   // Debug pour voir si la fonction est appelée
   console.log("🔄 updateTotals() appelé");
 
+  // IMPORTANT: Mettre à jour les montants des formations EN PREMIER
+  // avant de calculer les totaux de section
+  updateFormationMontants();
+
   let totalGeneral = 0;
   let totalParametrage = 0;
 
@@ -1086,9 +1090,6 @@ function updateTotals() {
     formationsCoutDisplay.textContent =
       sousTotal > 0 ? `${sousTotal} € HT` : "0 € HT";
   }
-
-  // Mettre à jour les montants des formations
-  updateFormationMontants();
 }
 
 // =====================
@@ -1287,15 +1288,35 @@ function updateFormationPrices() {
 // Fonction pour calculer les montants des formations
 // =====================
 function updateFormationMontants() {
+  console.log("💰 updateFormationMontants() appelé");
+
   // Trouver toutes les lignes de formations
-  document.querySelectorAll('tr[data-section="FORMATIONS"]').forEach((row) => {
+  const formationRows = document.querySelectorAll(
+    'tr[data-section="FORMATIONS"]'
+  );
+  console.log(
+    `📋 Nombre de lignes FORMATIONS trouvées: ${formationRows.length}`
+  );
+
+  formationRows.forEach((row, index) => {
     const nbInput = row.querySelector(".formation-nb");
     const montantCell = row.querySelector(".montant-formation");
     const switchElement = row.querySelector(".tri-state-modern-switch");
     const prixUnitaire = row.getAttribute("data-prix-unitaire");
 
+    console.log(`  🔍 Ligne ${index}:`);
+    console.log(`    - nbInput: ${nbInput ? nbInput.value : "NON TROUVÉ"}`);
+    console.log(`    - montantCell: ${montantCell ? "TROUVÉ" : "NON TROUVÉ"}`);
+    console.log(
+      `    - switchElement: ${switchElement ? "TROUVÉ" : "NON TROUVÉ"}`
+    );
+    console.log(`    - prixUnitaire: ${prixUnitaire}`);
+
     if (!nbInput || !montantCell || !prixUnitaire || prixUnitaire === "N/A") {
-      if (montantCell) montantCell.textContent = "N/A";
+      if (montantCell) {
+        montantCell.textContent = "N/A";
+        console.log(`    ❌ Montant mis à N/A (données manquantes)`);
+      }
       return;
     }
 
@@ -1304,8 +1325,11 @@ function updateFormationMontants() {
       ? isTriStateActivated(switchElement)
       : false;
 
+    console.log(`    - Switch activé: ${isActivated}`);
+
     if (!isActivated) {
       montantCell.textContent = "0 €";
+      console.log(`    💰 Montant mis à 0 € (switch non activé)`);
       return;
     }
 
@@ -1316,8 +1340,15 @@ function updateFormationMontants() {
     const prix = prixMatch ? parseInt(prixMatch[1], 10) : 0;
 
     const montant = nb * prix;
-    montantCell.textContent = montant > 0 ? `${montant} €` : "0 €";
+    const montantText = montant > 0 ? `${montant} €` : "0 €";
+    montantCell.textContent = montantText;
+
+    console.log(
+      `    💰 Calcul: ${nb} × ${prix} = ${montant} (affiché: "${montantText}")`
+    );
   });
+
+  console.log("✅ updateFormationMontants() terminé");
 }
 
 // =====================
