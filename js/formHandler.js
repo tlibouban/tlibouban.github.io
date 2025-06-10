@@ -757,19 +757,6 @@ function updateTotals() {
 
     const sectionTotalBadge = sectionDiv.querySelector(".section-total-badge");
 
-    if (sectionTotalBadge) {
-      const sectionTime = parseTimeToMinutes(sectionTotalBadge.textContent);
-      if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
-        totalParametrage += sectionTime;
-      }
-      if (
-        isSectionNamed(sectionName, "FORMATIONS") ||
-        isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
-      ) {
-        totalFormations += sectionTime;
-      }
-    }
-
     sectionDiv.querySelectorAll("tbody tr").forEach((tr, idx) => {
       // Vérifier si la ligne contient une fonctionnalité à exclure
       const fonctionnaliteText = tr
@@ -893,12 +880,20 @@ function updateTotals() {
             : "0";
         }
 
-        // Ajoute bien la somme utilisateurs+profils au total de la section
-        sectionTotal += totalUtilEtProfils;
+        // Agrégation pour cette ligne standard
+        if (!isExcluded) {
+          sectionTotal += totalUtilEtProfils;
 
-        // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
-        if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
-          totalParametrage += totalUtilEtProfils;
+          if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
+            totalParametrage += totalUtilEtProfils;
+          }
+
+          if (
+            isSectionNamed(sectionName, "FORMATIONS") ||
+            isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
+          ) {
+            totalFormations += totalUtilEtProfils;
+          }
         }
 
         // Valider la cohérence des effectifs après le calcul
@@ -946,16 +941,14 @@ function updateTotals() {
             }
           }
 
-          // Ajoute bien chaque sous-total au total de la section (sauf éléments exclus)
+          // Agrégation pour cette ligne standard (non exclue)
           if (!isExcluded) {
             sectionTotal += sousTotal;
 
-            // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
             if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
               totalParametrage += sousTotal;
             }
 
-            // Si c'est une section de FORMATION, ajouter au total formations
             if (
               isSectionNamed(sectionName, "FORMATIONS") ||
               isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
@@ -1031,18 +1024,11 @@ function updateTotals() {
     if (!isSectionNamed(sectionName, "CABINET OPTION")) {
       totalGeneral += sectionTotal;
     }
-
-    // Ajoute aux totaux spécifiques pour l'affichage détaillé
-    if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
-      totalParametrage += sectionTotal;
-    }
-    if (
-      isSectionNamed(sectionName, "FORMATIONS") ||
-      isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
-    ) {
-      totalFormations += sectionTotal;
-    }
   });
+
+  // Totaux globaux de paramétrage et formations basés sur les calculs précédents
+  const totalParametrageGlobal = totalParametrage;
+  const totalFormationsGlobal = totalFormations;
 
   // Mise à jour des nouveaux éléments d'affichage dans le header
   const heuresDisplay = document.getElementById("heures-display");
@@ -1052,34 +1038,6 @@ function updateTotals() {
   const formationsCoutDisplay = document.getElementById(
     "formations-cout-display"
   );
-
-  // Mettre à jour les totaux globaux de paramétrage et formation
-  let totalParametrageGlobal = 0;
-  let totalFormationsGlobal = 0;
-  document.querySelectorAll(".section").forEach((sectionDiv) => {
-    const sectionTitleElement = sectionDiv.querySelector("h2");
-    if (!sectionTitleElement) return;
-
-    // Clone a node to avoid messing with badges, and get clean name
-    const titleClone = sectionTitleElement.cloneNode(true);
-    titleClone.querySelectorAll("span").forEach((span) => span.remove());
-    const sectionName = titleClone.textContent.trim();
-
-    const sectionTotalBadge = sectionDiv.querySelector(".section-total-badge");
-
-    if (sectionTotalBadge) {
-      const sectionTime = parseTimeToMinutes(sectionTotalBadge.textContent);
-      if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
-        totalParametrageGlobal += sectionTime;
-      }
-      if (
-        isSectionNamed(sectionName, "FORMATIONS") ||
-        isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
-      ) {
-        totalFormationsGlobal += sectionTime;
-      }
-    }
-  });
 
   if (heuresDisplay) {
     const parametrageFormatted = formatMinutes(totalParametrageGlobal);
