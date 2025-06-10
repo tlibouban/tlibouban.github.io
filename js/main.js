@@ -1447,33 +1447,27 @@ document.addEventListener("DOMContentLoaded", function () {
   window.loadFormationsLogiciels = loadFormationsLogiciels;
 
   /* =========================================
-     🛈 Inject build commit SHA as HTML comment
+     🛈 Inject latest commit SHA (any branch) as HTML comment
      ========================================= */
   (async () => {
-    const repo = "tlibouban/tlibouban.github.io"; // adapter si nom différent
-    const branchesToTry = ["gh-pages", "main", "master"];
-    let sha = null;
-    for (const branch of branchesToTry) {
-      try {
-        const res = await fetch(
-          `https://api.github.com/repos/${repo}/commits/${branch}`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          sha = data.sha?.substring(0, 7);
-          if (sha) break;
-        }
-      } catch (_) {
-        /* ignore */
-      }
-    }
-    if (sha) {
-      const comment = document.createComment(` Build from commit ${sha} `);
-      document.documentElement.parentNode.insertBefore(
-        comment,
-        document.documentElement
+    try {
+      const repo = "tlibouban/tlibouban.github.io"; // ➜ adapter si nécessaire
+      const res = await fetch(
+        `https://api.github.com/repos/${repo}/commits?per_page=1`
       );
-      console.log(`ℹ️ Build commit: ${sha}`);
+      if (!res.ok) throw new Error(res.statusText);
+      const data = await res.json();
+      const sha = data?.[0]?.sha?.substring(0, 7);
+      if (sha) {
+        const comment = document.createComment(` Build from commit ${sha} `);
+        document.documentElement.parentNode.insertBefore(
+          comment,
+          document.documentElement
+        );
+        console.log(`ℹ️ Build commit: ${sha}`);
+      }
+    } catch (e) {
+      console.warn("Impossible de récupérer le SHA du commit :", e);
     }
   })();
 });
