@@ -59,6 +59,15 @@ document.addEventListener("DOMContentLoaded", function () {
   // Réattacher les gestionnaires d'événements après le rendu
   setTimeout(reattachProfileManagerHandler, 500);
 
+  // Générer des ID automatiques pour tous les éléments ne possédant pas encore d'id
+  // (permet une identification plus simple lors des tests, conforme aux bonnes pratiques Context7)
+  setTimeout(() => {
+    if (window.assignAutoIds) {
+      window.assignAutoIds();
+      console.log("🔖 IDs automatiques attribués aux éléments HTML manquants");
+    }
+  }, 600);
+
   // S'assurer que les interrupteurs de Cabinet Option sont correctement configurés
   document
     .querySelectorAll(".modern-switch-input.check-feature-cabinet")

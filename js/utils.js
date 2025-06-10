@@ -707,6 +707,52 @@ function formatFormateurs(totalJours, hasParametrage) {
   return html;
 }
 
+// =====================
+// Attribution d'ID automatiques
+// =====================
+/**
+ * Parcourt le DOM et attribue un id aux éléments qui n'en ont pas encore.
+ * Les id sont construits sous la forme `${prefix}-${n}` où `prefix` est basé
+ * sur le nom de la balise et éventuellement sa classe principale.
+ * @param {HTMLElement} [root=document.body] – Noeud racine à parcourir
+ */
+function assignAutoIds(root = document.body) {
+  if (!root) return;
+  const counters = {};
+
+  const getNext = (pref) => {
+    counters[pref] = (counters[pref] || 0) + 1;
+    return `${pref}-${counters[pref]}`;
+  };
+
+  const walker = document.createTreeWalker(
+    root,
+    NodeFilter.SHOW_ELEMENT,
+    null,
+    false
+  );
+
+  while (walker.nextNode()) {
+    const el = walker.currentNode;
+    if (!(el instanceof HTMLElement)) continue;
+    if (el.id) continue; // déjà un id
+
+    // Définir un prefix pertinent : balise + première classe éventuelle
+    const tag = el.tagName.toLowerCase();
+    let prefix = tag;
+    if (el.classList.length) {
+      const mainClass = el.classList[0].replace(/[^a-zA-Z0-9_-]/g, "");
+      if (mainClass && !mainClass.startsWith("ng-")) {
+        prefix += `-${mainClass}`;
+      }
+    }
+    el.id = getNext(prefix);
+  }
+}
+
+// Rendre disponible globalement pour pouvoir l'appeler au besoin
+window.assignAutoIds = assignAutoIds;
+
 // Rendre ces fonctions disponibles globalement pour le débogage
 window.debugProfilesState = debugProfilesState;
 window.verifyUsersCalculation = verifyUsersCalculation;
