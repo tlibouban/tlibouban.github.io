@@ -750,124 +750,86 @@ function updateTotals() {
 
       // Cas spécial : ligne Utilisateurs (par user)
       if (tr.classList.contains("utilisateurs-main-row")) {
-        console.log("📊 Calcul des utilisateurs détecté");
+        console.log("📊 Recalcul complet de la section PARAMÉTRAGE...");
         let utilisateursTotal = 0;
         let profilsTotalMinutes = 0;
 
-        // D'abord, récupérer la valeur du champ utilisateurs-nb
-        const nbInputField = tr.querySelector("#utilisateurs-nb");
-        const utilisateursFromField = nbInputField
-          ? parseInt(nbInputField.value, 10) || 0
-          : 0;
-        console.log(
-          `📋 Valeur actuelle du champ utilisateurs-nb: ${utilisateursFromField}`
-        );
-
-        // Vérifier si les lignes de profils sont présentes dans le DOM
-        const profilRows = document.querySelectorAll("tr.profil-row");
-        if (
-          profilRows.length === 0 &&
-          window.profilsDynList &&
-          window.profilsDynList.length > 0
-        ) {
-          console.warn(
-            "⚠️ Lignes de profils manquantes, tentative de re-render"
-          );
-          if (typeof renderProfilsDyn === "function") {
-            renderProfilsDyn();
-          }
-        }
-
+        // 1. Calculer le total des utilisateurs et des temps de profil
         if (window.profilsDynList) {
-          console.log("👥 Profils trouvés:", window.profilsDynList.length);
-          console.log("🔍 DEBUG window.profilsDynList:", window.profilsDynList);
           window.profilsDynList.forEach((profil, pidx) => {
-            // Rechercher les éléments par ID plutôt que par data-idx pour plus de robustesse
+            const nbInput = document.querySelector(`#profil-nb-${pidx}`);
+            const nb = nbInput ? parseInt(nbInput.value, 10) || 0 : 0;
+
+            // Le total des utilisateurs est la somme de TOUS les profils
+            utilisateursTotal += nb;
+
+            // Le temps est calculé seulement si le profil est coché et modifié
             const checkboxProfil = document.querySelector(
               `#profil-check-${pidx}`
             );
-            const nbInput = document.querySelector(`#profil-nb-${pidx}`);
-
-            // Pour le switch de modification, utiliser le système tri-state
             const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
-
-            const checked = checkboxProfil ? checkboxProfil.checked : false;
-            const nb = nbInput ? parseInt(nbInput.value, 10) || 0 : 0;
-            const modif = modifSwitch
+            const isChecked = checkboxProfil ? checkboxProfil.checked : false;
+            const isModified = modifSwitch
               ? isTriStateActivated(modifSwitch)
               : false;
 
             console.log(
-              `  Profil ${pidx} (${profil.nom}): checked=${checked}, nb=${nb}, modif=${modif}`
-            );
-            console.log(
-              `    Elements found: checkbox=${!!checkboxProfil}, nbInput=${!!nbInput}, modifSwitch=${!!modifSwitch}`
+              `  Profil ${profil.nom}: nb=${nb}, coché=${isChecked}, modifié=${isModified}`
             );
 
-            // Ajouter au total des utilisateurs seulement si le profil est coché
-            if (checked) {
-              utilisateursTotal += nb;
+            let tempsProfil = 0;
+            if (isChecked && isModified) {
+              tempsProfil = 30; // 30 min par profil modifié
+              profilsTotalMinutes += tempsProfil;
             }
 
-            // Temps profils : 0 si pas modif, 30 min si modif
-            let tempsProfil = 0;
-            if (modif) tempsProfil += 30;
-            profilsTotalMinutes += checked ? tempsProfil : 0;
-
-            // Met à jour le sous-total de la ligne profil
+            // Mettre à jour le sous-total de la ligne profil
             const sousTotalCell = document.querySelector(
               `.profil-sous-total[data-idx='${pidx}']`
             );
             if (sousTotalCell) {
-              sousTotalCell.textContent =
-                checked && modif ? formatMinutes(30) : "0";
+              sousTotalCell.textContent = tempsProfil
+                ? formatMinutes(tempsProfil)
+                : "0";
             }
           });
         }
+        console.log(
+          `👤 Utilisateurs Total (somme profils): ${utilisateursTotal}`
+        );
+        console.log(`⏱️ Profils Total (temps modif): ${profilsTotalMinutes}`);
 
-        // Utiliser la valeur du champ utilisateurs-nb comme référence,
-        // sauf si des profils sont cochés (auquel cas on utilise le calcul des profils)
-        const finalUtilisateursTotal =
-          utilisateursTotal > 0 ? utilisateursTotal : utilisateursFromField;
-
-        console.log(`👤 Utilisateurs des profils cochés: ${utilisateursTotal}`);
-        console.log(`👤 Utilisateurs du champ: ${utilisateursFromField}`);
-        console.log(`👤 Utilisateurs FINAL: ${finalUtilisateursTotal}`);
-        console.log(`⏱️ Profils total minutes: ${profilsTotalMinutes}`);
-
-        // Met à jour le champ nb utilisateurs avec le total final
+        // 2. Mettre à jour le champ utilisateurs-nb
         const nbInput = tr.querySelector("#utilisateurs-nb");
         if (nbInput) {
-          nbInput.value = finalUtilisateursTotal;
-          console.log(`📝 Mise à jour nbInput: ${finalUtilisateursTotal}`);
-
-          // Mettre à jour l'unité avec l'accord grammatical
+          nbInput.value = utilisateursTotal;
           const uniteCell = tr.querySelector(".unite-cell");
           if (uniteCell && uniteCell.hasAttribute("data-unit-base")) {
             const unitBase = uniteCell.getAttribute("data-unit-base");
-            uniteCell.textContent = accordUnit(
-              finalUtilisateursTotal,
-              unitBase
-            );
+            uniteCell.textContent = accordUnit(utilisateursTotal, unitBase);
           }
         }
 
-        // Calcul du sous-total utilisateurs (ligne)
+        // 3. Calculer le sous-total de la ligne "Utilisateurs"
         const checkedUtil = tr.querySelector(
           ".modern-switch-input.check-feature-utilisateurs"
         )?.checked;
-        console.log(`🔘 Switch utilisateurs activé: ${checkedUtil}`);
-
         const timeMins = parseTimeToMinutes(tr.dataset.temps);
-        console.log(`⏰ Temps unitaire: ${timeMins} minutes`);
+        const sousTotalUtil = checkedUtil ? utilisateursTotal * timeMins : 0;
 
-        const sousTotalUtil = checkedUtil
-          ? finalUtilisateursTotal * timeMins
-          : 0;
-        const totalUtilEtProfils = sousTotalUtil + profilsTotalMinutes;
-
+        console.log(`🔘 Switch "Utilisateurs" coché: ${checkedUtil}`);
         console.log(
-          `💰 Sous-total utilisateurs: ${sousTotalUtil}, Total utilisateurs+profils: ${totalUtilEtProfils}`
+          `💰 Sous-total (ligne "Utilisateurs"): ${formatMinutes(
+            sousTotalUtil
+          )}`
+        );
+
+        // 4. Calculer le total pour la section PARAMETRAGE
+        const totalUtilEtProfils = sousTotalUtil + profilsTotalMinutes;
+        console.log(
+          `🟰 Total Section (Utilisateurs + Profils): ${formatMinutes(
+            totalUtilEtProfils
+          )}`
         );
 
         const sousTotalCell = tr.querySelector(".sous-total");
@@ -875,42 +837,16 @@ function updateTotals() {
           sousTotalCell.innerHTML = totalUtilEtProfils
             ? `${formatMinutes(
                 totalUtilEtProfils
-              )}<br><span style='font-size:0.95em;color:#444;'>(utilisateurs : ${
-                sousTotalUtil ? formatMinutes(sousTotalUtil) : "0"
-              } + profils : ${
-                profilsTotalMinutes ? formatMinutes(profilsTotalMinutes) : "0"
-              })</span>`
+              )}<br><span style='font-size:0.95em;color:#444;'>(utilisateurs : ${formatMinutes(
+                sousTotalUtil
+              )} + profils : ${formatMinutes(profilsTotalMinutes)})</span>`
             : "0";
         }
 
-        // Ajoute bien la somme utilisateurs+profils au total de la section
         sectionTotal += totalUtilEtProfils;
-
-        // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
         if (isParametrageSection) {
           totalParametrage += totalUtilEtProfils;
         }
-
-        // Ajoute le sous-total profils à la cellule dédiée
-        const profilsTotalCell = document.querySelector("#profils-total-cell");
-        if (profilsTotalCell) {
-          profilsTotalCell.textContent = profilsTotalMinutes
-            ? formatMinutes(profilsTotalMinutes)
-            : "0";
-        }
-
-        // Debug: Lister tous les éléments de profils présents
-        console.log("🔍 Debug éléments de profils présents:");
-        const allProfilCheckboxes = document.querySelectorAll(
-          '[id^="profil-check-"]'
-        );
-        const allProfilNbs = document.querySelectorAll('[id^="profil-nb-"]');
-        const allProfilModifs = document.querySelectorAll(
-          '[id^="profil-modif-"]'
-        );
-        console.log(`  - Checkboxes profils: ${allProfilCheckboxes.length}`);
-        console.log(`  - Inputs nombre: ${allProfilNbs.length}`);
-        console.log(`  - Switches modif: ${allProfilModifs.length}`);
 
         // Valider la cohérence des effectifs après le calcul
         validateProfilesVsEffectif();
@@ -1181,10 +1117,6 @@ function addAllInputListeners() {
       "input",
       updateFormationQuantitiesBasedOnEffectif
     );
-
-    // Ajouter aussi un listener pour mettre à jour le champ utilisateurs-nb
-    effectifInput.removeEventListener("input", handleEffectifChange);
-    effectifInput.addEventListener("input", handleEffectifChange);
   }
 
   // Générer la section DEPLOIEMENT
@@ -1563,40 +1495,6 @@ function validateProfilesVsEffectif() {
         warning.parentNode.removeChild(warning);
       }
     });
-  }
-}
-
-// =====================
-// Fonction pour gérer les changements d'effectif et mettre à jour utilisateurs-nb
-// =====================
-function handleEffectifChange() {
-  console.log("📊 Changement d'effectif détecté");
-
-  const effectifInput = document.getElementById("effectif");
-  const utilisateursNb = document.getElementById("utilisateurs-nb");
-
-  if (!effectifInput || !utilisateursNb) {
-    console.warn("❌ Éléments effectif ou utilisateurs-nb non trouvés");
-    return;
-  }
-
-  const effectif = parseInt(effectifInput.value, 10);
-
-  if (isNaN(effectif) || effectif <= 0) {
-    console.log("📊 Effectif vide ou invalide, remise à zéro utilisateurs-nb");
-    utilisateursNb.value = 0;
-    updateTotals();
-    return;
-  }
-
-  console.log(`📊 Mise à jour utilisateurs-nb avec effectif: ${effectif}`);
-
-  // Mettre à jour directement le champ utilisateurs-nb avec l'effectif
-  utilisateursNb.value = effectif;
-
-  // Déclencher la mise à jour des totaux
-  if (typeof updateTotals === "function") {
-    updateTotals();
   }
 }
 
