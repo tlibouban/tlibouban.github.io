@@ -763,14 +763,18 @@ function updateTotals() {
             // Le total des utilisateurs est la somme de TOUS les profils
             utilisateursTotal += nb;
 
-            // Le temps est calculé seulement si le profil est coché et modifié
+            // Le temps de modification est ajouté si le switch de droite (modif) est activé.
+            const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
+            const isModified = modifSwitch
+              ? isTriStateActivated(modifSwitch)
+              : false;
+
+            // On récupère l'état du switch de gauche pour le log, mais il n'influe pas ce calcul.
             const checkboxProfil = document.querySelector(
               `#profil-check-${pidx}`
             );
-            const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
-            const isChecked = checkboxProfil ? checkboxProfil.checked : false;
-            const isModified = modifSwitch
-              ? isTriStateActivated(modifSwitch)
+            const isChecked = checkboxProfil
+              ? isTriStateActivated(checkboxProfil)
               : false;
 
             console.log(
@@ -778,7 +782,7 @@ function updateTotals() {
             );
 
             let tempsProfil = 0;
-            if (isChecked && isModified) {
+            if (isModified) {
               tempsProfil = 30; // 30 min par profil modifié
               profilsTotalMinutes += tempsProfil;
             }
