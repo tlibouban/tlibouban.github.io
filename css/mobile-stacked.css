@@ -1,0 +1,35 @@
+@media (max-width: 767px) {
+  /* Masquer l'en-tête */
+  .checklist-table thead {
+    display: none;
+  }
+
+  /* Chaque ligne devient une carte */
+  .checklist-table tr {
+    display: block;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    background: #fff;
+  }
+
+  .checklist-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+  }
+
+  .checklist-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2e4a9e;
+    margin-right: 0.5rem;
+  }
+
+  /* Laisser les sous-totaux en gras pour visibilité */
+  .checklist-table td.sous-total {
+    font-weight: 700;
+  }
+}
