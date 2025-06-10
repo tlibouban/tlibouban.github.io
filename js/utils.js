@@ -395,17 +395,18 @@ function forceUpdateUsersCalculation() {
   console.log("🔧 Forcing complete users calculation update...");
 
   // Vérifier que les éléments nécessaires existent
+  const profilsDiv = document.getElementById("profils-dyn-list");
   const utilisateursNb = document.getElementById("utilisateurs-nb");
   const effectifInput = document.getElementById("effectif");
 
-  if (!utilisateursNb || !window.profilsDynList) {
+  if (!profilsDiv || !utilisateursNb || !window.profilsDynList) {
     console.warn("❌ Éléments manquants pour le calcul des utilisateurs");
     return false;
   }
 
   console.log("📊 État actuel des profils:", window.profilsDynList);
 
-  // Calculer le total des utilisateurs
+  // Calculer le total des utilisateurs (TOUS les profils, pas seulement cochés)
   let totalUsers = 0;
   window.profilsDynList.forEach((profil, idx) => {
     const nb = profil.nb || 0;
@@ -415,7 +416,7 @@ function forceUpdateUsersCalculation() {
 
   console.log(`👤 Total calculé: ${totalUsers} utilisateurs`);
 
-  // Mettre à jour le champ nombre d'utilisateurs
+  // Mettre à jour le champ nombre d'utilisateurs DIRECTEMENT
   utilisateursNb.value = totalUsers;
 
   // Vérifier la cohérence avec l'effectif TSV

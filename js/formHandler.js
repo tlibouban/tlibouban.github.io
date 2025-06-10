@@ -1159,6 +1159,10 @@ function addAllInputListeners() {
       "input",
       updateFormationQuantitiesBasedOnEffectif
     );
+
+    // Ajouter aussi un listener pour mettre à jour le champ utilisateurs-nb
+    effectifInput.removeEventListener("input", handleEffectifChange);
+    effectifInput.addEventListener("input", handleEffectifChange);
   }
 
   // Générer la section DEPLOIEMENT
@@ -1537,6 +1541,40 @@ function validateProfilesVsEffectif() {
         warning.parentNode.removeChild(warning);
       }
     });
+  }
+}
+
+// =====================
+// Fonction pour gérer les changements d'effectif et mettre à jour utilisateurs-nb
+// =====================
+function handleEffectifChange() {
+  console.log("📊 Changement d'effectif détecté");
+
+  const effectifInput = document.getElementById("effectif");
+  const utilisateursNb = document.getElementById("utilisateurs-nb");
+
+  if (!effectifInput || !utilisateursNb) {
+    console.warn("❌ Éléments effectif ou utilisateurs-nb non trouvés");
+    return;
+  }
+
+  const effectif = parseInt(effectifInput.value, 10);
+
+  if (isNaN(effectif) || effectif <= 0) {
+    console.log("📊 Effectif vide ou invalide, remise à zéro utilisateurs-nb");
+    utilisateursNb.value = 0;
+    updateTotals();
+    return;
+  }
+
+  console.log(`📊 Mise à jour utilisateurs-nb avec effectif: ${effectif}`);
+
+  // Mettre à jour directement le champ utilisateurs-nb avec l'effectif
+  utilisateursNb.value = effectif;
+
+  // Déclencher la mise à jour des totaux
+  if (typeof updateTotals === "function") {
+    updateTotals();
   }
 }
 
