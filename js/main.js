@@ -1445,6 +1445,37 @@ document.addEventListener("DOMContentLoaded", function () {
   window.updateTrainerAssignment = updateTrainerAssignment;
   window.getTrainerAssignmentInstance = getTrainerAssignmentInstance;
   window.loadFormationsLogiciels = loadFormationsLogiciels;
+
+  /* =========================================
+     🛈 Inject build commit SHA as HTML comment
+     ========================================= */
+  (async () => {
+    const repo = "tlibouban/tlibouban.github.io"; // adapter si nom différent
+    const branchesToTry = ["gh-pages", "main", "master"];
+    let sha = null;
+    for (const branch of branchesToTry) {
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${repo}/commits/${branch}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          sha = data.sha?.substring(0, 7);
+          if (sha) break;
+        }
+      } catch (_) {
+        /* ignore */
+      }
+    }
+    if (sha) {
+      const comment = document.createComment(` Build from commit ${sha} `);
+      document.documentElement.parentNode.insertBefore(
+        comment,
+        document.documentElement
+      );
+      console.log(`ℹ️ Build commit: ${sha}`);
+    }
+  })();
 });
 
 // Variables globales pour les bases de données
