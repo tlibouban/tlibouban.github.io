@@ -246,6 +246,22 @@ function renderChecklist() {
         }
       }, 0);
     }
+
+    // N'ajoute au total général que pour les sections autres que Cabinet Option
+    if (!isSectionNamed(section, "CABINET OPTION")) {
+      totalGeneral += sectionTotal;
+    }
+
+    // Ajoute aux totaux spécifiques pour l'affichage détaillé
+    if (isSectionNamed(section, "PARAMÉTRAGE")) {
+      totalParametrage += sectionTotal;
+    }
+    if (
+      isSectionNamed(section, "FORMATIONS") ||
+      isSectionNamed(section, "MODULES COMPLEMENTAIRES")
+    ) {
+      totalFormations += sectionTotal;
+    }
   });
 
   // Initialisation dynamique des profils (sous Utilisateurs)
@@ -1031,6 +1047,14 @@ function updateTotals() {
     if (!isCabinetOption) {
       totalGeneral += sectionTotal;
     }
+
+    // Ajoute aux totaux spécifiques pour l'affichage détaillé
+    if (isParametrageSection) {
+      totalParametrage += sectionTotal;
+    }
+    if (isFormationsSection) {
+      totalFormations += sectionTotal;
+    }
   });
 
   // Mise à jour des nouveaux éléments d'affichage dans le header
@@ -1042,12 +1066,32 @@ function updateTotals() {
     "formations-cout-display"
   );
 
+  // Mettre à jour les totaux globaux de paramétrage et formation
+  let totalParametrageGlobal = 0;
+  let totalFormationsGlobal = 0;
+  document.querySelectorAll(".section").forEach((sectionDiv) => {
+    const sectionTitle = sectionDiv.querySelector("h2").textContent;
+    const sectionTotalBadge = sectionDiv.querySelector(".section-total-badge");
+    if (sectionTotalBadge) {
+      const sectionTime = parseTimeToMinutes(sectionTotalBadge.textContent);
+      if (isSectionNamed(sectionTitle, "PARAMÉTRAGE")) {
+        totalParametrageGlobal += sectionTime;
+      }
+      if (
+        isSectionNamed(sectionTitle, "FORMATIONS") ||
+        isSectionNamed(sectionTitle, "MODULES COMPLEMENTAIRES")
+      ) {
+        totalFormationsGlobal += sectionTime;
+      }
+    }
+  });
+
   if (heuresDisplay) {
-    const parametrageFormatted = formatMinutes(totalParametrage);
-    const formationsFormatted = formatMinutes(totalFormations);
+    const parametrageFormatted = formatMinutes(totalParametrageGlobal);
+    const formationsFormatted = formatMinutes(totalFormationsGlobal);
 
     heuresDisplay.innerHTML = `
-      <div style="line-height:1.2;">
+      <div style="line-height:1.2; text-align:center;">
         <span style="font-size:0.9em;">Total: ${formatMinutes(
           totalGeneral
         )}</span><br>
@@ -1057,17 +1101,33 @@ function updateTotals() {
   }
 
   if (journeesDisplay) {
-    journeesDisplay.textContent = formatJournees(
-      totalGeneral,
-      totalParametrage
-    );
+    const totalJours = convertToJournees(totalGeneral);
+    const paramJours = convertToJournees(totalParametrageGlobal);
+    const formJours = convertToJournees(totalFormationsGlobal);
+
+    journeesDisplay.innerHTML = `
+      <div style="line-height:1.2; text-align:center;">
+        <span style="font-size:0.9em;">Total: ${totalJours} j</span><br>
+        <span style="font-size:0.75em; opacity:0.8;">(Param: ${paramJours} j + Form: ${formJours} j)</span>
+      </div>
+    `;
   }
 
   if (demiJourneesDisplay) {
-    demiJourneesDisplay.textContent = formatDemiJournees(
-      totalGeneral,
-      totalParametrage
-    );
+    const totalDemiJours = totalGeneral / (4 * 60);
+    const paramDemiJours = totalParametrageGlobal / (4 * 60);
+    const formDemiJours = totalFormationsGlobal / (4 * 60);
+
+    demiJourneesDisplay.innerHTML = `
+      <div style="line-height:1.2; text-align:center;">
+        <span style="font-size:0.9em;">Total: ${totalDemiJours.toFixed(
+          1
+        )} dj</span><br>
+        <span style="font-size:0.75em; opacity:0.8;">(Param: ${paramDemiJours.toFixed(
+          1
+        )} dj + Form: ${formDemiJours.toFixed(1)} dj)</span>
+      </div>
+    `;
   }
 
   // Mise à jour de l'affichage des formateurs
@@ -1076,7 +1136,7 @@ function updateTotals() {
     const joursTotal = convertToJournees(totalGeneral);
 
     // Vérifier si le paramétrage est présent
-    const hasParametrage = totalParametrage > 0;
+    const hasParametrage = totalParametrageGlobal > 0;
 
     // Calculer les formateurs nécessaires
     const formateurs1Sem = calculateFormateurs(joursTotal, hasParametrage, 1);
