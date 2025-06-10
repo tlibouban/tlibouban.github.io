@@ -1478,6 +1478,26 @@ document.addEventListener("DOMContentLoaded", function () {
       console.warn("Impossible de récupérer la branche ou le SHA :", e);
     }
   })();
+
+  /**
+   * Ajoute l'attribut data-label à chaque cellule <td> en fonction du texte du <th> correspondant.
+   */
+  function setDataLabels() {
+    document.querySelectorAll("table.checklist-table").forEach((table) => {
+      const headers = Array.from(table.querySelectorAll("thead th")).map((th) =>
+        th.textContent.trim()
+      );
+      table.querySelectorAll("tbody tr").forEach((tr) => {
+        tr.querySelectorAll("td").forEach((td, idx) => {
+          if (!td.hasAttribute("data-label") && headers[idx]) {
+            td.setAttribute("data-label", headers[idx]);
+          }
+        });
+      });
+    });
+  }
+
+  setDataLabels();
 });
 
 // Variables globales pour les bases de données
