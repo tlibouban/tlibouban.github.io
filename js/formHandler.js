@@ -764,18 +764,32 @@ function updateTotals() {
             utilisateursTotal += nb;
 
             // Le temps de modification est ajouté si le switch de droite (modif) est activé.
-            const modifSwitch = document.querySelector(`#profil-modif-${pidx}`);
-            const isModified = modifSwitch
-              ? isTriStateActivated(modifSwitch)
-              : false;
+            // Logique robuste pour gérer les deux types de switchs (tri-state ou standard)
+            const modifSwitchEl = document.querySelector(
+              `#profil-modif-${pidx}`
+            );
+            let isModified = false;
+            if (modifSwitchEl) {
+              if (modifSwitchEl.classList.contains("tri-state-modern-switch")) {
+                isModified = isTriStateActivated(modifSwitchEl); // Cas tri-state
+              } else {
+                isModified = modifSwitchEl.checked; // Cas checkbox standard
+              }
+            }
 
-            // On récupère l'état du switch de gauche pour le log, mais il n'influe pas ce calcul.
-            const checkboxProfil = document.querySelector(
+            const checkboxProfilEl = document.querySelector(
               `#profil-check-${pidx}`
             );
-            const isChecked = checkboxProfil
-              ? isTriStateActivated(checkboxProfil)
-              : false;
+            let isChecked = false;
+            if (checkboxProfilEl) {
+              if (
+                checkboxProfilEl.classList.contains("tri-state-modern-switch")
+              ) {
+                isChecked = isTriStateActivated(checkboxProfilEl);
+              } else {
+                isChecked = checkboxProfilEl.checked;
+              }
+            }
 
             console.log(
               `  Profil ${profil.nom}: nb=${nb}, coché=${isChecked}, modifié=${isModified}`

@@ -37,6 +37,40 @@ function renderModernSwitch(
   `;
 }
 
+/**
+ * Génère un switch moderne pour tous les types de tableaux
+ * @param {string} id - ID unique pour le switch
+ * @param {string} name - Nom du champ
+ * @param {boolean} checked - État initial
+ * @param {string} ariaLabel - Label d'accessibilité
+ * @param {string} cssClass - Classe CSS additionnelle (optionnel)
+ * @returns {string} HTML du switch moderne
+ */
+function renderTriStateModernSwitch(
+  id,
+  name,
+  checked = false,
+  ariaLabel = "",
+  cssClass = "check-feature"
+) {
+  return `
+    <div class="modern-switch-container">
+      <input 
+        id="${id}"
+        name="${name}"
+        type="checkbox" 
+        class="modern-switch-input ${cssClass}"
+        aria-label="${ariaLabel}"
+        data-idx="${id.match(/\d+$/) ? id.match(/\d+$/)[0] : ""}"
+        ${checked ? "checked" : ""}
+      >
+      <label for="${id}" class="modern-switch-label">
+        <div class="tick-mark"></div>
+      </label>
+    </div>
+  `;
+}
+
 // =====================
 // Initialisation du gestionnaire de profils
 // =====================
@@ -414,10 +448,10 @@ function renderProfilsDyn() {
     .map(
       (profil, idx) => `
       <tr class="profil-row" data-profil-idx="${idx}" style="background:#f9fafb;">
-        <td style="padding-left:20px;">${renderModernSwitch(
+        <td style="padding-left:20px;">${renderTriStateModernSwitch(
           `profil-check-${idx}`,
           `profil-check-${idx}`,
-          idx === 0 && profil.nom === "Associé", // Cocher par défaut seulement l'Associé
+          idx === 0 && profil.nom === "Associé" ? "activated" : "non-examined",
           "Inclure ce profil",
           "check-feature-profil"
         )}</td>
@@ -438,10 +472,10 @@ function renderProfilsDyn() {
                  id="profil-nb-${idx}" name="profil-nb-${idx}" data-unit="utilisateur" />
         </td>
         <td style="text-align:center;">
-          ${renderModernSwitch(
+          ${renderTriStateModernSwitch(
             `profil-modif-${idx}`,
             `profil-modif-${idx}`,
-            profil.ajoute || false,
+            profil.ajoute ? "activated" : "non-examined",
             "Modifier ce profil",
             "profil-modif"
           )}
@@ -509,17 +543,7 @@ function renderProfilsDyn() {
     });
   });
 
-  document
-    .querySelectorAll(".modern-switch-input.check-feature-profil")
-    .forEach((chk) => {
-      chk.addEventListener("change", updateTotals);
-    });
-
-  document
-    .querySelectorAll(".modern-switch-input.profil-modif")
-    .forEach((chk) => {
-      chk.addEventListener("change", updateTotals);
-    });
+  // Les listeners pour les switches sont maintenant gérés par le listener global pour les tri-states
 
   // Listeners pour les boutons de suppression
   document.querySelectorAll(".remove-profil-btn").forEach((btn) => {
