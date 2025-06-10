@@ -985,14 +985,31 @@ function updateTotals() {
     // Mettre à jour le badge de montant
     if (montantBadge) {
       const sectionTitle = sectionDiv.querySelector("h2");
-      const sectionName = sectionTitle ? sectionTitle.textContent.trim() : "";
+      let sectionName = "";
 
-      // Nettoyer le nom de section en enlevant les badges et boutons
+      if (sectionTitle) {
+        // Extraire le nom de section en évitant les badges dynamiques
+        // On prend le premier texte avant les badges
+        const textNodes = [];
+        for (let node of sectionTitle.childNodes) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            textNodes.push(node.textContent);
+          } else if (
+            node.tagName &&
+            !node.classList.contains("section-badges")
+          ) {
+            // Inclure le texte des éléments qui ne sont pas des badges
+            textNodes.push(node.textContent);
+          }
+        }
+        sectionName = textNodes.join(" ").trim();
+      }
+
+      // Nettoyer le nom de section en enlevant les éléments indésirables
       const cleanSectionName = sectionName
         .replace(/^\s*▼?\s*/, "") // Enlever le symbole de toggle éventuel
-        .replace(/\d+h\s+\d+min.*$/, "") // Enlever les badges de temps
-        .replace(/\d+\s*€.*$/, "") // Enlever les badges de montant
         .replace(/VOTRE DEPLOIEMENT SEPTEO SOLUTIONS AVOCATS/, "DEPLOIEMENT") // Normaliser le nom de déploiement
+        .replace(/\s+/g, " ") // Remplacer tous les espaces multiples et sauts de ligne par un seul espace
         .trim();
 
       console.log(
