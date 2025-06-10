@@ -754,6 +754,15 @@ function updateTotals() {
         let utilisateursTotal = 0;
         let profilsTotalMinutes = 0;
 
+        // D'abord, récupérer la valeur du champ utilisateurs-nb
+        const nbInputField = tr.querySelector("#utilisateurs-nb");
+        const utilisateursFromField = nbInputField
+          ? parseInt(nbInputField.value, 10) || 0
+          : 0;
+        console.log(
+          `📋 Valeur actuelle du champ utilisateurs-nb: ${utilisateursFromField}`
+        );
+
         // Vérifier si les lignes de profils sont présentes dans le DOM
         const profilRows = document.querySelectorAll("tr.profil-row");
         if (
@@ -771,6 +780,7 @@ function updateTotals() {
 
         if (window.profilsDynList) {
           console.log("👥 Profils trouvés:", window.profilsDynList.length);
+          console.log("🔍 DEBUG window.profilsDynList:", window.profilsDynList);
           window.profilsDynList.forEach((profil, pidx) => {
             // Rechercher les éléments par ID plutôt que par data-idx pour plus de robustesse
             const checkboxProfil = document.querySelector(
@@ -815,20 +825,30 @@ function updateTotals() {
           });
         }
 
-        console.log(`👤 Utilisateurs total: ${utilisateursTotal}`);
+        // Utiliser la valeur du champ utilisateurs-nb comme référence,
+        // sauf si des profils sont cochés (auquel cas on utilise le calcul des profils)
+        const finalUtilisateursTotal =
+          utilisateursTotal > 0 ? utilisateursTotal : utilisateursFromField;
+
+        console.log(`👤 Utilisateurs des profils cochés: ${utilisateursTotal}`);
+        console.log(`👤 Utilisateurs du champ: ${utilisateursFromField}`);
+        console.log(`👤 Utilisateurs FINAL: ${finalUtilisateursTotal}`);
         console.log(`⏱️ Profils total minutes: ${profilsTotalMinutes}`);
 
-        // Met à jour le champ nb utilisateurs
+        // Met à jour le champ nb utilisateurs avec le total final
         const nbInput = tr.querySelector("#utilisateurs-nb");
         if (nbInput) {
-          nbInput.value = utilisateursTotal;
-          console.log(`📝 Mise à jour nbInput: ${utilisateursTotal}`);
+          nbInput.value = finalUtilisateursTotal;
+          console.log(`📝 Mise à jour nbInput: ${finalUtilisateursTotal}`);
 
           // Mettre à jour l'unité avec l'accord grammatical
           const uniteCell = tr.querySelector(".unite-cell");
           if (uniteCell && uniteCell.hasAttribute("data-unit-base")) {
             const unitBase = uniteCell.getAttribute("data-unit-base");
-            uniteCell.textContent = accordUnit(utilisateursTotal, unitBase);
+            uniteCell.textContent = accordUnit(
+              finalUtilisateursTotal,
+              unitBase
+            );
           }
         }
 
@@ -841,7 +861,9 @@ function updateTotals() {
         const timeMins = parseTimeToMinutes(tr.dataset.temps);
         console.log(`⏰ Temps unitaire: ${timeMins} minutes`);
 
-        const sousTotalUtil = checkedUtil ? utilisateursTotal * timeMins : 0;
+        const sousTotalUtil = checkedUtil
+          ? finalUtilisateursTotal * timeMins
+          : 0;
         const totalUtilEtProfils = sousTotalUtil + profilsTotalMinutes;
 
         console.log(
