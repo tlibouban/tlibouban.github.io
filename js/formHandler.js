@@ -811,13 +811,14 @@ function updateTotals() {
         }
 
         // 3. Calculer le sous-total de la ligne "Utilisateurs"
-        const checkedUtil = tr.querySelector(
-          ".modern-switch-input.check-feature-utilisateurs"
-        )?.checked;
+        const switchUtil = tr.querySelector(".tri-state-modern-switch");
+        const checkedUtil = switchUtil
+          ? isTriStateActivated(switchUtil)
+          : false;
         const timeMins = parseTimeToMinutes(tr.dataset.temps);
         const sousTotalUtil = checkedUtil ? utilisateursTotal * timeMins : 0;
 
-        console.log(`🔘 Switch "Utilisateurs" coché: ${checkedUtil}`);
+        console.log(`🔘 Switch "Utilisateurs" activé: ${checkedUtil}`);
         console.log(
           `💰 Sous-total (ligne "Utilisateurs"): ${formatMinutes(
             sousTotalUtil

@@ -331,14 +331,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFormationQuantitiesBasedOnEffectif();
       }
 
-      // NOUVEAU: Déclencher handleEffectifChange après remplissage automatique
-      if (typeof handleEffectifChange === "function") {
-        console.log(
-          "🔄 Déclenchement handleEffectifChange après auto-remplissage effectif"
-        );
-        handleEffectifChange();
-      }
-
       if (clientData.type === "Prospect") {
         // Si prospect : Type de projet = "New logo" uniquement
         updateProjetOptionsForProspect();
@@ -396,14 +388,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Mettre à jour les profils utilisateurs selon les données TSV
     updateProfilesFromClientData(clientData);
-
-    // NOUVEAU: Forcer la mise à jour du calcul des utilisateurs après mise à jour des profils
-    if (typeof forceUpdateUsersCalculation === "function") {
-      console.log(
-        "🔄 Déclenchement forceUpdateUsersCalculation après mise à jour profils"
-      );
-      setTimeout(() => forceUpdateUsersCalculation(), 100); // Petit délai pour s'assurer que les profils sont rendus
-    }
 
     // Mettre à jour les options de sens après changement
     updateSensOptions();
