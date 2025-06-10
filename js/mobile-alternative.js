@@ -105,6 +105,7 @@ class MobileAlternative {
       "feature-nb",
       "profil-nb",
       "profil-modif",
+      "tri-state-modern-switch",
     ];
 
     // Vérifier si l'élément a une des classes déclencheuses
@@ -323,15 +324,33 @@ class MobileAlternative {
     const subtotal = cells[5]?.textContent || "";
 
     // Gérer les switches différemment des checkboxes normales
-    const isSwitch = cells[0]?.querySelector(".switch");
+    const isTriState = cells[0]?.querySelector(".tri-state-modern-switch");
+    const switchElement = cells[0]?.querySelector(".switch");
     let checkboxHtml = "";
 
-    if (isSwitch) {
-      // Copier le switch existant avec tous ses attributs
-      const switchElement = cells[0].querySelector(".switch");
+    if (isTriState) {
+      // 💡 Tri-state modern switch : on clone l'élément entier afin de conserver les 3 états
+      const triEl = isTriState.cloneNode(true);
+      // Nouvel id pour éviter doublon
+      if (triEl.id) triEl.id = triEl.id + "-mobile";
+
+      // Écouteur de clic pour répercuter l'état dans l'original
+      triEl.addEventListener("click", () => {
+        // Après animation, copier la/les classes d'état
+        const original = document.getElementById(
+          triEl.id.replace("-mobile", "")
+        );
+        if (original) {
+          original.className = triEl.className.replace("-mobile", "");
+          if (typeof updateTotals === "function") updateTotals();
+        }
+      });
+
+      checkboxHtml = triEl.outerHTML;
+    } else if (switchElement) {
       const inputElement = switchElement.querySelector("input");
 
-      // Préserver tous les data-* attributs et événements
+      // Préserver les data-attrs
       const dataAttributes = [];
       Array.from(inputElement.attributes).forEach((attr) => {
         if (attr.name.startsWith("data-") || attr.name === "value") {
