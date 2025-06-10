@@ -747,20 +747,28 @@ function updateTotals() {
   document.querySelectorAll(".section").forEach((sectionDiv) => {
     let sectionTotal = 0;
 
-    const sectionTitle = sectionDiv.querySelector("h2");
-    const isCabinetOption =
-      sectionTitle &&
-      isSectionNamed(sectionTitle.textContent, "CABINET OPTION");
+    const sectionTitleElement = sectionDiv.querySelector("h2");
+    if (!sectionTitleElement) return;
 
-    // Vérifier si c'est la section PARAMÉTRAGE
-    const isParametrageSection =
-      sectionTitle && isSectionNamed(sectionTitle.textContent, "PARAMÉTRAGE");
+    // Clone a node to avoid messing with badges, and get clean name
+    const titleClone = sectionTitleElement.cloneNode(true);
+    titleClone.querySelectorAll("span").forEach((span) => span.remove());
+    const sectionName = titleClone.textContent.trim();
 
-    // Vérifier si c'est la section FORMATIONS
-    const isFormationsSection =
-      sectionTitle &&
-      (isSectionNamed(sectionTitle.textContent, "FORMATIONS") ||
-        isSectionNamed(sectionTitle.textContent, "MODULES COMPLEMENTAIRES"));
+    const sectionTotalBadge = sectionDiv.querySelector(".section-total-badge");
+
+    if (sectionTotalBadge) {
+      const sectionTime = parseTimeToMinutes(sectionTotalBadge.textContent);
+      if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
+        totalParametrage += sectionTime;
+      }
+      if (
+        isSectionNamed(sectionName, "FORMATIONS") ||
+        isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
+      ) {
+        totalFormations += sectionTime;
+      }
+    }
 
     sectionDiv.querySelectorAll("tbody tr").forEach((tr, idx) => {
       // Vérifier si la ligne contient une fonctionnalité à exclure
@@ -889,7 +897,7 @@ function updateTotals() {
         sectionTotal += totalUtilEtProfils;
 
         // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
-        if (isParametrageSection) {
+        if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
           totalParametrage += totalUtilEtProfils;
         }
 
@@ -905,7 +913,7 @@ function updateTotals() {
           : false;
 
         // Pour la section CABINET OPTION, pas de calcul de temps mais juste comptage
-        if (isCabinetOption) {
+        if (isSectionNamed(sectionName, "CABINET OPTION")) {
           // Ne rien ajouter au total, juste mettre à jour l'état visuel
           const sousTotalCell = tr.querySelector(".sous-total");
           if (sousTotalCell) {
@@ -943,12 +951,15 @@ function updateTotals() {
             sectionTotal += sousTotal;
 
             // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
-            if (isParametrageSection) {
+            if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
               totalParametrage += sousTotal;
             }
 
             // Si c'est une section de FORMATION, ajouter au total formations
-            if (isFormationsSection) {
+            if (
+              isSectionNamed(sectionName, "FORMATIONS") ||
+              isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
+            ) {
               totalFormations += sousTotal;
             }
           }
@@ -961,7 +972,7 @@ function updateTotals() {
     const montantBadge = sectionDiv.querySelector(".section-montant-badge");
 
     if (badge) {
-      if (isCabinetOption) {
+      if (isSectionNamed(sectionName, "CABINET OPTION")) {
         // Pour Cabinet Option, compter les tri-state switches activés
         const optionsActivees = Array.from(
           sectionDiv.querySelectorAll(".tri-state-modern-switch")
@@ -975,7 +986,10 @@ function updateTotals() {
         const texteOption =
           optionsActivees <= 1 ? "option active" : "options actives";
         badge.textContent = `${optionsActivees}/${optionsTotal} ${texteOption}`;
-      } else if (isFormationsSection) {
+      } else if (
+        isSectionNamed(sectionName, "FORMATIONS") ||
+        isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
+      ) {
         // Pour FORMATIONS, afficher temps + sous-total financier
         const sousTotal = calculateFormationSousTotal();
         if (sousTotal > 0) {
@@ -992,67 +1006,40 @@ function updateTotals() {
 
     // Mettre à jour le badge de montant
     if (montantBadge) {
-      const sectionTitle = sectionDiv.querySelector("h2");
-      let sectionName = "";
-
-      if (sectionTitle) {
-        // Extraire le nom de section en évitant les badges dynamiques
-        // On prend le premier texte avant les badges
-        const textNodes = [];
-        for (let node of sectionTitle.childNodes) {
-          if (node.nodeType === Node.TEXT_NODE) {
-            textNodes.push(node.textContent);
-          } else if (
-            node.tagName &&
-            !node.classList.contains("section-badges")
-          ) {
-            // Inclure le texte des éléments qui ne sont pas des badges
-            textNodes.push(node.textContent);
-          }
-        }
-        sectionName = textNodes.join(" ").trim();
-      }
-
-      // Nettoyer le nom de section en enlevant les éléments indésirables
-      const cleanSectionName = sectionName
-        .replace(/^\s*▼?\s*/, "") // Enlever le symbole de toggle éventuel
-        .replace(/VOTRE DEPLOIEMENT SEPTEO SOLUTIONS AVOCATS/, "DEPLOIEMENT") // Normaliser le nom de déploiement
-        .replace(/\s+/g, " ") // Remplacer tous les espaces multiples et sauts de ligne par un seul espace
-        .trim();
-
       console.log(
-        `🔍 Debug badge montant - Section: "${cleanSectionName}" (original: "${sectionName}")`
+        `🔍 Debug badge montant - Section: "${sectionName}" (original: "${sectionName}")`
       );
 
-      const montantTotal = calculateSectionMontantTotal(cleanSectionName);
-      console.log(
-        `💰 Montant calculé pour "${cleanSectionName}": ${montantTotal}€`
-      );
+      const montantTotal = calculateSectionMontantTotal(sectionName);
+      console.log(`💰 Montant calculé pour "${sectionName}": ${montantTotal}€`);
 
       if (montantTotal > 0) {
         montantBadge.textContent = `${montantTotal} € HT`;
         montantBadge.style.display = "inline-block";
         console.log(
-          `✅ Badge montant affiché pour "${cleanSectionName}": ${montantTotal} € HT`
+          `✅ Badge montant affiché pour "${sectionName}": ${montantTotal} € HT`
         );
       } else {
         montantBadge.style.display = "none";
         console.log(
-          `❌ Badge montant masqué pour "${cleanSectionName}" (montant: ${montantTotal})`
+          `❌ Badge montant masqué pour "${sectionName}" (montant: ${montantTotal})`
         );
       }
     }
 
     // N'ajoute au total général que pour les sections autres que Cabinet Option
-    if (!isCabinetOption) {
+    if (!isSectionNamed(sectionName, "CABINET OPTION")) {
       totalGeneral += sectionTotal;
     }
 
     // Ajoute aux totaux spécifiques pour l'affichage détaillé
-    if (isParametrageSection) {
+    if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
       totalParametrage += sectionTotal;
     }
-    if (isFormationsSection) {
+    if (
+      isSectionNamed(sectionName, "FORMATIONS") ||
+      isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
+    ) {
       totalFormations += sectionTotal;
     }
   });
@@ -1070,16 +1057,24 @@ function updateTotals() {
   let totalParametrageGlobal = 0;
   let totalFormationsGlobal = 0;
   document.querySelectorAll(".section").forEach((sectionDiv) => {
-    const sectionTitle = sectionDiv.querySelector("h2").textContent;
+    const sectionTitleElement = sectionDiv.querySelector("h2");
+    if (!sectionTitleElement) return;
+
+    // Clone a node to avoid messing with badges, and get clean name
+    const titleClone = sectionTitleElement.cloneNode(true);
+    titleClone.querySelectorAll("span").forEach((span) => span.remove());
+    const sectionName = titleClone.textContent.trim();
+
     const sectionTotalBadge = sectionDiv.querySelector(".section-total-badge");
+
     if (sectionTotalBadge) {
       const sectionTime = parseTimeToMinutes(sectionTotalBadge.textContent);
-      if (isSectionNamed(sectionTitle, "PARAMÉTRAGE")) {
+      if (isSectionNamed(sectionName, "PARAMÉTRAGE")) {
         totalParametrageGlobal += sectionTime;
       }
       if (
-        isSectionNamed(sectionTitle, "FORMATIONS") ||
-        isSectionNamed(sectionTitle, "MODULES COMPLEMENTAIRES")
+        isSectionNamed(sectionName, "FORMATIONS") ||
+        isSectionNamed(sectionName, "MODULES COMPLEMENTAIRES")
       ) {
         totalFormationsGlobal += sectionTime;
       }
