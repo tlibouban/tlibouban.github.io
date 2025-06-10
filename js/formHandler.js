@@ -33,6 +33,8 @@ function renderChecklist() {
   const container = document.getElementById("checklist-sections");
   container.innerHTML = "";
   let totalGeneral = 0;
+  let totalParametrage = 0;
+  let totalFormations = 0;
   const sectionTotals = {};
 
   // Définir l'ordre des sections
@@ -165,7 +167,9 @@ function renderChecklist() {
     // Traitement standard pour les autres sections
     else {
       // Table header - Ajouter colonnes Prix unitaire et Montant pour FORMATIONS
-      const isFormationsSection = isSectionNamed(section, "FORMATIONS");
+      const isFormationsSection =
+        isSectionNamed(section, "FORMATIONS") ||
+        isSectionNamed(section, "MODULES COMPLEMENTAIRES");
       if (isFormationsSection) {
         html += `<table class="checklist-table"><thead><tr><th>✔</th><th>Fonctionnalité</th><th>Nb</th><th>Unité</th><th>Temps unitaire</th><th>Sous-total</th><th>Prix unitaire</th><th>Montant</th></tr></thead><tbody>`;
       } else {
@@ -719,6 +723,7 @@ function updateTotals() {
 
   let totalGeneral = 0;
   let totalParametrage = 0;
+  let totalFormations = 0;
 
   // Fonctionnalités à exclure du calcul total
   const excludedFromTotal = [];
@@ -737,7 +742,9 @@ function updateTotals() {
 
     // Vérifier si c'est la section FORMATIONS
     const isFormationsSection =
-      sectionTitle && isSectionNamed(sectionTitle.textContent, "FORMATIONS");
+      sectionTitle &&
+      (isSectionNamed(sectionTitle.textContent, "FORMATIONS") ||
+        isSectionNamed(sectionTitle.textContent, "MODULES COMPLEMENTAIRES"));
 
     sectionDiv.querySelectorAll("tbody tr").forEach((tr, idx) => {
       // Vérifier si la ligne contient une fonctionnalité à exclure
@@ -862,7 +869,10 @@ function updateTotals() {
             : "0";
         }
 
+        // Ajoute bien la somme utilisateurs+profils au total de la section
         sectionTotal += totalUtilEtProfils;
+
+        // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
         if (isParametrageSection) {
           totalParametrage += totalUtilEtProfils;
         }
@@ -919,6 +929,11 @@ function updateTotals() {
             // Si c'est la section PARAMÉTRAGE, ajouter au total paramétrage
             if (isParametrageSection) {
               totalParametrage += sousTotal;
+            }
+
+            // Si c'est une section de FORMATION, ajouter au total formations
+            if (isFormationsSection) {
+              totalFormations += sousTotal;
             }
           }
         }
@@ -1028,10 +1043,17 @@ function updateTotals() {
   );
 
   if (heuresDisplay) {
-    heuresDisplay.textContent = formatMinutesAvecParametrage(
-      totalGeneral,
-      totalParametrage
-    );
+    const parametrageFormatted = formatMinutes(totalParametrage);
+    const formationsFormatted = formatMinutes(totalFormations);
+
+    heuresDisplay.innerHTML = `
+      <div style="line-height:1.2;">
+        <span style="font-size:0.9em;">Total: ${formatMinutes(
+          totalGeneral
+        )}</span><br>
+        <span style="font-size:0.75em; opacity:0.8;">(Param: ${parametrageFormatted} + Form: ${formationsFormatted})</span>
+      </div>
+    `;
   }
 
   if (journeesDisplay) {
