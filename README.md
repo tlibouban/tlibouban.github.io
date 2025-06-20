@@ -93,7 +93,7 @@ Données:
 └── LocalStorage (Persistance des profils)
 
 Outils:
-├── Git (Versioning avec branches main/main2)
+├── Git (Versioning avec branches main/responsive-redesign)
 ├── GitHub Actions (CI/CD automatique)
 └── Markdown (Documentation exhaustive)
 ```
@@ -185,8 +185,8 @@ cd tlibouban.github.io
 ### Workflow de Développement
 
 ```
-main2 (développement) → main (production)
-├── Nouvelles fonctionnalités sur main2
+responsive-redesign (développement) → main (production)
+├── Nouvelles fonctionnalités sur responsive-redesign
 ├── Tests sur GitHub Pages
 └── Merge vers main après validation
 ```
@@ -453,9 +453,9 @@ document.addEventListener('profileChanged', (event) => {
 ### Git Workflow
 
 ```bash
-# Développement sur main2
-git checkout main2
-git pull origin main2
+# Développement sur responsive-redesign
+git checkout responsive-redesign
+git pull origin responsive-redesign
 
 # Nouvelles fonctionnalités
 git checkout -b feature/nouvelle-fonctionnalite
@@ -463,7 +463,7 @@ git checkout -b feature/nouvelle-fonctionnalite
 git commit -m "feat: description de la fonctionnalité"
 git push origin feature/nouvelle-fonctionnalite
 
-# Merge vers main2 puis main après tests
+# Merge vers responsive-redesign puis main après tests
 ```
 
 ---
