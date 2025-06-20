@@ -1624,6 +1624,21 @@ function updateFormationQuantitiesBasedOnEffectif() {
 window.updateFormationMontants = updateFormationMontants;
 window.updateFormationPrices = updateFormationPrices;
 
-// Exposer les fonctions de formation globalement
-window.updateFormationMontants = updateFormationMontants;
-window.updateFormationPrices = updateFormationPrices;
+// =====================
+// Mise à jour des liens Interface comptable
+// =====================
+function updateInterfaceComptableLinks() {
+  const clientNameInput = document.getElementById("client");
+  if (!clientNameInput) return;
+
+  const clientName = clientNameInput.value.trim();
+  const encodedName = encodeURIComponent(clientName);
+  const baseUrl = "https://optimexco.onrender.com/";
+
+  document.querySelectorAll(".interface-comptable-link").forEach((link) => {
+    link.href = clientName ? `${baseUrl}?cabinetName=${encodedName}` : baseUrl;
+  });
+}
+
+// Exposer pour accès global (utilisé par triStateManager)
+window.updateInterfaceComptableLinks = updateInterfaceComptableLinks;

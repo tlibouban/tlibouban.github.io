@@ -117,13 +117,19 @@ function cycleTriState(element, clickType = "left") {
       if (!specialLink) {
         // Créer le lien si absent
         specialLink = document.createElement("a");
-        specialLink.href = "https://optimexco.onrender.com/";
         specialLink.target = "_blank";
         specialLink.className = "interface-comptable-link action-btn";
         specialLink.style.marginLeft = "10px";
         specialLink.textContent = "Questionnaire Export Compta";
         featureCell.appendChild(specialLink);
       }
+      // Construire l'URL avec le nom du cabinet
+      const clientInputEl = document.getElementById("client");
+      const clientName = clientInputEl ? clientInputEl.value.trim() : "";
+      const baseUrl = "https://optimexco.onrender.com/";
+      specialLink.href = clientName
+        ? `${baseUrl}?cabinetName=${encodeURIComponent(clientName)}`
+        : baseUrl;
       specialLink.style.display =
         newState === "activated" ? "inline-flex" : "none";
     }

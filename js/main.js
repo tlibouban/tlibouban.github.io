@@ -207,6 +207,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Écouter les changements dans le champ client
   clientInput.addEventListener("input", function () {
     updateOptionsBasedOnClient();
+    // Mettre à jour les liens Interface comptable avec le nom du cabinet
+    if (window.updateInterfaceComptableLinks) {
+      window.updateInterfaceComptableLinks();
+    }
   });
 
   // Écouter les changements dans le champ département
@@ -224,6 +228,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Mettre à jour l'affectation des formateurs si applicable
       updateTrainerAssignment(clientData);
     });
+  }
+
+  // Appeler une première fois après le chargement pour initialiser les liens si un client est déjà présent
+  if (window.updateInterfaceComptableLinks) {
+    window.updateInterfaceComptableLinks();
   }
 
   // Fonction helper pour obtenir le département effectif
