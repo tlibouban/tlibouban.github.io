@@ -105,6 +105,30 @@ function cycleTriState(element, clickType = "left") {
   // Mettre à jour l'état
   setTriStateState(element, newState);
 
+  // NEW: Afficher ou masquer le lien « Interface comptable » si concerné
+  const parentRow = element.closest("tr");
+  if (parentRow) {
+    const featureCell = parentRow.querySelector("td:nth-child(2)");
+    const isInterfaceComptable =
+      featureCell &&
+      featureCell.textContent.toLowerCase().includes("interface comptable");
+    if (isInterfaceComptable) {
+      let specialLink = parentRow.querySelector(".interface-comptable-link");
+      if (!specialLink) {
+        // Créer le lien si absent
+        specialLink = document.createElement("a");
+        specialLink.href = "https://optimexco.onrender.com/";
+        specialLink.target = "_blank";
+        specialLink.className = "interface-comptable-link action-btn";
+        specialLink.style.marginLeft = "10px";
+        specialLink.textContent = "Questionnaire Export Compta";
+        featureCell.appendChild(specialLink);
+      }
+      specialLink.style.display =
+        newState === "activated" ? "inline-flex" : "none";
+    }
+  }
+
   // Mettre à jour les totaux (qui inclut maintenant updateFormationMontants)
   if (typeof updateTotals === "function") {
     updateTotals();
