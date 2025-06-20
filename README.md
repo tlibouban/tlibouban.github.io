@@ -66,6 +66,13 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 - **Sauvegarde LocalStorage** pour la persistance
 - **Import/Export** des configurations
 
+### 📝 **Questionnaire Export Compta Intégré**
+
+- **Formulaire interactif** : collecte guidée de toutes les informations nécessaires à la création de l'export comptable.
+- **Pré-remplissage automatique** du champ *Nom du cabinet* à partir de la recherche client, évitant les erreurs de saisie.
+- **Sauvegarde JSON** : les réponses sont enregistrées dans un fichier `NomCabinet.json` pour un suivi et une réutilisation simplifiés.
+- **API REST** : accès en lecture via une requête `GET /api/questionnaire/{NomCabinet}` pour retrouver le questionnaire rempli.
+
 ---
 
 ## 🏗️ **Architecture Technique**
@@ -405,6 +412,8 @@ document.addEventListener('profileChanged', (event) => {
 - ✅ **Assignation formateurs** par proximité géographique
 - ✅ **Gestion profils dynamiques** avec persistance
 - ✅ **Optimisations performance** mobile et desktop
+- ✅ **Questionnaire export compta intégré** : formulaire interactif pour l'export comptable
+- ✅ **Pré-remplissage automatique** du nom du cabinet dans le questionnaire
 
 ### Prochaines Étapes (Roadmap)
 
