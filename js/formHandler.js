@@ -470,17 +470,22 @@ function renderCabinetColumn(
         /^\[PACKS\] |^\[MODULE\] /,
         ""
       ).replace(/\n/g, "<br>")}
-          ${
-            !forceActive && item.Attention
-              ? `<span class=\"attention-badge${
-                  item.Attention.toLowerCase().includes("warning")
-                    ? " warning-badge"
-                    : ""
-                }\">${item.Attention}</span>`
-              : ""
-          }
-          ${getProduitsHTML(item.FONCTIONNALITES)}
-        </td>
+        ${
+          !forceActive && item.Attention
+            ? `<span class=\"attention-badge${
+                item.Attention.toLowerCase().includes("warning")
+                  ? " warning-badge"
+                  : ""
+              }\">${item.Attention}</span>`
+            : ""
+        }
+        ${getProduitsHTML(item.FONCTIONNALITES)}
+        ${
+          item.FONCTIONNALITES.trim().toLowerCase() === "interface comptable"
+            ? `<a href=\"https://optimexco.onrender.com/\" target=\"_blank\" class=\"interface-comptable-link action-btn\" style=\"display:none;margin-left:10px;\">Questionnaire Export Compta</a>`
+            : ""
+        }
+      </td>
       </tr>`;
     });
 
@@ -1618,3 +1623,22 @@ function updateFormationQuantitiesBasedOnEffectif() {
 // Exposer les fonctions de formation globalement
 window.updateFormationMontants = updateFormationMontants;
 window.updateFormationPrices = updateFormationPrices;
+
+// =====================
+// Mise à jour des liens Interface comptable
+// =====================
+function updateInterfaceComptableLinks() {
+  const clientNameInput = document.getElementById("client");
+  if (!clientNameInput) return;
+
+  const clientName = clientNameInput.value.trim();
+  const encodedName = encodeURIComponent(clientName);
+  const baseUrl = "https://optimexco.onrender.com/";
+
+  document.querySelectorAll(".interface-comptable-link").forEach((link) => {
+    link.href = clientName ? `${baseUrl}?cabinetName=${encodedName}` : baseUrl;
+  });
+}
+
+// Exposer pour accès global (utilisé par triStateManager)
+window.updateInterfaceComptableLinks = updateInterfaceComptableLinks;

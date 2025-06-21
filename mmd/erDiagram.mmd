@@ -1,0 +1,122 @@
+erDiagram
+    CLIENT {
+        int id
+        text nom
+        enum type
+        text erp
+        int effectif
+        text departement
+        timestamptz created_at
+    }
+    DOSSIER {
+        int id
+        int client_id
+        text numero_dossier
+        enum projet
+        text logiciel_base
+        text sens
+        int effectif_snapshot
+        text departement_snapshot
+        text logiciel_autre
+        jsonb meta
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    ITEM_META {
+        int id
+        text slug
+        text label
+        text section
+        text sous_section
+        text item_type
+        int default_minutes
+        numeric default_prix_ht
+    }
+    DOSSIER_ITEM {
+        int id
+        int dossier_id
+        int item_meta_id
+        enum tri_state
+        int quantity
+        int minutes_override
+        numeric prix_ht_override
+        jsonb extra
+    }
+    PROFIL {
+        int id
+        int dossier_id
+        text nom
+        int nb_utilisateurs
+        enum tri_state_include
+        enum tri_state_modif
+    }
+    DEVIS {
+        int id
+        int dossier_id
+        numeric total_ht
+        numeric total_ttc
+        enum statut
+        timestamptz created_at
+    }
+    DEVIS_LIGNE {
+        int id
+        int devis_id
+        int item_meta_id
+        int quantity
+        numeric prix_unitaire_ht
+        numeric montant_ht
+    }
+    EQUIPE {
+        int id
+        text libelle
+        enum type
+    }
+    UTILISATEUR {
+        int id
+        text nom
+        text email
+        text role
+    }
+    MEMBRE_EQUIPE {
+        int equipe_id
+        int utilisateur_id
+        date debut
+        date fin
+    }
+    AFFECTATION {
+        int id
+        int client_id
+        int equipe_id
+        date debut
+        date fin
+    }
+    FACTURE {
+        int id
+        int devis_id
+        numeric total_ht
+        numeric tva
+        numeric total_ttc
+        date date_facture
+        enum statut
+    }
+    REGLEMENT {
+        int id
+        int facture_id
+        numeric montant
+        date date_reglement
+        text mode_paiement
+    }
+
+    CLIENT ||--o{ DOSSIER : has
+    DOSSIER ||--|{ DOSSIER_ITEM : contains
+    ITEM_META ||--o{ DOSSIER_ITEM : "instantiated as"
+    DOSSIER ||--|{ PROFIL : profiles
+    DOSSIER ||--o{ DEVIS : owns
+    DEVIS ||--|{ DEVIS_LIGNE : has
+    ITEM_META ||--o{ DEVIS_LIGNE : "quoted as"
+    CLIENT ||--o{ AFFECTATION : "is on"
+    EQUIPE ||--o{ AFFECTATION : "covers"
+    UTILISATEUR ||--o{ MEMBRE_EQUIPE : "member of"
+    EQUIPE ||--o{ MEMBRE_EQUIPE : "includes"
+    DEVIS ||--|{ FACTURE : invoiced
+    FACTURE ||--|{ REGLEMENT : paid_by

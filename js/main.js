@@ -207,6 +207,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Écouter les changements dans le champ client
   clientInput.addEventListener("input", function () {
     updateOptionsBasedOnClient();
+    // Mettre à jour les liens Interface comptable avec le nom du cabinet
+    if (window.updateInterfaceComptableLinks) {
+      window.updateInterfaceComptableLinks();
+    }
   });
 
   // Écouter les changements dans le champ département
@@ -224,6 +228,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Mettre à jour l'affectation des formateurs si applicable
       updateTrainerAssignment(clientData);
     });
+  }
+
+  // Appeler une première fois après le chargement pour initialiser les liens si un client est déjà présent
+  if (window.updateInterfaceComptableLinks) {
+    window.updateInterfaceComptableLinks();
   }
 
   // Fonction helper pour obtenir le département effectif
@@ -1447,29 +1456,57 @@ document.addEventListener("DOMContentLoaded", function () {
   window.loadFormationsLogiciels = loadFormationsLogiciels;
 
   /* =========================================
-     🛈 Inject latest commit SHA (any branch) as HTML comment
+     🛈 Inject branch + commit SHA as HTML comment (GitHub default branch)
      ========================================= */
   (async () => {
+    const repo = "tlibouban/tlibouban.github.io"; // ➜ adapter si nécessaire
     try {
-      const repo = "tlibouban/tlibouban.github.io"; // ➜ adapter si nécessaire
-      const res = await fetch(
-        `https://api.github.com/repos/${repo}/commits?per_page=1`
+      // 1. Récupérer la branche par défaut du dépôt
+      const repoInfo = await fetch(`https://api.github.com/repos/${repo}`).then(
+        (r) => r.json()
       );
-      if (!res.ok) throw new Error(res.statusText);
-      const data = await res.json();
-      const sha = data?.[0]?.sha?.substring(0, 7);
+      const branch = repoInfo?.default_branch || "main";
+
+      // 2. Récupérer le dernier commit de cette branche
+      const commitRes = await fetch(
+        `https://api.github.com/repos/${repo}/commits/${branch}`
+      );
+      if (!commitRes.ok) throw new Error(commitRes.statusText);
+      const commitData = await commitRes.json();
+      const sha = commitData?.sha?.substring(0, 7);
+
       if (sha) {
-        const comment = document.createComment(` Build from commit ${sha} `);
+        const comment = document.createComment(` Build from ${branch}@${sha} `);
         document.documentElement.parentNode.insertBefore(
           comment,
           document.documentElement
         );
-        console.log(`ℹ️ Build commit: ${sha}`);
+        console.log(`ℹ️ Build commit: ${branch}@${sha}`);
       }
     } catch (e) {
-      console.warn("Impossible de récupérer le SHA du commit :", e);
+      console.warn("Impossible de récupérer la branche ou le SHA :", e);
     }
   })();
+
+  /**
+   * Ajoute l'attribut data-label à chaque cellule <td> en fonction du texte du <th> correspondant.
+   */
+  function setDataLabels() {
+    document.querySelectorAll("table.checklist-table").forEach((table) => {
+      const headers = Array.from(table.querySelectorAll("thead th")).map((th) =>
+        th.textContent.trim()
+      );
+      table.querySelectorAll("tbody tr").forEach((tr) => {
+        tr.querySelectorAll("td").forEach((td, idx) => {
+          if (!td.hasAttribute("data-label") && headers[idx]) {
+            td.setAttribute("data-label", headers[idx]);
+          }
+        });
+      });
+    });
+  }
+
+  setDataLabels();
 });
 
 // Variables globales pour les bases de données

@@ -66,6 +66,13 @@ Application web moderne pour la gestion et le paramétrage des déploiements des
 - **Sauvegarde LocalStorage** pour la persistance
 - **Import/Export** des configurations
 
+### 📝 **Questionnaire Export Compta Intégré**
+
+- **Formulaire interactif** : collecte guidée de toutes les informations nécessaires à la création de l'export comptable.
+- **Pré-remplissage automatique** du champ *Nom du cabinet* à partir de la recherche client, évitant les erreurs de saisie.
+- **Sauvegarde JSON** : les réponses sont enregistrées dans un fichier `NomCabinet.json` pour un suivi et une réutilisation simplifiés.
+- **API REST** : accès en lecture via une requête `GET /api/questionnaire/{NomCabinet}` pour retrouver le questionnaire rempli.
+
 ---
 
 ## 🏗️ **Architecture Technique**
@@ -86,7 +93,7 @@ Données:
 └── LocalStorage (Persistance des profils)
 
 Outils:
-├── Git (Versioning avec branches main/main2)
+├── Git (Versioning avec branches main/responsive-redesign)
 ├── GitHub Actions (CI/CD automatique)
 └── Markdown (Documentation exhaustive)
 ```
@@ -178,8 +185,8 @@ cd tlibouban.github.io
 ### Workflow de Développement
 
 ```
-main2 (développement) → main (production)
-├── Nouvelles fonctionnalités sur main2
+responsive-redesign (développement) → main (production)
+├── Nouvelles fonctionnalités sur responsive-redesign
 ├── Tests sur GitHub Pages
 └── Merge vers main après validation
 ```
@@ -405,6 +412,8 @@ document.addEventListener('profileChanged', (event) => {
 - ✅ **Assignation formateurs** par proximité géographique
 - ✅ **Gestion profils dynamiques** avec persistance
 - ✅ **Optimisations performance** mobile et desktop
+- ✅ **Questionnaire export compta intégré** : formulaire interactif pour l'export comptable
+- ✅ **Pré-remplissage automatique** du nom du cabinet dans le questionnaire
 
 ### Prochaines Étapes (Roadmap)
 
@@ -444,9 +453,9 @@ document.addEventListener('profileChanged', (event) => {
 ### Git Workflow
 
 ```bash
-# Développement sur main2
-git checkout main2
-git pull origin main2
+# Développement sur responsive-redesign
+git checkout responsive-redesign
+git pull origin responsive-redesign
 
 # Nouvelles fonctionnalités
 git checkout -b feature/nouvelle-fonctionnalite
@@ -454,7 +463,7 @@ git checkout -b feature/nouvelle-fonctionnalite
 git commit -m "feat: description de la fonctionnalité"
 git push origin feature/nouvelle-fonctionnalite
 
-# Merge vers main2 puis main après tests
+# Merge vers responsive-redesign puis main après tests
 ```
 
 ---
