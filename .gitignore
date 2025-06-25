@@ -39,3 +39,6 @@ csv/db.tsv
 
 # Fichiers contenant des données personnelles/confidentielles
 json/repartition_commerciale_par_departement.json
+
+# Fichiers temporaires
+tmp/
