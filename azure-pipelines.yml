@@ -1,20 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json
 # Docker
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-  - master
+  branches:
+    include:
+      - master
 
 resources:
   - repo: self
 
 variables:
-  tag: "$(Build.BuildId)"
-  dockerRegistryServiceConnection: "DockerHubConnection"
-  # Le namespace Docker Hub (nom d'utilisateur) doit être fourni dans les variables du pipeline
-  # ou via un groupe de variables sécurisé nommé par exemple "DockerHubVars".
-  # Il n'apparaît donc pas en clair dans ce fichier.
-  dockerRepository: "$(dockerHubNamespace)/onboardingclient-frontend"
+  # Groupe de variables sécurisé défini dans Azure DevOps (DockerHubVars)
+  #   contient : dockerHubNamespace
+  # Les variables listées ci-dessous sont injectées au runtime.
+  - name: tag
+    value: "$(Build.BuildId)"
+  - name: dockerRegistryServiceConnection
+    value: "DockerHubConnection"
+  - name: dockerRepository
+    value: "$(dockerHubNamespace)/onboardingclient-frontend"
 
 stages:
   - stage: Build
@@ -31,7 +37,6 @@ stages:
               command: buildAndPush
               repository: "$(dockerRepository)"
               dockerfile: "$(Build.SourcesDirectory)/Dockerfile"
-              buildContext: "$(Build.SourcesDirectory)"
               containerRegistry: "$(dockerRegistryServiceConnection)"
               tags: |
                 $(tag)
