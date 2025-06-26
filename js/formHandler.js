@@ -1633,7 +1633,22 @@ function updateInterfaceComptableLinks() {
 
   const clientName = clientNameInput.value.trim();
   const encodedName = encodeURIComponent(clientName);
-  const baseUrl = "https://optimexco.onrender.com/";
+
+  // Déterminer l'URL de base pour l'interface comptable
+  let baseUrl = null;
+  if (window.APP_CONFIG && window.APP_CONFIG.backendBaseUrl) {
+    baseUrl = window.APP_CONFIG.backendBaseUrl;
+  }
+
+  // Fallback : utiliser l'origine courante du navigateur
+  if (!baseUrl) {
+    baseUrl = window.location.origin;
+  }
+
+  // S'assurer qu'il y a un trailing slash
+  if (!baseUrl.endsWith("/")) {
+    baseUrl += "/";
+  }
 
   document.querySelectorAll(".interface-comptable-link").forEach((link) => {
     link.href = clientName ? `${baseUrl}?cabinetName=${encodedName}` : baseUrl;

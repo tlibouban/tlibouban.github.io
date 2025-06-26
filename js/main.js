@@ -1528,6 +1528,11 @@ document.addEventListener("DOMContentLoaded", function () {
             mainTitleEl.textContent = cfg.displayName;
           }
         }
+
+        // Mettre à jour les liens Interface comptable avec la nouvelle baseUrl
+        if (window.updateInterfaceComptableLinks) {
+          window.updateInterfaceComptableLinks();
+        }
       }
     } catch (err) {
       console.warn("Configuration runtime non chargée :", err);

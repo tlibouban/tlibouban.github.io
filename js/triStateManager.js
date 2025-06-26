@@ -123,10 +123,22 @@ function cycleTriState(element, clickType = "left") {
         specialLink.textContent = "Questionnaire Export Compta";
         featureCell.appendChild(specialLink);
       }
-      // Construire l'URL avec le nom du cabinet
+      // Déterminer l'URL de base dynamiquement (configuration ou origine)
+      let baseUrl = null;
+      if (window.APP_CONFIG && window.APP_CONFIG.backendBaseUrl) {
+        baseUrl = window.APP_CONFIG.backendBaseUrl;
+      }
+
+      if (!baseUrl) {
+        baseUrl = window.location.origin;
+      }
+
+      if (!baseUrl.endsWith("/")) {
+        baseUrl += "/";
+      }
+
       const clientInputEl = document.getElementById("client");
       const clientName = clientInputEl ? clientInputEl.value.trim() : "";
-      const baseUrl = "https://optimexco.onrender.com/";
       specialLink.href = clientName
         ? `${baseUrl}?cabinetName=${encodeURIComponent(clientName)}`
         : baseUrl;
