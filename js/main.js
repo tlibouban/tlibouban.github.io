@@ -707,14 +707,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Rechercher le client dans la base pour obtenir le département
       const clientData = findClientInDatabase(val);
       if (clientData && clientData.departement) {
-        mainTitle.textContent = `Checklist du déploiement du cabinet ${val} (dép. ${clientData.departement})`;
+        mainTitle.textContent = `OnBoardingClient – Cabinet ${val} (dép. ${clientData.departement})`;
       } else {
-        mainTitle.textContent = `Checklist du déploiement du cabinet ${val}`;
+        mainTitle.textContent = `OnBoardingClient – Cabinet ${val}`;
       }
     } else {
       mainTitle.textContent =
         (window.APP_CONFIG && window.APP_CONFIG.displayName) ||
-        "Checklist du déploiement";
+        "OnBoardingClient";
     }
   }
 
