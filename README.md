@@ -1,4 +1,4 @@
-# 📋 Checklist de Déploiement - Application SEPTEO
+# 📋 OnBoardingClient - Application SEPTEO
 
 **URL de production :** <https://tlibouban.github.io>
 
