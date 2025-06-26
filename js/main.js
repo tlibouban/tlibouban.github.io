@@ -712,7 +712,9 @@ document.addEventListener("DOMContentLoaded", function () {
         mainTitle.textContent = `Checklist du déploiement du cabinet ${val}`;
       }
     } else {
-      mainTitle.textContent = "Checklist du déploiement";
+      mainTitle.textContent =
+        (window.APP_CONFIG && window.APP_CONFIG.displayName) ||
+        "Checklist du déploiement";
     }
   }
 
@@ -1507,6 +1509,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   setDataLabels();
+
+  // --------------------------------------------------
+  // Chargement de la configuration runtime exposée par /config.json
+  // --------------------------------------------------
+  (async () => {
+    try {
+      const res = await fetch("/config.json");
+      if (res.ok) {
+        const cfg = await res.json();
+        window.APP_CONFIG = cfg;
+
+        // Mettre à jour le titre de l'onglet et le h1 principal si présent
+        if (cfg.displayName) {
+          document.title = cfg.displayName;
+          const mainTitleEl = document.getElementById("main-title");
+          if (mainTitleEl) {
+            mainTitleEl.textContent = cfg.displayName;
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Configuration runtime non chargée :", err);
+    }
+  })();
 });
 
 // Variables globales pour les bases de données
