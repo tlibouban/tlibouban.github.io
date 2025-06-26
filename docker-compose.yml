@@ -17,6 +17,7 @@ services:
       retries: 5
 
   backend:
+    image: onboardingclient-backend:latest
     build:
       context: ../OptimExCo
       dockerfile: Dockerfile
@@ -33,6 +34,7 @@ services:
       - "3000:3000"
 
   frontend:
+    image: onboardingclient-frontend:latest
     build:
       context: .
       dockerfile: Dockerfile
