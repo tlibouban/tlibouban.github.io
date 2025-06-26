@@ -14,7 +14,6 @@ variables:
   # Le namespace Docker Hub (nom d'utilisateur) doit être fourni dans les variables du pipeline
   # ou via un groupe de variables sécurisé nommé par exemple "DockerHubVars".
   # Il n'apparaît donc pas en clair dans ce fichier.
-  dockerHubNamespace: "<DOCKER_HUB_USERNAME>"
   dockerRepository: "$(dockerHubNamespace)/onboardingclient-frontend"
 
 stages:
