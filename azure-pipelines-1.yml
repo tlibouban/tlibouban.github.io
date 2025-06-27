@@ -1,0 +1,168 @@
+# Azure DevOps pipeline – OnBoardingClient (multi-arch)
+# Ce pipeline est stocké dans Azure DevOps mais suit le code hébergé sur GitHub.
+# Il déclenche un build Docker automatique à chaque commit sur la branche main.
+# Prérequis :
+#   1. Un service-connection GitHub nommé "GitHubConnection" (OAuth ou PAT) permettant l'accès au dépôt.
+#   2. Un service-connection Docker (Docker Hub ou ACR) nommé "DockerRegistry" avec droits push.
+#   3. Variables à adapter si besoin : noms d'images, branche par défaut, etc.
+
+name: $(BuildDefinitionName)-$(Date:yyyyMMdd)$(Rev:.r)
+
+# Aucune déclencheur direct car on utilise la section resources (ci-bas)
+trigger: none
+
+# Le dépôt GitHub est référencé comme ressource ; le trigger est déclaré ici
+resources:
+  repositories:
+    - repository: githubRepo # alias local
+      type: github
+      name: tlibouban/OptimExCo # Référencement correct du dépôt GitHub
+      ref: refs/heads/main # branche suivie
+      endpoint: GitHubConnection # service connection GitHub
+      trigger: # déclencheurs CI
+        branches:
+          include:
+            - main
+
+variables:
+  # Nom de la connexion Docker (ACR ou Docker Hub)
+  dockerRegistryServiceConnection: "DockerHubConnection"
+  # Définition des dépôts d'images
+  imageRepositoryBackend: "onboardingclient-backend"
+  imageRepositoryFrontend: "onboardingclient-frontend"
+  # Tag principal = hash court du commit GitHub
+  tag: "$(Build.SourceVersionShort)"
+
+stages:
+  - stage: Build
+    displayName: Build per architecture
+    jobs:
+      # ---------------------------------------------------------------------
+      # AMD64 build (hosted Ubuntu agent)
+      # ---------------------------------------------------------------------
+      - job: Build_linux_amd64
+        displayName: "Build images – AMD64"
+        variables:
+          ARCH: linux/amd64
+          SUFFIX: amd64
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: githubRepo
+            path: s
+
+          # Backend
+          - task: Docker@2
+            displayName: "Build & Push backend (AMD64)"
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepositoryBackend)
+              Dockerfile: $(Build.SourcesDirectory)/s/backend/Dockerfile
+              buildContext: $(Build.SourcesDirectory)/s/backend
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)-$(SUFFIX)
+                latest-$(SUFFIX)
+              arguments: "--platform $(ARCH)"
+
+          # Frontend
+          - task: Docker@2
+            displayName: "Build & Push frontend (AMD64)"
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepositoryFrontend)
+              Dockerfile: $(Build.SourcesDirectory)/s/frontend/Dockerfile
+              buildContext: $(Build.SourcesDirectory)/s/frontend
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)-$(SUFFIX)
+                latest-$(SUFFIX)
+              arguments: "--platform $(ARCH)"
+
+      # ---------------------------------------------------------------------
+      # ARM64 build (self-hosted Raspberry Pi 5 agent)
+      # ---------------------------------------------------------------------
+      - job: Build_linux_arm64
+        displayName: "Build images – ARM64"
+        variables:
+          ARCH: linux/arm64
+          SUFFIX: arm64
+        pool:
+          name: ARM64   # ← remplacez par le nom de votre pool/agent Raspberry Pi
+          demands:
+            - Agent.OSArchitecture -equals ARM64
+        steps:
+          - checkout: githubRepo
+            path: s
+
+          # Backend
+          - task: Docker@2
+            displayName: "Build & Push backend (ARM64)"
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepositoryBackend)
+              Dockerfile: $(Build.SourcesDirectory)/s/backend/Dockerfile
+              buildContext: $(Build.SourcesDirectory)/s/backend
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)-$(SUFFIX)
+                latest-$(SUFFIX)
+              arguments: "--platform $(ARCH)"
+
+          # Frontend
+          - task: Docker@2
+            displayName: "Build & Push frontend (ARM64)"
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepositoryFrontend)
+              Dockerfile: $(Build.SourcesDirectory)/s/frontend/Dockerfile
+              buildContext: $(Build.SourcesDirectory)/s/frontend
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)-$(SUFFIX)
+                latest-$(SUFFIX)
+              arguments: "--platform $(ARCH)"
+
+  # -------------------------------------------------------------------------
+  # Manifest stage: assemble multi-arch images
+  # -------------------------------------------------------------------------
+  - stage: PublishManifests
+    displayName: Publish multi-arch manifests
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: Manifest
+        displayName: "Create & Push manifests"
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          # Login to registry using Docker@2 for simplicity
+          - task: Docker@2
+            displayName: Login
+            inputs:
+              command: login
+              containerRegistry: $(dockerRegistryServiceConnection)
+
+          # Assemble and push manifests for backend & frontend
+          - script: |
+              set -e
+              for image in $(imageRepositoryBackend) $(imageRepositoryFrontend); do
+                echo "⭐ Creating manifest for $image:$(tag)"
+                docker manifest create $image:$(tag) \
+                  $image:$(tag)-amd64 \
+                  $image:$(tag)-arm64
+                docker manifest push $image:$(tag)
+
+                echo "⭐ Creating manifest for $image:latest"
+                docker manifest create $image:latest \
+                  $image:latest-amd64 \
+                  $image:latest-arm64
+                docker manifest push $image:latest
+              done
+            displayName: "Create & Push manifests"
+
+# -------------------------------------------------------------------------
+# Étape de déploiement (optionnelle)
+# Ajoutez ici un stage Deploy si vous souhaitez déployer automatiquement
+# sur un environnement (AKS, Web App for Containers, etc.)
+# -------------------------------------------------------------------------
