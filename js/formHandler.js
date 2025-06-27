@@ -1203,6 +1203,9 @@ function renderDeploymentSection() {
 
   // Contenu de la section avec les différentes équipes
   html += `
+    <!-- Options de déploiement -->
+    <div id="deployment-options" class="deployment-options-container" style="display: none"></div>
+
     <!-- Équipe commerciale -->
     <div id="commercial-team-info" class="commercial-team-container" style="display: none"></div>
 
@@ -1217,9 +1220,6 @@ function renderDeploymentSection() {
 
     <!-- Affectation automatique des formateurs -->
     <div id="trainer-assignment-info" class="trainer-assignment-container" style="display: none"></div>
-
-    <!-- Options de déploiement -->
-    <div id="deployment-options" class="deployment-options-container" style="display: none"></div>
   `;
 
   html += `</div></div>`;
